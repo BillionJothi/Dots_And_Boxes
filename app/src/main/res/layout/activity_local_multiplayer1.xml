@@ -36,15 +36,16 @@
         tools:layout="@layout/fragment_game_options" />
 
     <TextView
-        android:id="@+id/localGameText"
+        android:id="@+id/localMultiText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/vs_computer"
+        android:text="@string/local_multiplayer"
         android:textAlignment="center"
         android:textSize="@dimen/textSize24"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/fragment2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.956" />

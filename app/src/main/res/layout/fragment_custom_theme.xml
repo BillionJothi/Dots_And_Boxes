@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout3"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".CustomTheme">
+
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="match_parent"
+        android:layout_height="51dp"
+        android:paddingStart="@dimen/switchPadding15"
+        android:paddingLeft="@dimen/switchPadding15"
+        android:paddingTop="@dimen/switchPadding15"
+        android:paddingEnd="@dimen/switchPadding15"
+        android:paddingRight="@dimen/switchPadding15"
+        android:paddingBottom="@dimen/switchPadding15"
+        android:text="@string/CustomTheme"
+        android:textSize="@dimen/CThemeTextSize"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.509"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical"
+        android:paddingBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/themeApply"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switch1"
+        app:layout_constraintVertical_bias="0.13">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/rText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingEnd="@dimen/rgbEndPadding"
+                android:text="@string/R"
+                android:textSize="@dimen/rgbTextSize" />
+
+            <EditText
+                android:id="@+id/editText2"
+                android:layout_width="@dimen/inputLayoutWidth"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="number"
+                android:text="@string/RequiredFileds"
+                android:textSize="@dimen/rgbTextSize" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/rText2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingEnd="@dimen/rgbEndPadding"
+                android:text="@string/G"
+                android:textSize="@dimen/rgbTextSize" />
+
+            <EditText
+                android:id="@+id/editText3"
+                android:layout_width="@dimen/inputLayoutWidth"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="number"
+                android:text="@string/RequiredFileds"
+                android:textSize="@dimen/rgbTextSize" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/rText3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingEnd="@dimen/rgbEndPadding"
+                android:text="@string/B"
+                android:textSize="@dimen/rgbTextSize" />
+
+            <EditText
+                android:id="@+id/editText4"
+                android:layout_width="@dimen/inputLayoutWidth"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="number"
+                android:text="@string/RequiredFileds"
+                android:textSize="@dimen/rgbTextSize" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/themeApply"
+        android:layout_width="71dp"
+        android:layout_height="34dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/mybutton"
+        android:text="Apply"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.873"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/switch1"
+        app:layout_constraintVertical_bias="0.958" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

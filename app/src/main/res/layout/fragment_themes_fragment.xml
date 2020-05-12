@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".themes_fragment" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteY="30dp">
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/themeText10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/themeButtonTextBottomPadding"
+                android:text="@string/Theme1"
+                android:textColor="@color/white"
+                android:textSize="@dimen/themeButtonTextSize" />
+
+            <Button
+                android:id="@+id/theme7"
+                android:layout_width="@dimen/themeButtonWidth"
+                android:layout_height="@dimen/themeButtonHeight"
+                android:background="@drawable/themevuttons_bg" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/themeText11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/themeButtonTextBottomPadding"
+                android:text="@string/Theme2"
+                android:textColor="@color/white"
+                android:textSize="@dimen/themeButtonTextSize" />
+
+            <Button
+                android:id="@+id/theme8"
+                android:layout_width="@dimen/themeButtonWidth"
+                android:layout_height="@dimen/themeButtonHeight"
+                android:background="@drawable/themevuttons_bg" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/themeText12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/themeButtonTextBottomPadding"
+                android:text="@string/Theme3"
+                android:textColor="@color/white"
+                android:textSize="@dimen/themeButtonTextSize" />
+
+            <Button
+                android:id="@+id/theme9"
+                android:layout_width="@dimen/themeButtonWidth"
+                android:layout_height="@dimen/themeButtonHeight"
+                android:background="@drawable/themevuttons_bg" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/themeText13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/themeButtonTextBottomPadding"
+                android:text="@string/Theme4"
+                android:textColor="@color/white"
+                android:textSize="@dimen/themeButtonTextSize" />
+
+            <Button
+                android:id="@+id/theme6"
+                android:layout_width="@dimen/themeButtonWidth"
+                android:layout_height="@dimen/themeButtonHeight"
+                android:background="@drawable/themevuttons_bg" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/themeText14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/themeButtonTextBottomPadding"
+                android:text="@string/Theme5"
+                android:textColor="@color/white"
+                android:textSize="@dimen/themeButtonTextSize" />
+
+            <Button
+                android:id="@+id/theme10"
+                android:layout_width="@dimen/themeButtonWidth"
+                android:layout_height="@dimen/themeButtonHeight"
+                android:background="@drawable/themevuttons_bg" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

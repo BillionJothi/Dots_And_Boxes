@@ -1,8 +1,10 @@
 <resources>
+    <!--Main Activity Strings-->
     <string name="app_name">Dots &amp; Boxes</string>
     <string name="Title"><![CDATA[Dots & Boxes]]></string>
     <string name="Logo">Logo of App</string>
 
+    <!--Main Page/Contents Page Strings-->
     <string name="vs_computer">Vs Computer</string>
     <string name="local_multiplayer">Local Multiplayer</string>
     <string name="settings">Settings</string>
@@ -11,10 +13,27 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Game Options Fragment Strings -->
     <string name="hint_allowed">Hint\'s Allowed?</string>
     <string name="undo_allowed">Undo\'s Allowed?</string>
     <string name="start">Start</string>
+
+    <!--Theme Strings-->
+    <string name="Theme">Themes</string>
+    <string name="Theme1">White</string>
+    <string name="Theme2">Light Blue</string>
+    <string name="Theme3">Mild Blue</string>
+    <string name="Theme4">Blue</string>
+    <string name="Theme5">Dark Blue</string>
+
+    <string name="CustomTheme">Custom Theme</string>
+    <string name="R">R</string>
+    <string name="G">G</string>
+    <string name="B">B</string>
+    <string name="RequiredFileds">Required Fields</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>

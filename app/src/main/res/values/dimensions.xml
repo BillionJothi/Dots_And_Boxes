@@ -14,4 +14,22 @@
     <dimen name="buttonMarginTop">10dp</dimen>
     <dimen name="buttonElavation">30dp</dimen>
     <item name="one" type="integer">1.0</item>
+
+    <dimen name="textSize24">24sp</dimen>
+
+    <!--Settings-->
+    <dimen name="buttonSpcaing">12dp</dimen>
+    <dimen name="themeButtonWidth">58dp</dimen>
+    <dimen name="themeButtonHeight">58dp</dimen>
+    <dimen name="themeButtonTextSize">12sp</dimen>
+    <dimen name="themeButtonTextBottomPadding">5dp</dimen>
+
+    <!--Theme-->
+    <dimen name="CThemeBottomPadding">100dp</dimen>
+    <dimen name="CThemeTextSize">14sp</dimen>
+    <dimen name="inputLayoutWidth">180dp</dimen>
+    <dimen name="rgbTextSize">12sp</dimen>
+    <dimen name="rgbEndPadding">20dp</dimen>
+
+
 </resources>

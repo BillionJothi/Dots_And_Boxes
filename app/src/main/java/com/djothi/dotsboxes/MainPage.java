@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import java.util.Objects;
-
 public class MainPage extends AppCompatActivity {
 
     @Override
@@ -36,7 +34,7 @@ public class MainPage extends AppCompatActivity {
 
     //Opens Local Multiplayer Activity
     public void openLocalMultiplayer() {
-        Intent intent = new Intent(this, LocalMultiplayer.class);
+        Intent intent = new Intent(this, LocalMultiplayer1.class);
         startActivity(intent);
     }
 

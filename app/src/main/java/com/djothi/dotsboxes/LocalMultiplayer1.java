@@ -6,12 +6,12 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 
-public class LocalMultiplayer extends AppCompatActivity {
+public class LocalMultiplayer1 extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_local_multiplayer);
+        setContentView(R.layout.activity_local_multiplayer1);
 
         //Toolbar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);

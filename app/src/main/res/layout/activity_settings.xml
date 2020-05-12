@@ -7,6 +7,7 @@
     tools:context=".Settings">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -19,5 +20,91 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <!--PlayStore-->
+    <TextView
+        android:id="@+id/playStoreBack"
+        android:layout_width="0dp"
+        android:layout_height="75dp"
+        android:background="#1ABBCA"
+        android:gravity="center|end"
+        android:textAlignment="gravity"
+        android:textIsSelectable="false"
+        android:textSize="@dimen/switchTextSize"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="53dp"
+        android:layout_height="56dp"
+        app:layout_constraintBottom_toTopOf="@+id/playStoreBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.044"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playStoreBack"
+        app:layout_constraintVertical_bias="0.487"
+        app:srcCompat="@drawable/gplaystore" />
+
+    <TextView
+        android:id="@+id/PlayStore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PlayStore Integration Comming Soon!"
+        app:layout_constraintBottom_toBottomOf="@+id/playStoreBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+
+    <!--Themes Title-->
+    <TextView
+        android:id="@+id/theme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/Theme"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playStoreBack"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <!--Themes Buttons-->
+
+    <!--Themes Button Names-->
+
+    <fragment
+        android:id="@+id/fragment"
+        android:name="com.djothi.dotsboxes.themes_fragment"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@id/theme"
+        app:layout_constraintTop_toBottomOf="@+id/theme"
+        app:layout_constraintVertical_bias="0.051"
+        tools:layout="@layout/fragment_themes_fragment" />
+
+    <fragment
+        android:id="@+id/fragment3"
+        android:name="com.djothi.dotsboxes.CustomTheme"
+        android:layout_width="373dp"
+        android:layout_height="236dp"
+        android:layout_weight="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment"
+        app:layout_constraintVertical_bias="0.279"
+        tools:layout="@layout/fragment_custom_theme" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
