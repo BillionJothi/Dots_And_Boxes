@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Dots &amp; Boxes</string>
+    <string name="Title"><![CDATA[Dots & Boxes]]></string>
+    <string name="Logo">Logo of App</string>
+
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>
