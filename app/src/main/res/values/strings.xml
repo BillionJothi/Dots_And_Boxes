@@ -6,4 +6,7 @@
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="vs_computer">Vs Computer</string>
+    <string name="local_multiplayer">Local Multiplayer</string>
+    <string name="settings">Settings</string>
 </resources>
