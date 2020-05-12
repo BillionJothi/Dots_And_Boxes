@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Fragment Switch Attributes (Game Options)-->
+    <dimen name="switchWidth">300dp</dimen>
+    <dimen name="switchHeight">55dp</dimen>
+    <dimen name="switchPadding15">15dp</dimen>
+    <dimen name="switchTextSize">14sp</dimen>
+    <dimen name="switchMarginTop">7dp</dimen>
+    <item name="zeroPoint5" type="integer">0.5</item>
+
+    <!--Button Atrributes-->
+    <dimen name="buttonWidth">89dp</dimen>
+    <dimen name="buttonHeight">33dp</dimen>
+    <dimen name="buttonMarginTop">10dp</dimen>
+    <dimen name="buttonElavation">30dp</dimen>
+    <item name="one" type="integer">1.0</item>
+</resources>

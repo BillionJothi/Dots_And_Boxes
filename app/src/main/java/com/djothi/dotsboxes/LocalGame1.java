@@ -3,12 +3,16 @@ package com.djothi.dotsboxes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
+import android.view.Choreographer;
 
 import java.util.Objects;
 
 public class LocalGame1 extends AppCompatActivity {
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +28,8 @@ public class LocalGame1 extends AppCompatActivity {
             ab.setTitle(R.string.vs_computer);
             ab.setDisplayHomeAsUpEnabled(true);
         }
+
+
 
 
 

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTintMode="src_over"
+    tools:context=".GameOptionsFragment">
+
+    <Switch
+        android:id="@+id/hintSwitch"
+        android:layout_width="@dimen/switchWidth"
+        android:layout_height="@dimen/switchHeight"
+        android:layout_marginTop="@dimen/switchMarginTop"
+        android:background="@drawable/switch_background"
+        android:padding="@dimen/switchPadding15"
+        android:text="@string/hint_allowed"
+        android:textSize="@dimen/switchTextSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="@integer/zeroPoint5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Switch
+        android:id="@+id/undoSwitch"
+        android:layout_width="@dimen/switchWidth"
+        android:layout_height="@dimen/switchHeight"
+        android:layout_marginTop="@dimen/switchMarginTop"
+        android:background="@drawable/switch_background"
+        android:padding="@dimen/switchPadding15"
+        android:text="@string/undo_allowed"
+        android:textSize="@dimen/switchTextSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="@integer/zeroPoint5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hintSwitch" />
+
+    <Button
+        android:id="@+id/goButton"
+        android:layout_width="@dimen/buttonWidth"
+        android:layout_height="@dimen/buttonHeight"
+        android:layout_marginTop="@dimen/buttonMarginTop"
+        android:background="@drawable/mybutton"
+        android:elevation="@dimen/buttonElavation"
+        android:text="@string/start"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="@+id/undoSwitch"
+        app:layout_constraintHorizontal_bias="@integer/one"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/undoSwitch" />
+</androidx.constraintlayout.widget.ConstraintLayout>
