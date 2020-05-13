@@ -26,7 +26,7 @@ public class MainPage extends AppCompatActivity {
 
 
 
-    //Opens Local Game Activity
+    //Opens Local GameFragment Activity
     public void openLocalGame() {
         Intent intent = new Intent(this, LocalGame1.class);
         startActivity(intent);

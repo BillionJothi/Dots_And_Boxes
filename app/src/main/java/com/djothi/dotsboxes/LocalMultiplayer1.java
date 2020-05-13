@@ -4,9 +4,10 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 
-public class LocalMultiplayer1 extends AppCompatActivity {
+public class LocalMultiplayer1 extends AppCompatActivity implements GameOptionsFragment.GameOptionsListerner {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,5 +23,15 @@ public class LocalMultiplayer1 extends AppCompatActivity {
             ab.setTitle(R.string.local_multiplayer);
             ab.setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    @Override
+    public void fragementStartButtonClicked(boolean hints, boolean undos) {
+        openGameActivity();
+    }
+
+    public void openGameActivity() {
+        Intent intent = new Intent(this, gameAct.class);
+        startActivity(intent);
     }
 }

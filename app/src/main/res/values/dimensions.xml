@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--Fragment Switch Attributes (Game Options)-->
+
+
+    <dimen name="custom_wrap_content">-2px</dimen>
+    <dimen name="custom_match_parent">-1px</dimen>
+    <dimen name="custom_layout_center">11</dimen>
+    <dimen name="custom_layout_fill">77</dimen>
+
+
+    <!--Fragment Switch Attributes (GameFragment Options)-->
     <dimen name="switchWidth">300dp</dimen>
     <dimen name="switchHeight">55dp</dimen>
     <dimen name="switchPadding15">15dp</dimen>
@@ -30,6 +38,19 @@
     <dimen name="inputLayoutWidth">180dp</dimen>
     <dimen name="rgbTextSize">12sp</dimen>
     <dimen name="rgbEndPadding">20dp</dimen>
+
+    <!--GameFragment-->
+    <dimen name="dotWidth">35dp</dimen>
+    <dimen name="dotHeigth">34dp</dimen>
+    <dimen name="lineWidth">90dp</dimen>
+    <dimen name="lineHeight">30dp</dimen>
+
+    <dimen name="dotWidth2">35dp</dimen>
+    <dimen name="dotHeigth2">34dp</dimen>
+    <dimen name="lineWidth2">90dp</dimen>
+    <dimen name="lineHeight2">30dp</dimen>
+
+    <dimen name="layout">@dimen/custom_layout_center</dimen>
 
 
 </resources>

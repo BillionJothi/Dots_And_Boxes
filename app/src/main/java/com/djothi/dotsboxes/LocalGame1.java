@@ -5,14 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Choreographer;
 
 import java.util.Objects;
 
-public class LocalGame1 extends AppCompatActivity {
-
-
+public class LocalGame1 extends AppCompatActivity implements GameOptionsFragment.GameOptionsListerner{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +27,15 @@ public class LocalGame1 extends AppCompatActivity {
             ab.setTitle(R.string.vs_computer);
             ab.setDisplayHomeAsUpEnabled(true);
         }
+    }
 
+    @Override
+    public void fragementStartButtonClicked(boolean hints, boolean undos) {
+        openGameActivity();
+    }
 
-
-
-
+    public void openGameActivity() {
+        Intent intent = new Intent(this, gameAct.class);
+        startActivity(intent);
     }
 }
