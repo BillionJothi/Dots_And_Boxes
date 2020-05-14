@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.media.Image;
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.util.TypedValue;
@@ -11,18 +12,15 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TableRow;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link GameFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class GameFragment extends Fragment {
 
     ImageView dot0;
@@ -40,20 +38,24 @@ public class GameFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        float dip = 50f;
+        /*float dip = 50f;
         Resources r = getResources();
+
         int px = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip,
-                r.getDisplayMetrics()));
+                r.getDisplayMetrics()));*/
         View view = inflater.inflate(R.layout.fragment_game, container,false);
 
-        LinearLayout layout = (LinearLayout)view.findViewById(R.id.layout);
+
+        set(view,3);
+
+        //LinearLayout layout = (LinearLayout)view.findViewById(R.id.layout);
         //boolean success = formIsValid(layout);
 
         //withd & height
-        TableRow.LayoutParams dotLayout = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
+      /*  TableRow.LayoutParams dotLayout = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 px);
         TableRow.LayoutParams linearLineLayout = new TableRow.LayoutParams( px,
-                (int)px);
+                (int)px);*/
 
         /*dot0 = view.findViewById(R.id.dot0);
         dot0.setLayoutParams(dotLayout);
@@ -79,5 +81,88 @@ public class GameFragment extends Fragment {
             } //etc. If it fails anywhere, just return false.
         }
         return true;
+    }
+
+    public void set(View view, int x){
+        int actual = (x*2)+1;
+        int dots = (x+1)^2;
+        int totallines = (x*2*(x+1));
+        int lines = totallines/2;
+        int boxes = x^2;
+
+        float dotLinearLayoutWeight = (float) 1.25;
+        float linearLayoutWeight = (float) 1.0;
+        float dotWeight = (float) 1.05;
+        float verticalLineWeight = (float) 0.86;
+        float horizontalLineWeight = (float) 1.0;
+        float boxesWeight = (float) 0.86;
+
+        LinearLayout[] linearLayouts = new LinearLayout[actual];
+        ImageView[] imageViews_dot = new ImageView[dots];
+        ImageView[] imageViews_verticalLines = new ImageView[lines];
+        ImageView[] imageViews_horziontalLines = new ImageView[lines];
+        ImageView[] imageViews_boxes = new ImageView[boxes];
+
+        //Layout for linearlayout
+        LinearLayout.LayoutParams layoutParams =
+                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT);
+        //Layout for assets
+        LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(layoutParams);
+
+        //Dots
+        layoutParams2.weight = dotWeight;
+        layoutParams2.gravity = Gravity.CENTER;
+        for(ImageView i : imageViews_dot ){
+            i = new ImageView(view.getContext());
+            i.setLayoutParams(layoutParams2);
+            i.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            i.setImageResource(R.drawable.dot);
+        }
+
+        //HorizontaLines
+        layoutParams2.weight = horizontalLineWeight;
+        layoutParams2.gravity = Gravity.CENTER;
+        for(ImageView i : imageViews_horziontalLines ){
+            i = new ImageView(view.getContext());
+            i.setLayoutParams(layoutParams2);
+            i.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            i.setImageResource(R.drawable.blankhorizontal);
+        }
+
+        //Vertical Lines
+        layoutParams2.weight = verticalLineWeight;
+        layoutParams2.gravity = Gravity.CENTER;
+        for(ImageView i : imageViews_verticalLines ){
+            i = new ImageView(view.getContext());
+            i.setLayoutParams(layoutParams2);
+            i.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            i.setImageResource(R.drawable.blankvertical);
+        }
+
+        //boxes
+        layoutParams2.weight = boxesWeight;
+        layoutParams2.gravity = Gravity.CENTER;
+        for(ImageView i : imageViews_verticalLines ){
+            i = new ImageView(view.getContext());
+            i.setLayoutParams(layoutParams2);
+            i.setScaleType(ImageView.ScaleType.FIT_XY);
+            i.setImageResource(R.drawable.bgasset);
+        }
+
+        //Layout
+        for(int i=0; i<actual; i++){
+            linearLayouts[i] = new LinearLayout(view.getContext());
+            linearLayouts[i].setOrientation(LinearLayout.HORIZONTAL);
+            if(i%2 == 0){
+                layoutParams.weight = dotLinearLayoutWeight;
+//                linearLayouts[i].addView(imageViews_boxes[i]);
+            }else{
+                layoutParams.weight = linearLayoutWeight;
+            }
+            linearLayouts[i].setLayoutParams(layoutParams);
+        }
+
+
     }
 }

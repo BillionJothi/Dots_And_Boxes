@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Game Settings-->
+    <integer name="boardSize">3</integer>
+    <bool name="playerStarts1st">true</bool>
+    <integer name="turnStart">0</integer>
+
+    <!--Objects Weights-->>
+    <!--Original 3x: 1.25-->
+    <item name="dotLinearLayoutWeight"
+        format="float" type="dimen">1.25</item>
+    <!--Original 3x: 1.25-->
+    <fraction name="dotLinearLayoutWeight2"
+        format="float" type="dimen">1.25</fraction>
+    <!--Original 3x: 1.0-->
+    <item name="linearLayoutWeight"
+        format="float" type="dimen">1.0</item>
+    <!--Original 3x: 1.05-->
+    <item name="dotWeight"
+        format="float" type="dimen">1.05</item>
+    <!--Original 3x: 1.0-->
+    <item name="verticalLineWeight"
+        format="float" type="dimen">1.0</item>
+    <!--Original 3x: 0.86-->
+    <item name="horizontalLineWeight"
+        format="float" type="dimen">0.86</item>
+    <!--Original 3x: 0.86-->
+    <item name="boxesWeight"
+        format="float" type="dimen">0.86</item>
+
+    <!--Objects Scaling Parameters-->
+    <string name="dotScalling">@string/custom_ScaleType_FIT_CENTER</string>
+    <string name="horizontalLineScalling">@string/custom_ScaleType_FIT_CENTER</string>
+    <string name="verticalLineScalling">@string/custom_ScaleType_FIT_CENTER</string>
+    <string name="boxScalling">@string/custom_ScaleType_FIT_XY</string>
+
+    <!--Object Gravity Settings-->
+    <integer name="dotGravity">@integer/customGravityCENTER</integer>
+    <integer name="horizontalLineGravity">@integer/customGravityCENTER</integer>
+    <integer name="verticalLineGravity">@integer/customGravityCENTER</integer>
+    <integer name="boxGravity">@integer/customGravityCENTER</integer>
+
+    <!--Asserts/drawable images-->
+    <drawable name="dotDrawable">@drawable/dot</drawable>
+    <drawable name="blankHorizontalLineDrawable">@drawable/blankhorizontal</drawable>
+    <drawable name="blueHorizontalLineDrawable">@drawable/bluehorizontal</drawable>
+    <drawable name="redHorizontalLineDrawable">@drawable/redhorizontal</drawable>
+    <drawable name="blankVerticalLineDrawable">@drawable/blankvertical</drawable>
+    <drawable name="blueVerticalLineDrawable">@drawable/bluevertical</drawable>
+    <drawable name="redVerticalLineDrawable">@drawable/redhorizontal</drawable>
+    <drawable name="blankBoxDrawable">@drawable/bgasset</drawable>
+    <drawable name="blueBoxDrawable">@drawable/boxblue</drawable>
+    <drawable name="redBoxDrawable">@drawable/boxred</drawable>
+
+    <!--IDs/tags-->
+    <!--Note: used as tag-->
+    <!--Note: Usesd with tag+i-->
+    <string name="dotTag">dot</string>
+    <string name="horizontalLineTag">horizontalLine</string>
+    <string name="verticalLineTag">verticalLine</string>
+    <string name="boxTag">box</string>
+
+
+    <!--Gravity-->
+    <integer name="customGravityCENTER">17</integer>
+    <integer name="customGravityFILL">119</integer>
+    <integer name="customGravityTOP">48</integer>
+    <!--SclaeTypes-->
+    <string name="custom_ScaleType_CENTER">CENTER</string>
+    <string name="custom_ScaleType_CENTER_INSIDE">CENTER_INSIDE</string>
+    <string name="custom_ScaleType_CENTER_CROP">CENTER_CROP</string>
+    <string name="custom_ScaleType_FIT_CENTER">FIT_CENTER</string>
+    <string name="custom_ScaleType_FIT_END">FIT_END</string>
+    <string name="custom_ScaleType_FIT_START">FIT_START</string>
+    <string name="custom_ScaleType_MATRIX">MATRIX</string>
+    <string name="custom_ScaleType_FIT_XY">FIT_XY</string>
+</resources>

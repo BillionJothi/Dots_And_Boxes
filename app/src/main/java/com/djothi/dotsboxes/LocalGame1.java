@@ -35,7 +35,7 @@ public class LocalGame1 extends AppCompatActivity implements GameOptionsFragment
     }
 
     public void openGameActivity() {
-        Intent intent = new Intent(this, gameAct.class);
+        Intent intent = new Intent(this, Main2Activity.class);
         startActivity(intent);
     }
 }
