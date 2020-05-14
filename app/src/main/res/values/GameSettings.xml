@@ -4,6 +4,20 @@
     <integer name="boardSize">3</integer>
     <bool name="playerStarts1st">true</bool>
     <integer name="turnStart">0</integer>
+    <integer name="initialPlayers">1</integer>
+    <item name="waitForNextPlayer"
+        format="integer" type="integer">3000</item>
+    <item name="timeToSkipNextPlayer"
+        format="integer" type="integer">10000</item>
+
+    <!-- Game Setting - ColorLine  -->
+    <string name="P0Colour">red</string>
+    <string name="P1Colour">blue</string>
+
+    <!--Game Settings - Score-->
+    <integer name="initialScore">0</integer>
+    <integer name="lineScore">5</integer>
+    <integer name="boxScore">15</integer>
 
     <!--Objects Weights-->>
     <!--Original 3x: 1.25-->
@@ -42,15 +56,20 @@
 
     <!--Asserts/drawable images-->
     <drawable name="dotDrawable">@drawable/dot</drawable>
-    <drawable name="blankHorizontalLineDrawable">@drawable/blankhorizontal</drawable>
-    <drawable name="blueHorizontalLineDrawable">@drawable/bluehorizontal</drawable>
-    <drawable name="redHorizontalLineDrawable">@drawable/redhorizontal</drawable>
-    <drawable name="blankVerticalLineDrawable">@drawable/blankvertical</drawable>
-    <drawable name="blueVerticalLineDrawable">@drawable/bluevertical</drawable>
-    <drawable name="redVerticalLineDrawable">@drawable/redhorizontal</drawable>
+    <drawable name="blankHorizontalDrawable">@drawable/blankhorizontal</drawable>
+    <drawable name="blueHorizontalDrawable">@drawable/bluehorizontal</drawable>
+    <drawable name="redHorizontalDrawable">@drawable/redhorizontal</drawable>
+    <drawable name="blankVerticalDrawable">@drawable/blankvertical</drawable>
+    <drawable name="blueVerticalDrawable">@drawable/bluevertical</drawable>
+    <drawable name="redVerticalDrawable">@drawable/redvertical</drawable>
     <drawable name="blankBoxDrawable">@drawable/bgasset</drawable>
     <drawable name="blueBoxDrawable">@drawable/boxblue</drawable>
     <drawable name="redBoxDrawable">@drawable/boxred</drawable>
+
+    <!--Asserts/drawable images Namer-->
+    <string name="HLineDName">HorizontalDrawable</string>
+    <string name="VLineDName">VerticalDrawable</string>
+    <string name="boxDName">BoxDrawable</string>
 
     <!--IDs/tags-->
     <!--Note: used as tag-->
@@ -59,6 +78,14 @@
     <string name="horizontalLineTag">horizontalLine</string>
     <string name="verticalLineTag">verticalLine</string>
     <string name="boxTag">box</string>
+    <string name="horizontalGameLayoutTag">horizontalGameLayout</string>
+
+    <!--Tag toString Checker-->
+    <string name="dotTagChecker">@string/dotTag</string>
+    <string name="horizontalLineTagChecker">@string/horizontalLineTag</string>
+    <string name="verticalLineTagChecker">@string/verticalLineTag</string>
+    <string name="boxTagChecker">@string/boxTag</string>
+    <string name="horizontalGameLayoutTagChecker">@string/horizontalGameLayoutTag</string>
 
 
     <!--Gravity-->
@@ -74,4 +101,6 @@
     <string name="custom_ScaleType_FIT_START">FIT_START</string>
     <string name="custom_ScaleType_MATRIX">MATRIX</string>
     <string name="custom_ScaleType_FIT_XY">FIT_XY</string>
+    <!--Error Int-->
+    <integer name="errorInt">777</integer>
 </resources>
