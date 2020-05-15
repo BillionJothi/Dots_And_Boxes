@@ -12,7 +12,7 @@
     <!--Set4ttins start from 1-->
     <bool name="playerStarts1st">true</bool>
     <bool name="pcPlaying">true</bool>
-    <integer name="noPCPlayers">1</integer>
+    <integer name="noPCPlayers">0</integer>
     <integer name="onlinePlayers">0</integer>
     <integer name="localPlayers">1</integer>
 

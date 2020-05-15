@@ -1,6 +1,9 @@
 package com.djothi.dotsboxes;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -8,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -366,7 +370,6 @@ public class GameFragment2 extends Fragment {
         return new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showToast(v.getTag().toString());
                 lineClicked(v);
             }
         };
@@ -384,11 +387,9 @@ public class GameFragment2 extends Fragment {
             time = System.currentTimeMillis();
             upPlayerScore();
             removeLine(img,playersTurn,isHorizontalLine);
-            System.out.print(img.getId()+"**********");
-            if(boxExist(img)){
+            if(boxExist(v)){
                 box.setImageResource(R.drawable.redBoxDrawable);
             }
-
             activityCommander.GameClicked(score,turn);
             nextTurn();
         }else{showWaitToast();}
@@ -682,7 +683,8 @@ public class GameFragment2 extends Fragment {
         }
         return finalLayout;
     }
-    private boolean boxExist(ImageViewAdded line) {
+    private boolean boxExist(View v) {
+        ImageViewAdded line = (ImageViewAdded) v;
         ImageViewAdded[][] lay = layoutInArray;
         int row = 0, column = 0;
         boolean hori = true;
@@ -691,25 +693,23 @@ public class GameFragment2 extends Fragment {
         //Get row/colum values
         for (int i = 0; i < lay.length; i++) {
             for (int j = 0; j < lay.length; j++) {
-                if (lay[i][j].getId() == line.getId()) {
+                if (lay[i][j].getTag() == line.getTag()) {
                     column = i;
                     row = j;
                     break;
                 }
             }
         }
-
+        showToast(line.getTag().toString() + " "+line.getId() +"\n" + "r:"+row+"c"+column);
         try {
             // System.out.println("row: "+row+" column "+column+ " isHOri" +hori);
             hori = isHorizontalLine(line);
-
-
             System.out.println("row: "+ row + " column " + column + " isHOri" + hori);
             if (hori) {
                 if (column == 0) {
                     return topLines(lay, column, row);
                 }
-                if (column == lay.length) {
+                if (column == lay.length-1) {
                     return bottomLines(lay, column, row);
                 } else {
                     boolean t = topLines(lay, column, row);
@@ -721,12 +721,12 @@ public class GameFragment2 extends Fragment {
                     }
                 }
 
-            } /*else {
+            } else {
                 //Vertical Lines only
                 if (row == 0) {
                     return beforeLines(lay, column, row);
                 }
-                if (row == lay.length) {
+                if (row == lay.length-1) {
                     return afterLines(lay, column, row);
                 } else { //TODO add dual boxes function
                     boolean b = beforeLines(lay, column, row);
@@ -737,42 +737,76 @@ public class GameFragment2 extends Fragment {
                         return false;
                     }
                 }
-            }*/
-
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }return false;
 
     }
+
+
+    private void animate(ImageViewAdded i){
+        final AnimationDrawable animation = new AnimationDrawable();
+        animation.addFrame(getResources().getDrawable(R.drawable.blueHorizontalDrawable,null), 100);
+        animation.addFrame(getResources().getDrawable(R.drawable.redHorizontalDrawable,null), 200);
+        animation.addFrame(getResources().getDrawable(R.drawable.blueHorizontalDrawable,null), 300);
+        animation.setOneShot(false);
+        i.setImageDrawable(animation);
+                // Drawable[] drawables = new Drawable[i.length];
+        /*for(int k=0; k<i.length; k++){
+            drawables[k] = i[k].getDrawable();
+            i[k].setImageDrawable(animation);
+        }*/
+        animation.start();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                animation.stop();
+                //refreshing.clearAnimation();
+            }
+        }, 5000);
+        /*for(int k=0; k<i.length; k++){
+            i[k].setImageDrawable(drawables[k]);
+        }*/
+    }
+
+
+
     //Colum addd goes up the table, column minus goes down
     //row add goes into table, minums out
     private boolean bottomLines(ImageViewAdded[][] lay, int column, int row) {
-        boolean r = (lay[column-1][row+1].isSet() &&
-                     lay[column-1][row-1].isSet() &&
-                        lay[column-2][row].isSet());
+        ImageViewAdded[] i = {lay[column-1][row+1],lay[column-1][row-1],lay[column-2][row]};
+        animate(lay[column-1][row+1]);
+        Boolean y = false;
+        for (ImageViewAdded j: i) {
+            y = j.isSet();
+        }
+        boolean r = y;
+        //animate(i);
         if(r){box = lay[column-1][row];}
         return r;
     }
     private boolean topLines(ImageViewAdded[][] lay, int column, int row) {
         System.out.println("******************c"+column+"********"+row);
-        boolean r = (lay[column+1][row].isSet() &&
-                      lay[column-1][row].isSet() &&
-                       lay[column][row+2].isSet());
+        boolean r = (lay[column+1][row+1].isSet() &&
+                      lay[column+1][row-1].isSet() &&
+                       lay[column+2][row].isSet());
         if(r){box = lay[column+1][row];}
         return r;
     }
     private boolean beforeLines(ImageViewAdded[][] lay, int column, int row) {
         boolean r = (lay[column+1][row+1].isSet() &&
-                     lay[column+1][row-1].isSet() &&
-                      lay[column+2][row].isSet());
-        if(r){box = lay[column+1][row];}
+                     lay[column-1][row+1].isSet() &&
+                      lay[column][row+2].isSet());
+        if(r){box = lay[column][row+1];}
         return r;
     }
     private boolean afterLines(ImageViewAdded[][] lay, int column, int row) {
-        boolean r = (lay[column-1][row+1].isSet() &&
-                      lay[column-1][row-1].isSet() &&
-                      lay[column-2][row].isSet());
-        if(r){box = lay[column-1][row];}
+        boolean r = (lay[column-1][row-1].isSet() &&
+                      lay[column-1][row+1].isSet() &&
+                      lay[column][row-2].isSet());
+        if(r){box = lay[column][row-1];}
         return r;
     }
 
