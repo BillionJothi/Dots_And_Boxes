@@ -17,6 +17,6 @@ public class Main2Activity extends AppCompatActivity implements GameFragment2.Ga
 
     @Override
     public void GameClicked(int score, int turn) {
-        System.out.println(score);
+        System.out.println("turn :"+turn);
     }
 }

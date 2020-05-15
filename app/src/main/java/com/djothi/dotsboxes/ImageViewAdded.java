@@ -11,6 +11,9 @@ class ImageViewAdded extends ImageView {
     boolean set = false;
     int player;
 
+    public ImageViewAdded(Context context, ImageView imageView) {
+        super(context);
+        }
     public ImageViewAdded(Context context) {
         super(context);
     }
@@ -22,4 +25,6 @@ class ImageViewAdded extends ImageView {
     }
     public int getPlayer() { return player; }
     public void setPlayer(int player) { this.player = player; }
+
+
 }
