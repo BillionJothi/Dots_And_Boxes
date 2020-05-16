@@ -26,7 +26,9 @@ public class LocalGame1 extends AppCompatActivity implements GameOptionsFragment
     }
 
     @Override
-    public void fragementStartButtonClicked(boolean hints, boolean undos) {
+    public void fragementStartButtonClicked(
+            int grid, int human, int AI,
+            boolean hint, boolean undo, boolean p1Starts, boolean quickMode, boolean randomTurns) {
         openGameActivity();
     }
 

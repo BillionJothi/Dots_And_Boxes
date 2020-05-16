@@ -37,6 +37,12 @@
     <integer name="noPickerWheelItemCount">3</integer>
     <bool name="noPickerWrapWheel">false</bool>
     <bool name="noPickerAIWrapWheel">true</bool>
+    <integer name="noPickerGridSizeMaxValue">10</integer>
+    <integer name="noPickerGridSizeMinValue">1</integer>
+    <integer name="noPickerNoPlayersMaxValue">24</integer>
+    <integer name="noPickerNoPlayersMinValue">0</integer>
+    <integer name="noPickerNoAIMaxValue">24</integer>
+    <integer name="noPickerNoAIMinValue">0</integer>
 
 
     <!--Button Atrributes-->

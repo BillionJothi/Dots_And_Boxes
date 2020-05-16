@@ -181,7 +181,9 @@
         app:np_selectedTextSize="@dimen/noPickerSelectedTextSize"
         app:np_textSize="@dimen/noPickerTextSize"
         app:np_wheelItemCount="@integer/noPickerWheelItemCount"
-        app:np_wrapSelectorWheel="@bool/noPickerWrapWheel" />
+        app:np_wrapSelectorWheel="@bool/noPickerWrapWheel"
+        app:np_max="@integer/noPickerGridSizeMaxValue"
+        app:np_min="@integer/noPickerGridSizeMinValue"/>
 
 
     <com.shawnlin.numberpicker.NumberPicker
@@ -201,7 +203,9 @@
         app:np_selectedTextSize="@dimen/noPickerSelectedTextSize"
         app:np_textSize="@dimen/noPickerTextSize"
         app:np_wheelItemCount="@integer/noPickerWheelItemCount"
-        app:np_wrapSelectorWheel="@bool/noPickerWrapWheel" />
+        app:np_wrapSelectorWheel="@bool/noPickerAIWrapWheel"
+        app:np_max="@integer/noPickerNoPlayersMaxValue"
+        app:np_min="@integer/noPickerNoPlayersMinValue"/>
 
     <com.shawnlin.numberpicker.NumberPicker
         android:id="@+id/noAIPlayersPickerInput"
@@ -220,7 +224,9 @@
         app:np_selectedTextSize="@dimen/noPickerSelectedTextSize"
         app:np_textSize="@dimen/noPickerTextSize"
         app:np_wheelItemCount="@integer/noPickerWheelItemCount"
-        app:np_wrapSelectorWheel="@bool/noPickerAIWrapWheel" />
+        app:np_wrapSelectorWheel="@bool/noPickerAIWrapWheel"
+        app:np_max="@integer/noPickerNoPlayersMaxValue"
+        app:np_min="@integer/noPickerNoAIMinValue"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
