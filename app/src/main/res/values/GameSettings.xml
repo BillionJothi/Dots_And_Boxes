@@ -62,16 +62,36 @@
     <integer name="boxGravity">@integer/customGravityCENTER</integer>
 
     <!--Asserts/drawable images-->
-    <drawable name="dotDrawable">@drawable/dot</drawable>
-    <drawable name="blankHorizontalDrawable">@drawable/blankhorizontal</drawable>
-    <drawable name="blueHorizontalDrawable">@drawable/bluehorizontal</drawable>
-    <drawable name="redHorizontalDrawable">@drawable/redhorizontal</drawable>
-    <drawable name="blankVerticalDrawable">@drawable/blankvertical</drawable>
-    <drawable name="blueVerticalDrawable">@drawable/bluevertical</drawable>
-    <drawable name="redVerticalDrawable">@drawable/redvertical</drawable>
-    <drawable name="blankBoxDrawable">@drawable/bgasset</drawable>
-    <drawable name="blueBoxDrawable">@drawable/boxblue</drawable>
-    <drawable name="redBoxDrawable">@drawable/boxred</drawable>
+    <!--Dot-->
+    <drawable name="dotDrawable">@drawable/dots</drawable>
+    <!--Boxes-->
+    <drawable name="blankBoxDrawable">@drawable/box_black</drawable>
+    <drawable name="blueBoxDrawable">@drawable/box_blue</drawable>
+    <drawable name="redBoxDrawable">@drawable/box_red</drawable>
+    <!--Red-Line-->
+    <drawable name="redHorizontalDrawable">@drawable/line_red_horizontal</drawable>
+    <drawable name="redVerticalDrawable">@drawable/line_red_vertical</drawable>
+    <!--Light-Blue-Line-->
+    <drawable name="lightblueHorizontalDrawable">@drawable/line_light_blue_horizontal</drawable>
+    <drawable name="lightblueVerticalDrawable">@drawable/line_light_blue_vertical</drawable>
+    <!--Blue-Line-->
+    <drawable name="blueHorizontalDrawable">@drawable/line_blue_horizontal</drawable>
+    <drawable name="blueVerticalDrawable">@drawable/line_blue_vertical</drawable>
+    <!--Blank/Grey-Line-->
+    <drawable name="blankHorizontalDrawable">@drawable/line_grey_horizontal</drawable>
+    <drawable name="blankVerticalDrawable">@drawable/line_grey_vertical</drawable>
+    <!--Yellow-Line-->
+    <drawable name="yellowHorizontalDrawable">@drawable/line_yellow_horizontal</drawable>
+    <drawable name="yellowVerticalDrawable">@drawable/line_yellow_vertical</drawable>
+    <!--Pink-Line-->
+    <drawable name="pinkHorizontalDrawable">@drawable/line_pink_horizontal</drawable>
+    <drawable name="pinkVerticalDrawable">@drawable/line_pink_vertical</drawable>
+    <!--Orange-Line-->
+    <drawable name="orangeHorizontalDrawable">@drawable/line_orange_horizontal</drawable>
+    <drawable name="orangeVerticalDrawable">@drawable/line_orange_vertical</drawable>
+    <!--Done - Pictures-->
+
+
 
     <!--Asserts/drawable images Namer-->
     <string name="HLineDName">HorizontalDrawable</string>
