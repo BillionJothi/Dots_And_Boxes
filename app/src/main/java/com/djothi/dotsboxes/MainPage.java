@@ -1,10 +1,10 @@
 package com.djothi.dotsboxes;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainPage extends AppCompatActivity {
 
@@ -26,7 +26,7 @@ public class MainPage extends AppCompatActivity {
 
 
 
-    //Opens Local GameFragment Activity
+    //Opens Local GameFragment_static Activity
     public void openLocalGame() {
         Intent intent = new Intent(this, LocalGame1.class);
         startActivity(intent);

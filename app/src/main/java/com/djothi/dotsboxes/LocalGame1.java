@@ -1,22 +1,18 @@
 package com.djothi.dotsboxes;
 
+import android.content.Intent;
+import android.os.Bundle;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.Choreographer;
-
-import java.util.Objects;
 
 public class LocalGame1 extends AppCompatActivity implements GameOptionsFragment.GameOptionsListerner{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_local_game1);
+        setContentView(R.layout.activity_local_game);
 
         //Toolbar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -35,7 +31,7 @@ public class LocalGame1 extends AppCompatActivity implements GameOptionsFragment
     }
 
     public void openGameActivity() {
-        Intent intent = new Intent(this, Main2Activity.class);
+        Intent intent = new Intent(this, Main2Activity2.class);
         startActivity(intent);
     }
 }

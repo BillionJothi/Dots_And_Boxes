@@ -1,17 +1,18 @@
 package com.djothi.dotsboxes;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.NumberPicker;
 import android.widget.Switch;
-import android.widget.Toast;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 
 public class GameOptionsFragment extends Fragment {
@@ -51,6 +52,50 @@ public class GameOptionsFragment extends Fragment {
                     }
                 }
         );
+
+
+
+
+        View v = view;
+
+        NumberPicker np = (NumberPicker) v.findViewById(R.id.np);
+
+        //Set TextView text color
+        final TextView tv = (TextView) v.findViewById(R.id.tv);
+        System.out.println(tv);
+        tv.setTextColor(Color.parseColor("#FF2C834F"));
+
+        //Initializing a new string array with elements
+        final String[] values= {"English","Hindi", "Suomi"};
+
+        //Populate NumberPicker values from String array values
+        //Set the minimum value of NumberPicker
+        np.setMinValue(0); //from array first value
+        //Specify the maximum value/number of NumberPicker
+        np.setMaxValue(values.length-1); //to array last value
+
+        //Specify the NumberPicker data source as array elements
+        np.setDisplayedValues(values);
+
+        //Gets whether the selector wheel wraps when reaching the min/max value.
+        np.setWrapSelectorWheel(true);
+
+        //Set a value change listener for NumberPicker
+        np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal){
+                //Display the newly selected value from picker
+                tv.setText("Selected value : " + values[newVal]);
+            }
+        });
+
+
+
+
+
+
+
+
 
         // Inflate the layout for this fragment
         return view;

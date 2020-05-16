@@ -1,18 +1,18 @@
 package com.djothi.dotsboxes;
 
+import android.content.Intent;
+import android.os.Bundle;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
-import android.content.Intent;
-import android.os.Bundle;
 
 public class LocalMultiplayer1 extends AppCompatActivity implements GameOptionsFragment.GameOptionsListerner {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_local_multiplayer1);
+        setContentView(R.layout.activity_local_multiplayer);
 
         //Toolbar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -31,7 +31,7 @@ public class LocalMultiplayer1 extends AppCompatActivity implements GameOptionsF
     }
 
     public void openGameActivity() {
-        Intent intent = new Intent(this, gameAct.class);
+        Intent intent = new Intent(this, ConstrainGame.class);
         startActivity(intent);
     }
 }

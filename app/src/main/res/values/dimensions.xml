@@ -8,7 +8,7 @@
     <dimen name="custom_layout_fill">77</dimen>
 
 
-    <!--Fragment Switch Attributes (GameFragment Options)-->
+    <!--Fragment Switch Attributes (GameFragment_static Options)-->
     <dimen name="switchWidth">300dp</dimen>
     <dimen name="switchHeight">55dp</dimen>
     <dimen name="switchPadding15">15dp</dimen>
@@ -39,7 +39,7 @@
     <dimen name="rgbTextSize">12sp</dimen>
     <dimen name="rgbEndPadding">20dp</dimen>
 
-    <!--GameFragment-->
+    <!--GameFragment_static-->
     <dimen name="dotWidth">35dp</dimen>
     <dimen name="dotHeigth">34dp</dimen>
     <dimen name="lineWidth">90dp</dimen>

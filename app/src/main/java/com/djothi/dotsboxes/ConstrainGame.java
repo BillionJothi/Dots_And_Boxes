@@ -1,22 +1,22 @@
 package com.djothi.dotsboxes;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 
-public class Main2Activity extends AppCompatActivity implements GameFragment2.GameListener{
+import androidx.appcompat.app.AppCompatActivity;
+
+public class ConstrainGame extends AppCompatActivity implements GameFragment.GameListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_main_game);
 
     }
 
 
     @Override
-    public void GameClicked(int score, int turn) {
+    public void GameClicked(int[] score, int turn) {
         System.out.println("turn :"+turn);
     }
 }

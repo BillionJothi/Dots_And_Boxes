@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Game Settings-->
-    <integer name="boardSize">3</integer>
+    <integer name="boardSize">7</integer>
     <integer name="turnStart">0</integer>
-    <item name="waitForNextPlayer"
-        format="integer" type="integer">3000</item>
-    <item name="timeToSkipNextPlayer"
-        format="integer" type="integer">10000</item>
+    <integer name="PCDelay">1000</integer>
 
     <!--Players Settings-->
     <!--Set4ttins start from 1-->
-    <bool name="playerStarts1st">true</bool>
     <bool name="pcPlaying">true</bool>
-    <integer name="noPCPlayers">0</integer>
+    <integer name="noPCPlayers">6</integer>
     <integer name="onlinePlayers">0</integer>
-    <integer name="localPlayers">1</integer>
+    <integer name="localPlayers">2</integer>
+    <bool name="playerStarts1st">true</bool>
 
 
     <!-- Game Setting - ColorLine  -->
-    <string name="P0Colour">red</string>
-    <string name="P1Colour">blue</string>
+    <!--P0 usually is the 1st human player-->
+    <string name="P0Colour">blue</string>
+    <string name="P1Colour">red</string>
 
     <!--Game Settings - Score-->
     <integer name="initialScore">0</integer>
@@ -29,30 +27,30 @@
     <!--Objects Weights-->>
     <!--Original 3x: 1.25-->
     <item name="dotLinearLayoutWeight"
-        format="float" type="dimen">1.25</item>
+        format="float" type="dimen">1.1</item>
     <!--Original 3x: 1.25-->
     <fraction name="dotLinearLayoutWeight2"
-        format="float" type="dimen">1.25</fraction>
+        format="float" type="dimen">1</fraction>
     <!--Original 3x: 1.0-->
     <item name="linearLayoutWeight"
         format="float" type="dimen">1.0</item>
     <!--Original 3x: 1.05-->
     <item name="dotWeight"
-        format="float" type="dimen">1.05</item>
+        format="float" type="dimen">1.1</item>
     <!--Original 3x: 1.0-->
     <item name="verticalLineWeight"
-        format="float" type="dimen">1.0</item>
+        format="float" type="dimen">1.1</item>
     <!--Original 3x: 0.86-->
     <item name="horizontalLineWeight"
-        format="float" type="dimen">0.86</item>
+        format="float" type="dimen">1</item>
     <!--Original 3x: 0.86-->
     <item name="boxesWeight"
-        format="float" type="dimen">0.86</item>
+        format="float" type="dimen">1</item>
 
     <!--Objects Scaling Parameters-->
-    <string name="dotScalling">@string/custom_ScaleType_FIT_CENTER</string>
+    <string name="dotScalling">@string/custom_ScaleType_FIT_XY</string>
     <string name="horizontalLineScalling">@string/custom_ScaleType_FIT_CENTER</string>
-    <string name="verticalLineScalling">@string/custom_ScaleType_FIT_CENTER</string>
+    <string name="verticalLineScalling">@string/custom_ScaleType_FIT_XY</string>
     <string name="boxScalling">@string/custom_ScaleType_FIT_XY</string>
 
     <!--Object Gravity Settings-->
@@ -68,6 +66,17 @@
     <drawable name="blankBoxDrawable">@drawable/box_black</drawable>
     <drawable name="blueBoxDrawable">@drawable/box_blue</drawable>
     <drawable name="redBoxDrawable">@drawable/box_red</drawable>
+    <!--Colors--><!--Excludes blank-->
+    <integer name="noAvailbleColors">6</integer>
+    <string name="color0">blank</string>
+    <!--color 1 ususally P0 which is 1st human--><!--Edit: always set human-->
+    <string name="color1">blue</string>
+    <!--Color 2 usually P1 usually pc-->
+    <string name="color2">red</string>
+    <string name="color3">lightblue</string>
+    <string name="color4">yellow</string>
+    <string name="color5">pink</string>
+    <string name="color6">orange</string>
     <!--Red-Line-->
     <drawable name="redHorizontalDrawable">@drawable/line_red_horizontal</drawable>
     <drawable name="redVerticalDrawable">@drawable/line_red_vertical</drawable>

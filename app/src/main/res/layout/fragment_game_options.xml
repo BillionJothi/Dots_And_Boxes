@@ -8,6 +8,43 @@
     android:backgroundTintMode="src_over"
     tools:context=".GameOptionsFragment">
 
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select a Language..."
+        android:textSize="25dp"
+        app:layout_constraintBottom_toTopOf="@+id/spinner"
+        app:layout_constraintStart_toEndOf="@+id/np"
+        app:layout_constraintTop_toTopOf="@+id/np" />
+
+    <NumberPicker
+        android:id="@+id/np"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:internalMaxHeight="100dp"
+        app:selectionDividersDistance="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/undoSwitch2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.193"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/undoSwitch"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Switch
+        android:id="@+id/undoSwitch2"
+        android:layout_width="@dimen/switchWidth"
+        android:layout_height="@dimen/switchHeight"
+        android:layout_marginTop="312dp"
+        android:background="@drawable/switch_background"
+        android:padding="@dimen/switchPadding15"
+        android:text="@string/undo_allowed"
+        android:textSize="@dimen/switchTextSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.603"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hintSwitch" />
+
     <Switch
         android:id="@+id/hintSwitch"
         android:layout_width="@dimen/switchWidth"
@@ -41,7 +78,7 @@
         android:id="@+id/goButton"
         android:layout_width="@dimen/buttonWidth"
         android:layout_height="@dimen/buttonHeight"
-        android:layout_marginTop="@dimen/buttonMarginTop"
+        android:layout_marginTop="12dp"
         android:background="@drawable/mybutton"
         android:elevation="@dimen/buttonElavation"
         android:text="@string/start"
@@ -50,4 +87,15 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/undoSwitch" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        app:layout_constraintBottom_toBottomOf="@+id/np"
+        app:layout_constraintStart_toEndOf="@+id/np"
+        app:layout_constraintTop_toTopOf="@+id/np"
+        app:layout_constraintVertical_bias="0.487" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
