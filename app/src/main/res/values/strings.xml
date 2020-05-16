@@ -34,6 +34,10 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="exception_playable_equal_remianing">Total playable not equal to remaining</string>
+    <string name="exception_playable_horizontal_equal_vertical"><![CDATA[Horizontal & Vertical playable lines is not equal]]></string>
+    <string name="exception_toast_pc_unable_line">PC failed to find a line</string>
+    <string name="toast_wait_next_player">Waiting for next player\'s decision</string>
 
 
 </resources>

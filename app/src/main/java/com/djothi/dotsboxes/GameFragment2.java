@@ -1,16 +1,9 @@
 package com.djothi.dotsboxes;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-
 import android.os.Handler;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -25,6 +18,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
 
 
 public class GameFragment2 extends Fragment {
@@ -62,17 +59,14 @@ public class GameFragment2 extends Fragment {
     private List<ImageViewAdded> horziontalLinesLeft;
     private GameListener activityCommander;
     private ImageViewAdded box;
-    private int noSqaures = 0;
     private View view;
+    private int noSqaures;
 
     private ImageViewAdded[][] layoutInArray;
-
-    //private int .;
 
     public interface GameListener{
         public void GameClicked(int score, int turn);
     }
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -81,7 +75,9 @@ public class GameFragment2 extends Fragment {
         }catch (ClassCastException e ){
             throw new ClassCastException(getActivity().toString());
         }
-      /*  Fragment currentFragment = getFragmentManager().findFragmentById(R.id.fragment4);
+      /*  //TODO Fragment Detach/Attach
+        **********Attaching & Detaching fragment for updates*************
+        Fragment currentFragment = getFragmentManager().findFragmentById(R.id.fragment4);
         FragmentTransaction fragTransaction = getFragmentManager().beginTransaction();
         fragTransaction.detach(currentFragment);
         //GameFragment2 g = new GameFragment2();
@@ -105,6 +101,7 @@ public class GameFragment2 extends Fragment {
             e.printStackTrace();
             showToast("Error getting rnad no. for PC");
         }
+
         //Get Settings from resouruces
         this.turn = getResources().getInteger(R.integer.turnStart);
         this.score = getResources().getInteger(R.integer.initialScore);
@@ -127,6 +124,8 @@ public class GameFragment2 extends Fragment {
         makeBoard(layout);
         layoutInArray =  getLayoutArray();
 
+        //TODO Layout Maunual Print
+        //**.Testing***
         System.out.println(layoutInArray[0][0].getTag()+","+layoutInArray[0][1].getTag()+","+layoutInArray[0][2].getTag()+ ","+layoutInArray[0][3].getTag()+","+layoutInArray[0][4].getTag()+","+layoutInArray[0][5].getTag()+","+layoutInArray[0][6].getTag());
         System.out.println(layoutInArray[1][0].getTag()+","+layoutInArray[1][1].getTag()+","+layoutInArray[1][2].getTag()+","+layoutInArray[1][3].getTag()+","+layoutInArray[1][4].getTag()+","+layoutInArray[1][5].getTag()+","+layoutInArray[1][6].getTag());
         System.out.println(layoutInArray[2][0].getTag()+","+layoutInArray[2][1].getTag()+","+layoutInArray[2][2].getTag()+","+layoutInArray[2][3].getTag()+","+layoutInArray[2][4].getTag()+","+layoutInArray[2][5].getTag()+","+layoutInArray[2][6].getTag());
@@ -135,26 +134,25 @@ public class GameFragment2 extends Fragment {
         System.out.println(layoutInArray[5][0].getTag()+","+layoutInArray[5][1].getTag()+","+layoutInArray[5][2].getTag()+","+layoutInArray[5][3].getTag()+","+layoutInArray[5][4].getTag()+","+layoutInArray[5][5].getTag()+","+layoutInArray[5][6].getTag());
         System.out.println(layoutInArray[6][0].getTag()+","+layoutInArray[6][1].getTag()+","+layoutInArray[6][2].getTag()+","+layoutInArray[6][3].getTag()+","+layoutInArray[6][4].getTag()+","+layoutInArray[6][5].getTag()+","+layoutInArray[6][6].getTag());
 
-
         // Inflate the layout for this fragment
         return view;
     }
 
     private void checkCubeBoard() throws Exception {
         if(noHorizontalPlayableLinesLeft != noVerticalPlayableLinesLeft){
-            throw new Exception("Horizontal & Vertical playables not equal");
+            throw new Exception(getString(R.string.exception_playable_horizontal_equal_vertical));
         }else if((noHorizontalPlayableLinesLeft + noVerticalPlayableLinesLeft) != noPlayableLinesLeft){
-            throw new Exception("Total playables not equal to remaining");
+            throw new Exception(getString(R.string.exception_playable_equal_remianing));
         }
     }
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void makeBoard(LinearLayout layout) {
         this.gridSize = (boardSize*2)+1;
         this.noTotalDots = (int) Math.pow((boardSize+1),2);
+        //or for below, can use formaula: Math.pow(x,2)+x where x is boardSize instead;
         this.noTotalInitialXlines = noTotalPlayableSides/2;
-        //for above,also formaula: Math.pow(x,2)+x;
         this.noTotalBoxes = (int) Math.pow(boardSize,2);
-        //No.of LayoutParems is dependent on the number of object types.
+        //No.of LayoutParems is dependent on the number of object types. Currently fixes no of types
         final int noLayoutParems = 6;
 
         //get Resouces Values for each object
@@ -221,7 +219,6 @@ public class GameFragment2 extends Fragment {
             imageViews_horziontalLines[i].setImageResource(R.drawable.blankHorizontalDrawable);
             //setPlayed to false
             imageViews_horziontalLines[i].setSet(false);
-            ImageViewAdded himg = imageViews_horziontalLines[i];
             imageViews_horziontalLines[i].setOnClickListener(setLineClicker());
         }
 
@@ -259,6 +256,7 @@ public class GameFragment2 extends Fragment {
             imageViews_boxes[i].setSet(false);
         }
 
+        //Adding items to view in right layout. Note: This allows for variable grids
         int dotCount = 0;
         int horizontalLineCount = 0;
         int verticalLineCount = 0;
@@ -300,6 +298,7 @@ public class GameFragment2 extends Fragment {
             }
         }
 
+        //TODO Note: Copying of Arrays of Assets happens here
         //Copy array for finding specific lines later
         this.horziontalLinesLeft = new ArrayList<>(Arrays.asList(Arrays.copyOf(imageViews_horziontalLines,
                 imageViews_horziontalLines.length)));
@@ -317,7 +316,7 @@ public class GameFragment2 extends Fragment {
             totalPlayers+=noPcPlaying;
             this.PCTurns = new int[noPcPlaying];
         }
-        boolean done =false;
+        boolean done;
         //TODO add player don't start 1st
         int pcTurn, count = 0, min = 0, notp =0;
         if(!playersTurn){notp=1;};
@@ -335,6 +334,7 @@ public class GameFragment2 extends Fragment {
                         do{
                             if(pcTurn == PCTurns[j]){
                                 done=false;
+                                break;
                             }
                             j++;
                         }while (j<i);
@@ -347,6 +347,7 @@ public class GameFragment2 extends Fragment {
             }
         }
 
+        //TODO: Calculate Players print
        /* System.out.println("localPlayers " + localPlayers+ "\n"+
                 " onlinePlayers " + onlinePlayers+"\n"+
                 " pcPlaying " + pcPlaying+"\n"+
@@ -356,14 +357,12 @@ public class GameFragment2 extends Fragment {
                 " PCPlayers "+ Arrays.toString(PCTurns));*/
     }
 
-    /*************************** END - Methods Used in MakeBoard****************************/
+    /*************************** Methods Used in MakeBoard****************************/
     private static float getFloatResourcesValues(View view, Integer resources){
         TypedValue outValue = new TypedValue();
         view.getResources().getValue(resources, outValue, true);
         return (outValue.getFloat());
     }
-
-
     //OnClickLister for line
     private Button.OnClickListener
         setLineClicker(){
@@ -382,8 +381,9 @@ public class GameFragment2 extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        //On line clicked, upsocre, remove/update the line & change it's color then change turn
         if(playersTurn && !img.isSet()){
+            //TODO Timer Set Here
             time = System.currentTimeMillis();
             upPlayerScore();
             removeLine(img,playersTurn,isHorizontalLine);
@@ -401,6 +401,8 @@ public class GameFragment2 extends Fragment {
         int linescore = getResources().getInteger(R.integer.lineScore);
         this.score+=linescore;
     }
+    //Meathod Removes the line & updates it based off players colors
+    //TODO checks for multiple players here
     private void removeLine(ImageViewAdded img,Boolean player, Boolean isHorizontal) {
         img.setSet(true);
         img.setClickable(false);
@@ -416,8 +418,8 @@ public class GameFragment2 extends Fragment {
             if(player){switchLineColor(playerColor,img,false);}
             else {switchLineColor(pcColor,img,false);}
         }
-
     }
+    //Auto getting line colors based off inputs, allows for easy upgrades
     private void switchLineColor(String r, ImageViewAdded img, Boolean isHorizontal){
         int line;
         if(isHorizontal){
@@ -425,6 +427,10 @@ public class GameFragment2 extends Fragment {
                 case "blue": line = R.drawable.blueHorizontalDrawable; break;
                 case "red": line = R.drawable.redHorizontalDrawable; break;
                 case "blank": line = R.drawable.blankHorizontalDrawable; break;
+                case "lightBlue": line = R.drawable.lightblueHorizontalDrawable; break;
+                case "yellow": line = R.drawable.yellowHorizontalDrawable; break;
+                case "pink": line = R.drawable.pinkHorizontalDrawable; break;
+                case "orange": line = R.drawable.orangeHorizontalDrawable; break;
                 default: line = R.drawable.blueHorizontalDrawable;
             }
         }else{
@@ -432,23 +438,24 @@ public class GameFragment2 extends Fragment {
                 case "blue": line = R.drawable.blueVerticalDrawable; break;
                 case "red": line = R.drawable.redVerticalDrawable; break;
                 case "blank": line = R.drawable.blankVerticalDrawable; break;
+                case "lightBlue": line = R.drawable.lightblueVerticalDrawable; break;
+                case "yellow": line = R.drawable.yellowVerticalDrawable; break;
+                case "pink": line = R.drawable.pinkVerticalDrawable; break;
+                case "orange": line = R.drawable.orangeVerticalDrawable; break;
                 default: line = R.drawable.blueVerticalDrawable;
             }
         }
         img.setImageResource(line);
     }
-
+    //Method increments the turn
     private void nextTurn(){
         if(haveTurns()){
             turn++;
             if(turn >= totalPlayers){ this.turn = 0;}
-            //System.out.println(" NewTurn: = "+turn);
             nextPlayer();
         }else{ showToast("GAME OVER!"); }
     }
-    private boolean haveTurns(){
-        return (noPlayableLinesLeft !=0);
-    }
+    //Method Changes Players
     private void nextPlayer(){
         playersTurn = !isPCTurn();
         if(!playersTurn){
@@ -457,7 +464,7 @@ public class GameFragment2 extends Fragment {
                 nextTurn();
             }
             else{
-                //TODO set as service so can update when time is over - now is static (not
+                //TODO (Timer) set as service so can update when time is over - now is static (not
                 // functional)
                 long elapsed = System.currentTimeMillis()-time;
                 if(elapsed > (long) getResources().getInteger(R.integer.waitForNextPlayer)){
@@ -471,34 +478,33 @@ public class GameFragment2 extends Fragment {
     }
 
     /****************PC Gameplay Methods****************/
+    //Method is for PC/AI gameplay
     private void computersTurn() {
-        //TODO As of now it will play all of PC turns at 1 go - possibly to change/expand
-        //TODO upPC scoare
-        //for(int i=0; i<noPcPlaying; i++){
+        //TODO upPC score
         try {
             randomLine();
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(getContext(),"PC failed to find a line",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.exception_toast_pc_unable_line,Toast.LENGTH_SHORT).show();
         }
-        //}
     }
+    //Method picks a remaining line at random
     private void randomLine() {
-        ImageViewAdded choosenLine;
+        ImageViewAdded chooseLine;
         final Random random = new Random();
         final int min = 0;
         boolean horizontal = (Math.random()<0.5);
         if(noHorizontalPlayableLinesLeft == 0){ horizontal=false; }
         else if(noVerticalPlayableLinesLeft == 0){ horizontal=true; }
         if(horizontal){
-            choosenLine = horziontalLinesLeft.get(random.nextInt(horziontalLinesLeft.size()-min)+min);
+            chooseLine = horziontalLinesLeft.get(random.nextInt(horziontalLinesLeft.size()-min)+min);
         }else {
-            choosenLine = verticalLinesLeft.get(random.nextInt(verticalLinesLeft.size()-min)+min);
+            chooseLine = verticalLinesLeft.get(random.nextInt(verticalLinesLeft.size()-min)+min);
         }
-        removeLine(choosenLine,false,horizontal);
+        removeLine(chooseLine,false,horizontal);
     }
-
-    //method to check if line sets a box
+    //Method to check if line sets a box
+    //TODO isBOX Depreciated
     private boolean isBox(ImageViewAdded line){
 
         List<Boolean[][]> r = getLinesSetValues();  //hLinesChecked & then vLinesChecked
@@ -645,13 +651,14 @@ public class GameFragment2 extends Fragment {
         return r;
     }
 
+    //Gets an Array of the exact board layout in table format
     private ImageViewAdded[][] getLayoutArray(){
         this.linesPerDotGrid = (noTotalInitialXlines-boardSize)/boardSize;
         this.noDotGrids = noTotalInitialXlines/ linesPerDotGrid;
         int totalPerGrid = linesPerDotGrid+noDotGrids;
         int dotCounter=0,hLineCounter = 0, vLineCounter =0, boxCounter =0;
-
         ImageViewAdded[][] finalLayout = new ImageViewAdded[totalPerGrid][totalPerGrid];
+
         for(int i=0; i<totalPerGrid; i++){
             for(int j=0; j<totalPerGrid; j++){
                 if(i%2==0){
@@ -681,8 +688,18 @@ public class GameFragment2 extends Fragment {
                 }
             }
         }
+        //Checks if layout gotten matches actual game
+        try {
+            if(dotCounter != noTotalDots){throw new Exception("Dots layout not matching Game");}
+            if(hLineCounter != noTotalInitialXlines){throw new Exception("Boxes layout not matching Game");}
+            if(vLineCounter != noTotalInitialXlines){throw new Exception("Boxes layout not matching Game");}
+            if(boxCounter != noTotalBoxes){throw new Exception("Boxes layout not matching Game");}
+        }catch (Exception e){
+            showToast(e.getMessage());
+        }
         return finalLayout;
     }
+    //TODO box Exist
     private boolean boxExist(View v) {
         ImageViewAdded line = (ImageViewAdded) v;
         ImageViewAdded[][] lay = layoutInArray;
@@ -743,8 +760,7 @@ public class GameFragment2 extends Fragment {
         }return false;
 
     }
-
-
+    //TODO Animate
     private void animate(ImageViewAdded i){
         final AnimationDrawable animation = new AnimationDrawable();
         animation.addFrame(getResources().getDrawable(R.drawable.blueHorizontalDrawable,null), 100);
@@ -770,11 +786,9 @@ public class GameFragment2 extends Fragment {
             i[k].setImageDrawable(drawables[k]);
         }*/
     }
-
-
-
     //Colum addd goes up the table, column minus goes down
     //row add goes into table, minums out
+    //TODO changed botom lines &top
     private boolean bottomLines(ImageViewAdded[][] lay, int column, int row) {
         ImageViewAdded[] i = {lay[column-1][row+1],lay[column-1][row-1],lay[column-2][row]};
         animate(lay[column-1][row+1]);
@@ -840,8 +854,11 @@ public class GameFragment2 extends Fragment {
 
 
     /********************Aux Meathods**********/
-    private void showWaitToast(){ String s = "Waiting for next player's decision"; showToast(s); }
+    //Method that show wiaing toast
+    private void showWaitToast(){ String s = getString(R.string.toast_wait_next_player); showToast(s); }
+    // Method to show toast of string input
     private void showToast(String s){ Toast.makeText(getContext(),s,Toast.LENGTH_SHORT).show(); }
+    //Method to check if line is horizontal
     private boolean isHorizontalLine(ImageViewAdded img) throws Exception {
         if(img.getTag().toString().contains(hLineTag)){
             return true;
@@ -851,6 +868,7 @@ public class GameFragment2 extends Fragment {
             throw new Exception("Unknown Line");
         }
     }
+    //Method gets line tag no, returning only its no.
     private String getLineTagNo(ImageViewAdded line,Boolean isHorizontal){
         if(isHorizontal){
             return line.getTag().toString().replace(hLineTag,"");
@@ -858,13 +876,15 @@ public class GameFragment2 extends Fragment {
             return line.getTag().toString().replace(vLineTag,"");
         }
     }
+    //Method checks if turn is PCsTrun
     private boolean isPCTurn(){
         for (int pcPlayer : PCTurns) {
-            if (turn == pcPlayer) {
-                return true;
-            }
-        }
-        return false;
+            if (turn == pcPlayer) { return true;}
+        } return false;
+    }
+    //Method checks if any more turns left
+    private boolean haveTurns(){
+        return (noPlayableLinesLeft !=0);
     }
 
     /***********Getters & Setters **********8*/

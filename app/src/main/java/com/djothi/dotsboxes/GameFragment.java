@@ -1,24 +1,15 @@
 package com.djothi.dotsboxes;
 
-import android.content.res.Resources;
-import android.media.Image;
 import android.os.Bundle;
-
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RelativeLayout;
-import android.widget.TableRow;
+
+import androidx.fragment.app.Fragment;
 
 
 public class GameFragment extends Fragment {
@@ -117,7 +108,7 @@ public class GameFragment extends Fragment {
             i = new ImageView(view.getContext());
             i.setLayoutParams(layoutParams2);
             i.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            i.setImageResource(R.drawable.dot);
+            i.setImageResource(R.drawable.dotDrawable);
         }
 
         //HorizontaLines
@@ -127,7 +118,7 @@ public class GameFragment extends Fragment {
             i = new ImageView(view.getContext());
             i.setLayoutParams(layoutParams2);
             i.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            i.setImageResource(R.drawable.blankhorizontal);
+            i.setImageResource(R.drawable.blankHorizontalDrawable);
         }
 
         //Vertical Lines
@@ -137,7 +128,7 @@ public class GameFragment extends Fragment {
             i = new ImageView(view.getContext());
             i.setLayoutParams(layoutParams2);
             i.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            i.setImageResource(R.drawable.blankvertical);
+            i.setImageResource(R.drawable.blankVerticalDrawable);
         }
 
         //boxes
@@ -147,7 +138,7 @@ public class GameFragment extends Fragment {
             i = new ImageView(view.getContext());
             i.setLayoutParams(layoutParams2);
             i.setScaleType(ImageView.ScaleType.FIT_XY);
-            i.setImageResource(R.drawable.bgasset);
+            i.setImageResource(R.drawable.blankBoxDrawable);
         }
 
         //Layout

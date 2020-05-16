@@ -27,7 +27,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1.05"
                 android:scaleType="fitCenter"
-                android:src="@drawable/dot" />
+                android:src="@drawable/dotDrawable" />
 
             <ImageView
                 android:id="@+id/line19"
@@ -36,7 +36,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="0.86"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blankhorizontal" />
+                android:src="@drawable/blankHorizontalDrawable" />
 
             <ImageView
                 android:id="@+id/dot27"
@@ -45,7 +45,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1.05"
                 android:scaleType="fitCenter"
-                android:src="@drawable/dot" />
+                android:src="@drawable/dotDrawable" />
 
             <ImageView
                 android:id="@+id/line20"
@@ -54,7 +54,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="0.86"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blankhorizontal" />
+                android:src="@drawable/blankHorizontalDrawable" />
 
             <ImageView
                 android:id="@+id/dot28"
@@ -63,7 +63,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1.05"
                 android:scaleType="fitCenter"
-                android:src="@drawable/dot" />
+                android:src="@drawable/dotDrawable" />
 
             <ImageView
                 android:id="@+id/line21"
@@ -72,7 +72,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="0.86"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blankhorizontal" />
+                android:src="@drawable/blankHorizontalDrawable" />
 
             <ImageView
                 android:id="@+id/dot29"
@@ -81,7 +81,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1.05"
                 android:scaleType="fitCenter"
-                android:src="@drawable/dot" />
+                android:src="@drawable/dotDrawable" />
         </LinearLayout>
 
         <LinearLayout
@@ -97,7 +97,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blankvertical" />
+                android:src="@drawable/blankVerticalDrawable" />
 
             <ImageView
                 android:id="@+id/imageView17"
@@ -106,7 +106,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="0.86"
                 android:scaleType="fitXY"
-                android:src="@drawable/bgasset" />
+                android:src="@drawable/blankBoxDrawable" />
 
             <ImageView
                 android:id="@+id/imageView18"
@@ -115,7 +115,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blankvertical" />
+                android:src="@drawable/blankVerticalDrawable" />
 
             <ImageView
                 android:id="@+id/imageView19"
@@ -124,7 +124,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="0.86"
                 android:scaleType="fitXY"
-                android:src="@drawable/bgasset" />
+                android:src="@drawable/blankBoxDrawable" />
 
             <ImageView
                 android:id="@+id/imageView20"
@@ -133,7 +133,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blankvertical" />
+                android:src="@drawable/blankVerticalDrawable" />
 
             <ImageView
                 android:id="@+id/imageView21"
@@ -142,7 +142,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="0.86"
                 android:scaleType="fitXY"
-                android:src="@drawable/bgasset" />
+                android:src="@drawable/blankBoxDrawable" />
 
             <ImageView
                 android:id="@+id/imageView22"
@@ -151,7 +151,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blankvertical" />
+                android:src="@drawable/blankVerticalDrawable" />
         </LinearLayout>
 
         <LinearLayout
@@ -167,7 +167,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/dot" />
+                android:src="@drawable/dotDrawable" />
 
             <ImageView
                 android:id="@+id/line10"
@@ -176,7 +176,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="0.86"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blankhorizontal" />
+                android:src="@drawable/blankHorizontalDrawable" />
 
             <ImageView
                 android:id="@+id/dot15"
@@ -185,7 +185,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/dot" />
+                android:src="@drawable/dotDrawable" />
 
             <ImageView
                 android:id="@+id/line11"
@@ -194,7 +194,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="0.86"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blankhorizontal" />
+                android:src="@drawable/blankHorizontalDrawable" />
 
             <ImageView
                 android:id="@+id/dot16"
@@ -203,7 +203,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/dot" />
+                android:src="@drawable/dotDrawable" />
 
             <ImageView
                 android:id="@+id/line12"
@@ -212,7 +212,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="0.86"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blankhorizontal" />
+                android:src="@drawable/blankHorizontalDrawable" />
 
             <ImageView
                 android:id="@+id/dot17"
@@ -221,7 +221,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/dot" />
+                android:src="@drawable/dotDrawable" />
         </LinearLayout>
 
         <LinearLayout
@@ -237,7 +237,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blankvertical" />
+                android:src="@drawable/blankVerticalDrawable" />
 
             <ImageView
                 android:id="@+id/imageView24"
@@ -246,7 +246,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="0.86"
                 android:scaleType="fitXY"
-                android:src="@drawable/bgasset" />
+                android:src="@drawable/blankBoxDrawable" />
 
             <ImageView
                 android:id="@+id/imageView25"
@@ -255,7 +255,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blankvertical" />
+                android:src="@drawable/blankVerticalDrawable" />
 
             <ImageView
                 android:id="@+id/imageView26"
@@ -264,7 +264,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="0.86"
                 android:scaleType="fitXY"
-                android:src="@drawable/bgasset" />
+                android:src="@drawable/blankBoxDrawable" />
 
             <ImageView
                 android:id="@+id/imageView27"
@@ -273,7 +273,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blankvertical" />
+                android:src="@drawable/blankVerticalDrawable" />
 
             <ImageView
                 android:id="@+id/imageView28"
@@ -282,7 +282,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="0.86"
                 android:scaleType="fitXY"
-                android:src="@drawable/bgasset" />
+                android:src="@drawable/blankBoxDrawable" />
 
             <ImageView
                 android:id="@+id/imageView29"
@@ -291,7 +291,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blankvertical" />
+                android:src="@drawable/blankVerticalDrawable" />
         </LinearLayout>
 
         <LinearLayout
@@ -307,7 +307,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/dot" />
+                android:src="@drawable/dotDrawable" />
 
             <ImageView
                 android:id="@+id/line13"
@@ -316,7 +316,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="0.86"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blankhorizontal" />
+                android:src="@drawable/blankHorizontalDrawable" />
 
             <ImageView
                 android:id="@+id/dot19"
@@ -325,7 +325,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/dot" />
+                android:src="@drawable/dotDrawable" />
 
             <ImageView
                 android:id="@+id/line14"
@@ -334,7 +334,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="0.86"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blankhorizontal" />
+                android:src="@drawable/blankHorizontalDrawable" />
 
             <ImageView
                 android:id="@+id/dot20"
@@ -343,7 +343,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/dot" />
+                android:src="@drawable/dotDrawable" />
 
             <ImageView
                 android:id="@+id/line15"
@@ -352,7 +352,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="0.86"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blankhorizontal" />
+                android:src="@drawable/blankHorizontalDrawable" />
 
             <ImageView
                 android:id="@+id/dot21"
@@ -361,7 +361,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/dot" />
+                android:src="@drawable/dotDrawable" />
         </LinearLayout>
 
         <LinearLayout
@@ -377,7 +377,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blankvertical" />
+                android:src="@drawable/blankVerticalDrawable" />
 
             <ImageView
                 android:id="@+id/imageView31"
@@ -386,7 +386,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="0.86"
                 android:scaleType="fitXY"
-                android:src="@drawable/bgasset" />
+                android:src="@drawable/blankBoxDrawable" />
 
             <ImageView
                 android:id="@+id/imageView32"
@@ -395,7 +395,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blankvertical" />
+                android:src="@drawable/blankVerticalDrawable" />
 
             <ImageView
                 android:id="@+id/imageView33"
@@ -404,7 +404,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="0.86"
                 android:scaleType="fitXY"
-                android:src="@drawable/bgasset" />
+                android:src="@drawable/blankBoxDrawable" />
 
             <ImageView
                 android:id="@+id/imageView34"
@@ -413,7 +413,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blankvertical" />
+                android:src="@drawable/blankVerticalDrawable" />
 
             <ImageView
                 android:id="@+id/imageView35"
@@ -422,7 +422,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="0.86"
                 android:scaleType="fitXY"
-                android:src="@drawable/bgasset" />
+                android:src="@drawable/blankBoxDrawable" />
 
             <ImageView
                 android:id="@+id/imageView36"
@@ -431,7 +431,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blankvertical" />
+                android:src="@drawable/blankVerticalDrawable" />
         </LinearLayout>
 
         <LinearLayout
@@ -447,7 +447,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/dot" />
+                android:src="@drawable/dotDrawable" />
 
             <ImageView
                 android:id="@+id/line16"
@@ -456,7 +456,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="0.86"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blankhorizontal" />
+                android:src="@drawable/blankHorizontalDrawable" />
 
             <ImageView
                 android:id="@+id/dot23"
@@ -465,7 +465,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/dot" />
+                android:src="@drawable/dotDrawable" />
 
             <ImageView
                 android:id="@+id/line17"
@@ -474,7 +474,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="0.86"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blankhorizontal" />
+                android:src="@drawable/blankHorizontalDrawable" />
 
             <ImageView
                 android:id="@+id/dot24"
@@ -483,7 +483,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/dot" />
+                android:src="@drawable/dotDrawable" />
 
             <ImageView
                 android:id="@+id/line18"
@@ -492,7 +492,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="0.86"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blankhorizontal" />
+                android:src="@drawable/blankHorizontalDrawable" />
 
             <ImageView
                 android:id="@+id/dot25"
@@ -501,7 +501,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/dot" />
+                android:src="@drawable/dotDrawable" />
         </LinearLayout>
 
     </LinearLayout>
