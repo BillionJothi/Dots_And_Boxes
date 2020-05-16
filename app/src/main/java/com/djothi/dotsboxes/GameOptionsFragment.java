@@ -1,23 +1,24 @@
 package com.djothi.dotsboxes;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 
 public class GameOptionsFragment extends Fragment {
     private Switch hints;
     private Switch undo;
+    private TextView textView7;
 
     GameOptionsListerner activityCommander;
 
@@ -35,15 +36,32 @@ public class GameOptionsFragment extends Fragment {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_game_options, container,false);
 
+        /*textView7 = (TextView) view.findViewById(R.id.setNoAIPlayers);
         hints = (Switch) view.findViewById(R.id.hintSwitch);
         undo = (Switch) view.findViewById(R.id.undoSwitch);
-        Button start = (Button) view.findViewById(R.id.goButton);
+        textView7.setText(hints.getText().toString());
+        //textView7.setTextClassifier(hints.getTextClassifier());
+        //textView7.setTypeface(hints.getTypeface());
+        //textView7.setTextSize(hints.getTextSize());
+        hints.setWidth(0);
+        hints.setHeight(0);
+        //hints.setVisibility(View.INVISIBLE);
+        hints.setActivated(false);
+        undo.getTrackDrawable();
+        undo.getThumbDrawable().setVisible(false,false);
+        undo.getTrackDrawable().setVisible(false,false);
+        //undo.setActivated(true);
+        //undo.setEnabled(false);
+        //undo.setThumbDrawable(getResources().getDrawable());*/
 
+
+        Button start = (Button) view.findViewById(R.id.startGameButton);
         start.setOnClickListener(
                 new Button.OnClickListener() {
                     @Override
@@ -53,49 +71,63 @@ public class GameOptionsFragment extends Fragment {
                 }
         );
 
-
-
-
         View v = view;
 
-        NumberPicker np = (NumberPicker) v.findViewById(R.id.np);
+        /*NumberPicker numberPicker = (NumberPicker) v.findViewById(R.id.number_picker);
+        //NumberPicker numberPicker2 = (NumberPicker) v.findViewById(R.id.number_picker2);
+        // Set divider color
+        numberPicker.setDividerColor(ContextCompat.getColor(v.getContext(), R.color.colorPrimary));
+        numberPicker.setDividerColorResource(R.color.colorPrimary);
+        // Set selected text color
+        numberPicker.setSelectedTextColor(ContextCompat.getColor(v.getContext(), R.color.colorPrimary));
+        numberPicker.setSelectedTextColorResource(R.color.colorPrimary);
+        // Set selected text size
 
-        //Set TextView text color
-        final TextView tv = (TextView) v.findViewById(R.id.tv);
-        System.out.println(tv);
-        tv.setTextColor(Color.parseColor("#FF2C834F"));
+        // Set value
+        numberPicker.setMaxValue(59);
+        numberPicker.setMinValue(0);
+        numberPicker.setValue(3);
 
-        //Initializing a new string array with elements
-        final String[] values= {"English","Hindi", "Suomi"};
+        // Using string values
+        // IMPORTANT! setMinValue to 1 and call setDisplayedValues after setMinValue and setMaxValue
+        String[] data = {"2", "3", "4", "5", "6", "7", "8", "9", "10"};
+        numberPicker.setMinValue(1);
+        numberPicker.setMaxValue(data.length);
+        numberPicker.setDisplayedValues(data);
+        numberPicker.setValue(7);
 
-        //Populate NumberPicker values from String array values
-        //Set the minimum value of NumberPicker
-        np.setMinValue(0); //from array first value
-        //Specify the maximum value/number of NumberPicker
-        np.setMaxValue(values.length-1); //to array last value
-
-        //Specify the NumberPicker data source as array elements
-        np.setDisplayedValues(values);
-
-        //Gets whether the selector wheel wraps when reaching the min/max value.
-        np.setWrapSelectorWheel(true);
-
-        //Set a value change listener for NumberPicker
-        np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+        // Set fading edge enabled
+        numberPicker.setFadingEdgeEnabled(true);
+        // Set scroller enabled
+        numberPicker.setScrollerEnabled(true);
+        //numberPicker2.setScrollerEnabled(true);
+        // Set wrap selector wheel
+        numberPicker.setWrapSelectorWheel(true);
+        // Set accessibility description enabled
+        numberPicker.setAccessibilityDescriptionEnabled(true);
+        // OnClickListener
+        numberPicker.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal){
-                //Display the newly selected value from picker
-                tv.setText("Selected value : " + values[newVal]);
+            public void onClick(View view) {
+                //Log.d(TAG, "Click on current value");
             }
         });
-
-
-
-
-
-
-
-
+        // OnValueChangeListener
+        numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                // Log.d(TAG, String.format(Locale.US, "oldVal: %d, newVal: %d", oldVal, newVal));
+            }
+        });
+        // OnScrollListener
+        numberPicker.setOnScrollListener(new NumberPicker.OnScrollListener() {
+            @Override
+            public void onScrollStateChange(NumberPicker picker, int scrollState) {
+                if (scrollState == SCROLL_STATE_IDLE) {
+                    // Log.d(TAG, String.format(Locale.US, "newVal: %d", picker.getValue()));
+                }
+            }
+        });*/
 
         // Inflate the layout for this fragment
         return view;

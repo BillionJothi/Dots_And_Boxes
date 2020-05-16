@@ -7,75 +7,153 @@
     android:layout_height="match_parent"
     android:backgroundTintMode="src_over"
     tools:context=".GameOptionsFragment">
-
+    <!--        TODO toolip-->
     <TextView
-        android:id="@+id/tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Select a Language..."
-        android:textSize="25dp"
-        app:layout_constraintBottom_toTopOf="@+id/spinner"
-        app:layout_constraintStart_toEndOf="@+id/np"
-        app:layout_constraintTop_toTopOf="@+id/np" />
-
-    <NumberPicker
-        android:id="@+id/np"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:internalMaxHeight="100dp"
-        app:selectionDividersDistance="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/undoSwitch2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.193"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/undoSwitch"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <Switch
-        android:id="@+id/undoSwitch2"
-        android:layout_width="@dimen/switchWidth"
-        android:layout_height="@dimen/switchHeight"
-        android:layout_marginTop="312dp"
-        android:background="@drawable/switch_background"
-        android:padding="@dimen/switchPadding15"
-        android:text="@string/undo_allowed"
-        android:textSize="@dimen/switchTextSize"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.603"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hintSwitch" />
-
-    <Switch
-        android:id="@+id/hintSwitch"
+        android:id="@+id/setGridSizeText"
         android:layout_width="@dimen/switchWidth"
         android:layout_height="@dimen/switchHeight"
         android:layout_marginTop="@dimen/switchMarginTop"
         android:background="@drawable/switch_background"
-        android:checked="false"
         android:padding="@dimen/switchPadding15"
-        android:text="@string/hint_allowed"
-        android:textSize="@dimen/switchTextSize"
+        android:gravity="center_vertical"
+        android:text="Grid Size"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:typeface="normal"
+        android:tooltipText="HELP!"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="@integer/zeroPoint5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Switch
-        android:id="@+id/undoSwitch"
+    <TextView
+        android:id="@+id/setNoHumanPlayersText"
         android:layout_width="@dimen/switchWidth"
         android:layout_height="@dimen/switchHeight"
         android:layout_marginTop="@dimen/switchMarginTop"
         android:background="@drawable/switch_background"
         android:padding="@dimen/switchPadding15"
-        android:text="@string/undo_allowed"
-        android:textSize="@dimen/switchTextSize"
+        android:gravity="center_vertical"
+        android:text="Number of Human Players"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:typeface="normal"
+        android:tooltipText="HELP!"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="@integer/zeroPoint5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hintSwitch" />
+        app:layout_constraintTop_toBottomOf="@id/setGridSizeText" />
+
+    <TextView
+        android:id="@+id/setNoAIPlayersText"
+        android:layout_width="@dimen/switchWidth"
+        android:layout_height="@dimen/switchHeight"
+        android:layout_marginTop="@dimen/switchMarginTop"
+        android:background="@drawable/switch_background"
+        android:gravity="center_vertical"
+        android:padding="@dimen/switchPadding15"
+        android:text="Number of AI Players"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:tooltipText="HELP!"
+        android:typeface="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="@integer/zeroPoint5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/setNoHumanPlayersText" />
+
+    <TextView
+        android:id="@+id/showTotalNoPlayersText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/totalTextMarginTop"
+        android:layout_marginStart="2dp"
+        android:textColor="@color/white"
+        android:textAlignment="textStart"
+        android:text="Total No. Players  = 5"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:tooltipText="HELP!"
+        android:typeface="normal"
+        app:layout_constraintStart_toStartOf="@id/setNoAIPlayersText"
+        app:layout_constraintTop_toBottomOf="@id/setNoAIPlayersText" />
+
+    <TextView
+        android:id="@+id/showTrunsPerPlayerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/totalTextMarginTop"
+        android:layout_marginEnd="2dp"
+        android:textColor="@color/white"
+        android:textAlignment="textEnd"
+        android:text="6 Turns/player"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:tooltipText="HELP!"
+        android:typeface="normal"
+        app:layout_constraintEnd_toEndOf="@id/setNoAIPlayersText"
+        app:layout_constraintTop_toBottomOf="@id/setNoAIPlayersText" />
+
+    <Switch
+        android:id="@+id/setHintAllowedSwitch"
+        android:layout_width="@dimen/switchSmallWidth"
+        android:layout_height="@dimen/switchHeight"
+        android:layout_marginTop="@dimen/switchMarginTopAfterText"
+        android:background="@drawable/switch_background"
+        android:checked="true"
+        android:padding="@dimen/switchPadding15"
+        android:text="@string/hint_allowed"
+        android:textSize="@dimen/switchTextSize"
+        app:layout_constraintStart_toStartOf="@id/showTotalNoPlayersText"
+        app:layout_constraintTop_toBottomOf="@id/showTotalNoPlayersText" />
+
+    <Switch
+        android:id="@+id/setUndoAllowedSwitch"
+        android:layout_width="@dimen/switchSmallWidth"
+        android:layout_height="@dimen/switchHeight"
+        android:layout_marginTop="@dimen/switchMarginTopAfterText"
+        android:background="@drawable/switch_background"
+        android:checked="true"
+        android:padding="@dimen/switchPadding15"
+        android:text="@string/undo_allowed"
+        android:textSize="@dimen/switchTextSize"
+        app:layout_constraintEnd_toEndOf="@+id/showTrunsPerPlayerText"
+        app:layout_constraintTop_toBottomOf="@+id/showTrunsPerPlayerText" />
+
+    <Switch
+        android:id="@+id/setP1StartsSwitch"
+        android:layout_width="@dimen/switchSmallWidth"
+        android:layout_height="@dimen/switchHeight"
+        android:layout_marginTop="@dimen/switchMarginTop"
+        android:background="@drawable/switch_background"
+        android:checked="true"
+        android:padding="@dimen/switchPadding15"
+        android:text="P1Starts"
+        android:textSize="@dimen/switchTextSize"
+        app:layout_constraintStart_toStartOf="@id/setHintAllowedSwitch"
+        app:layout_constraintTop_toBottomOf="@+id/setHintAllowedSwitch" />
+
+    <Switch
+        android:id="@+id/setQuickModeSwitch"
+        android:layout_width="@dimen/switchSmallWidth"
+        android:layout_height="@dimen/switchHeight"
+        android:layout_marginTop="@dimen/switchMarginTop"
+        android:background="@drawable/switch_background"
+        android:padding="@dimen/switchPadding15"
+        android:text="QuickMode"
+        android:textSize="@dimen/switchTextSize"
+        app:layout_constraintEnd_toEndOf="@+id/setUndoAllowedSwitch"
+        app:layout_constraintTop_toBottomOf="@+id/setUndoAllowedSwitch" />
+
+    <Switch
+        android:id="@+id/setRandomTurnsSwitch"
+        android:layout_width="@dimen/switchWidth"
+        android:layout_height="@dimen/switchHeight"
+        android:layout_marginTop="@dimen/switchMarginTop"
+        android:background="@drawable/switch_background"
+        android:padding="@dimen/switchPadding15"
+        android:text="Randomize Turns?"
+        android:textSize="@dimen/switchTextSize"
+        app:layout_constraintStart_toStartOf="@id/setP1StartsSwitch"
+        app:layout_constraintTop_toBottomOf="@+id/setP1StartsSwitch" />
 
     <Button
-        android:id="@+id/goButton"
+        android:id="@+id/startGameButton"
         android:layout_width="@dimen/buttonWidth"
         android:layout_height="@dimen/buttonHeight"
         android:layout_marginTop="12dp"
@@ -83,19 +161,66 @@
         android:elevation="@dimen/buttonElavation"
         android:text="@string/start"
         android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="@+id/undoSwitch"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/undoSwitch" />
+        app:layout_constraintEnd_toEndOf="@+id/setRandomTurnsSwitch"
+        app:layout_constraintTop_toBottomOf="@+id/setRandomTurnsSwitch" />
 
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        app:layout_constraintBottom_toBottomOf="@+id/np"
-        app:layout_constraintStart_toEndOf="@+id/np"
-        app:layout_constraintTop_toTopOf="@+id/np"
-        app:layout_constraintVertical_bias="0.487" />
+    <com.shawnlin.numberpicker.NumberPicker
+        android:id="@+id/gridSizePickerInput"
+        android:layout_width="@dimen/noPickerWidth"
+        android:layout_height="@dimen/noPickerHeight"
+        android:layout_marginEnd="@dimen/noPickerMarginEnd"
+        app:layout_constraintTop_toTopOf="@+id/setGridSizeText"
+        app:layout_constraintBottom_toBottomOf="@id/setGridSizeText"
+        app:layout_constraintEnd_toEndOf="@id/setGridSizeText"
+        app:np_dividerColor="@color/noPickerDividerColor"
+        app:np_selectedTextColor="@color/noPickerSelectedTextColor"
+        app:np_textColor="@color/noPickerTextColor"
+        app:np_dividerDistance="@dimen/noPickerDividerDistance"
+        app:np_orientation="@integer/noPickerOrientation"
+        app:np_value="@integer/noPickerDefaultGridSize"
+        app:np_selectedTextSize="@dimen/noPickerSelectedTextSize"
+        app:np_textSize="@dimen/noPickerTextSize"
+        app:np_wheelItemCount="@integer/noPickerWheelItemCount"
+        app:np_wrapSelectorWheel="@bool/noPickerWrapWheel" />
+
+
+    <com.shawnlin.numberpicker.NumberPicker
+        android:id="@+id/noHumanPlayersPickerInput"
+        android:layout_width="@dimen/noPickerWidth"
+        android:layout_height="@dimen/noPickerHeight"
+        android:layout_marginEnd="@dimen/noPickerMarginEnd"
+        app:layout_constraintTop_toTopOf="@+id/setNoHumanPlayersText"
+        app:layout_constraintBottom_toBottomOf="@id/setNoHumanPlayersText"
+        app:layout_constraintEnd_toEndOf="@id/setNoHumanPlayersText"
+        app:np_dividerColor="@color/noPickerDividerColor"
+        app:np_selectedTextColor="@color/noPickerSelectedTextColor"
+        app:np_textColor="@color/noPickerTextColor"
+        app:np_dividerDistance="@dimen/noPickerDividerDistance"
+        app:np_orientation="@integer/noPickerOrientation"
+        app:np_value="@integer/noPickerDefaultNoHumanPlayers"
+        app:np_selectedTextSize="@dimen/noPickerSelectedTextSize"
+        app:np_textSize="@dimen/noPickerTextSize"
+        app:np_wheelItemCount="@integer/noPickerWheelItemCount"
+        app:np_wrapSelectorWheel="@bool/noPickerWrapWheel" />
+
+    <com.shawnlin.numberpicker.NumberPicker
+        android:id="@+id/noAIPlayersPickerInput"
+        android:layout_width="@dimen/noPickerWidth"
+        android:layout_height="@dimen/noPickerHeight"
+        android:layout_marginEnd="@dimen/noPickerMarginEnd"
+        app:layout_constraintTop_toTopOf="@+id/setNoAIPlayersText"
+        app:layout_constraintBottom_toBottomOf="@id/setNoAIPlayersText"
+        app:layout_constraintEnd_toEndOf="@id/setNoAIPlayersText"
+        app:np_dividerColor="@color/noPickerDividerColor"
+        app:np_selectedTextColor="@color/noPickerSelectedTextColor"
+        app:np_textColor="@color/noPickerTextColor"
+        app:np_dividerDistance="@dimen/noPickerDividerDistance"
+        app:np_orientation="@integer/noPickerOrientation"
+        app:np_value="@integer/noPickerDefaultNoAIPlayers"
+        app:np_selectedTextSize="@dimen/noPickerSelectedTextSize"
+        app:np_textSize="@dimen/noPickerTextSize"
+        app:np_wheelItemCount="@integer/noPickerWheelItemCount"
+        app:np_wrapSelectorWheel="@bool/noPickerAIWrapWheel" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

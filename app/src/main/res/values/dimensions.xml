@@ -10,11 +10,34 @@
 
     <!--Fragment Switch Attributes (GameFragment_static Options)-->
     <dimen name="switchWidth">300dp</dimen>
+    <dimen name="switchSmallWidth">145dp</dimen>
     <dimen name="switchHeight">55dp</dimen>
     <dimen name="switchPadding15">15dp</dimen>
     <dimen name="switchTextSize">14sp</dimen>
     <dimen name="switchMarginTop">7dp</dimen>
+    <dimen name="totalTextMarginTop">5dp</dimen>
+    <dimen name="switchMarginTopAfterText">10dp</dimen>
     <item name="zeroPoint5" type="integer">0.5</item>
+
+    <!--Scroller/Number Picker Dimensions-->
+    <integer name="noPickerDefaultGridSize">3</integer>
+    <integer name="noPickerDefaultNoHumanPlayers">1</integer>
+    <integer name="noPickerDefaultNoAIPlayers">1</integer>
+    <dimen name="noPickerWidth">60dp</dimen>
+    <dimen name="noPickerHeight">20dp</dimen>
+    <dimen name="noPickerMarginEnd">20dp</dimen>
+    <color name="noPickerDividerColor">@color/colorAccent</color>
+    <color name="noPickerSelectedTextColor">@color/design_default_color_primary_dark</color>
+    <color name="noPickerTextColor">@color/colorAccent</color>
+    <dimen name="noPickerDividerDistance">23dp</dimen>
+    <!--Horizontal is 0, Vertical is 1-->
+    <integer name="noPickerOrientation">0</integer>
+    <dimen name="noPickerSelectedTextSize">15sp</dimen>
+    <dimen name="noPickerTextSize">12sp</dimen>
+    <integer name="noPickerWheelItemCount">3</integer>
+    <bool name="noPickerWrapWheel">false</bool>
+    <bool name="noPickerAIWrapWheel">true</bool>
+
 
     <!--Button Atrributes-->
     <dimen name="buttonWidth">89dp</dimen>

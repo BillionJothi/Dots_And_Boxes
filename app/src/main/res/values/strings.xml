@@ -14,8 +14,8 @@
     <string name="previous">Previous</string>
 
     <!-- GameFragment_static Options Fragment Strings -->
-    <string name="hint_allowed">Hint\'s Allowed?</string>
-    <string name="undo_allowed">Undo\'s Allowed?</string>
+    <string name="hint_allowed">Hint\'s</string>
+    <string name="undo_allowed">Undo\'s</string>
     <string name="start">Start</string>
 
     <!--Theme Strings-->
