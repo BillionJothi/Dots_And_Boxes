@@ -2,6 +2,7 @@ package com.djothi.dotsboxes;
 
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -387,9 +388,7 @@ public class GameFragment2 extends Fragment {
             time = System.currentTimeMillis();
             upPlayerScore();
             removeLine(img,playersTurn,isHorizontalLine);
-            if(boxExist(v)){
-                box.setImageResource(R.drawable.redBoxDrawable);
-            }
+            setFilledBox(v);
             activityCommander.GameClicked(score,turn);
             nextTurn();
         }else{showWaitToast();}
@@ -503,154 +502,6 @@ public class GameFragment2 extends Fragment {
         }
         removeLine(chooseLine,false,horizontal);
     }
-    //Method to check if line sets a box
-    //TODO isBOX Depreciated
-    private boolean isBox(ImageViewAdded line){
-
-        List<Boolean[][]> r = getLinesSetValues();  //hLinesChecked & then vLinesChecked
-        List<Integer> i; //rowNo, then actNumber
-        boolean box;
-        boolean check;
-        this.noSqaures = 0;
-        try {
-            boolean horizontal = isHorizontalLine(line);
-            //System.out.println("LINE IS XXXXXX"+horizontal);
-            String s = getLineTagNo(line, horizontal);
-            int v = Integer.parseInt(s);
-            int linesPerGrid;
-
-            if(horizontal){
-                linesPerGrid = linesPerDotGrid;
-                i = calLineRowColums(v,linesPerGrid);
-                //System.out.println("LINE CORD isHorizontal"+horizontal+"," + i.get(0)+"," +i
-                // .get(1));
-                check = r.get(0)[i.get(0)][i.get(1)];
-                if(i.get(0)==0){
-                    if(checkHBelow(r,i)){
-                        box = true; noSqaures++;
-                        this.box = view.findViewWithTag(
-                                getResources().getString(R.string.boxTagChecker)+ i.get(1));
-                        return box;
-                    }
-                }  //Only check below if topmost
-                else if(i.get(0)== noDotGrids -1) {
-                    if(checkHAbove(r,i)){
-                        box = true; noSqaures++;
-                        this.box = view.findViewWithTag(
-                                getResources().getString(R.string.boxTagChecker)+ i.get(1));
-                        return box;
-                    }
-                }
-                //only check above if bottom most (noHLinesGrid) is if last line
-                else{
-                    if(checkHBelow(r,i)){
-                        box = true; noSqaures++;
-                        this.box = view.findViewWithTag(
-                                getResources().getString(R.string.boxTagChecker)+ i.get(1));
-                        return box;
-                    }else if(checkHAbove(r,i)){
-                        box = true; noSqaures++;
-                        this.box = view.findViewWithTag(
-                                getResources().getString(R.string.boxTagChecker)+ i.get(1));
-                        return box;
-                    }
-                } //check abocve & below
-
-            }else {
-                //Vertical
-                linesPerGrid = linesPerDotGrid;
-                i = calLineRowColums(v,linesPerGrid);
-                //System.out.println("LINE CORD isHorizontal"+horizontal+"," + i.get(0)+"," +i
-                // .get(1));
-                check =  r.get(1)[i.get(0)][i.get(1)];
-                if(i.get(0)==0){
-                    if(checkVforward(r,i)){
-                        box = true; noSqaures++;
-                        this.box = view.findViewWithTag(
-                                getResources().getString(R.string.boxTagChecker)+ i.get(1));
-                        return box;
-                    }
-
-                } //Only check forward if 1st
-                else if(i.get(0)== noDotGrids) {
-                    if(checkVBackward(r,i)){
-                        box = true; noSqaures++;
-                        this.box = view.findViewWithTag(
-                                getResources().getString(R.string.boxTagChecker)+ i.get(1));
-                        return box;
-                    }
-                }
-                //only check backward if last , (noHLinesGrid) is if last line
-                else{
-                    if(checkVBackward(r,i)){
-                        box = true; noSqaures++;
-                        this.box = view.findViewWithTag(
-                                getResources().getString(R.string.boxTagChecker)+ i.get(1));
-                        return box;
-                    }else if(checkVforward(r,i)){
-                        box = true; noSqaures++;
-                        this.box = view.findViewWithTag(
-                                getResources().getString(R.string.boxTagChecker)+ i.get(1));
-                        return box;
-                    }
-                } //check forward & backward
-            }
-            //Check to ensure right line
-            if(line.isSet() != check){
-                throw new Exception("Line settings not equal");
-            }
-            return false;
-        } catch (Exception e) {
-            e.printStackTrace();
-            showToast("Unknown Line or error");
-        }
-        return false;
-    }
-    private List<Boolean[][]> getLinesSetValues(){
-        this.linesPerDotGrid = (noTotalInitialXlines-boardSize)/boardSize;
-        this.noDotGrids = noTotalInitialXlines/ linesPerDotGrid;
-        int totalPerGrid = linesPerDotGrid+noDotGrids;
-        int dotCounter=0,hLineCounter = 0, vLineCounter =0, boxCounter =0;
-
-        Boolean[][] hLinesChecked = new Boolean[noDotGrids][linesPerDotGrid];
-        Boolean[][] vLinesChecked = new Boolean[noDotGrids][linesPerDotGrid];
-        int counter = 0;
-        //For every horizontal line check if checked
-        //outputs fomr [0][0],[0][1],[0][2],[1][0]...
-        //Do also for veritcal lines
-        for(int i = 0; i< noDotGrids; i++){
-            for (int j = 0; j< linesPerDotGrid; j++){
-                ImageViewAdded side =
-                        view.findViewWithTag(getResources().getString(R.string.horizontalLineTagChecker)+ counter);
-                hLinesChecked[i][j] = side.isSet();
-                ImageViewAdded Vside =
-                        view.findViewWithTag(getResources().getString(R.string.verticalLineTagChecker)+counter);
-                vLinesChecked[i][j] = Vside.isSet();
-                counter++;
-            }
-        }
-        List r = new ArrayList();
-        r.add(hLinesChecked);
-        r.add(vLinesChecked);
-        return r;
-    }
-    private ArrayList<Integer> calLineRowColums(Integer v, Integer linesPerGrid){
-        int actnumber;
-        int rowno;
-        if(v==0){
-            actnumber = 0; rowno = 0;
-        }else if(v> linesPerGrid){
-            actnumber= v%(linesPerGrid);
-            rowno = v/(linesPerGrid);
-        }else{
-            actnumber = v; rowno = 0;
-        }
-        ArrayList<Integer> r = new ArrayList<Integer>();
-        r.add(rowno);
-        r.add(actnumber);
-        return r;
-    }
-
     //Gets an Array of the exact board layout in table format
     private ImageViewAdded[][] getLayoutArray(){
         this.linesPerDotGrid = (noTotalInitialXlines-boardSize)/boardSize;
@@ -699,159 +550,126 @@ public class GameFragment2 extends Fragment {
         }
         return finalLayout;
     }
-    //TODO box Exist
-    private boolean boxExist(View v) {
+    //Method to check if line sets a box
+    private void setFilledBox(View v) {
         ImageViewAdded line = (ImageViewAdded) v;
-        ImageViewAdded[][] lay = layoutInArray;
         int row = 0, column = 0;
-        boolean hori = true;
-        //Note: ROWS goes left to right on screen & columsns top to down
-        //Also layour [row][column]
-        //Get row/colum values
-        for (int i = 0; i < lay.length; i++) {
-            for (int j = 0; j < lay.length; j++) {
-                if (lay[i][j].getTag() == line.getTag()) {
+        boolean horizontal = true;
+
+        //layout [row][column], gets the clicked line row/colum values
+        for (int i = 0; i < layoutInArray.length; i++) {
+            for (int j = 0; j < layoutInArray.length; j++) {
+                if (layoutInArray[i][j].getTag() == line.getTag()) {
                     column = i;
                     row = j;
                     break;
                 }
             }
         }
-        showToast(line.getTag().toString() + " "+line.getId() +"\n" + "r:"+row+"c"+column);
         try {
-            // System.out.println("row: "+row+" column "+column+ " isHOri" +hori);
-            hori = isHorizontalLine(line);
-            System.out.println("row: "+ row + " column " + column + " isHOri" + hori);
-            if (hori) {
-                if (column == 0) {
-                    return topLines(lay, column, row);
+            horizontal = isHorizontalLine(line);
+            if (horizontal) {
+                if (column == 0 && topLines(column,row)) { topLinesBox(column,row);}
+                else if (column == layoutInArray.length-1 && bottomLines(column,row)) { bottomLinesBox(column,row);}
+                else {
+                    if(topLines(column,row)) {topLinesBox(column,row);}
+                    if(bottomLines(column,row)) {bottomLinesBox(column,row);}
                 }
-                if (column == lay.length-1) {
-                    return bottomLines(lay, column, row);
-                } else {
-                    boolean t = topLines(lay, column, row);
-                    boolean b = bottomLines(lay, column, row);
-                    if (t || b) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-
             } else {
                 //Vertical Lines only
-                if (row == 0) {
-                    return beforeLines(lay, column, row);
-                }
-                if (row == lay.length-1) {
-                    return afterLines(lay, column, row);
-                } else { //TODO add dual boxes function
-                    boolean b = beforeLines(lay, column, row);
-                    boolean a = afterLines(lay, column, row);
-                    if (b || a) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                if (row == 0 &&  beforeLines(column,row)) { beforeLinesBox(column,row); }
+                if (row == layoutInArray.length-1 && afterLines(column,row)) { afterLinesBox(column,row); }
+                else {
+                    if (beforeLines(column,row)){ beforeLinesBox(column,row); }
+                    if (afterLines(column,row)){ afterLinesBox(column,row); }
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }return false;
-
+        }
     }
+
     //TODO Animate
-    private void animate(ImageViewAdded i){
+    /*************Meathods used in checking if lines near box*************/
+    private boolean bottomLines(int column, int row) {
+        ImageViewAdded a = layoutInArray[column-1][row+1];
+        ImageViewAdded b = layoutInArray[column-1][row-1];
+        ImageViewAdded c =  layoutInArray[column-2][row];
+        ImageViewAdded[] check = {a,b,c};
+        //animateCheck(check);
+        boolean set = isBoxCreated(check);
+        return set;
+    }
+    private boolean topLines(int column, int row) {
+        ImageViewAdded a = layoutInArray[column+1][row+1];
+        ImageViewAdded b = layoutInArray[column+1][row-1];
+        ImageViewAdded c =  layoutInArray[column+2][row];
+        ImageViewAdded[] check = {a,b,c};
+        //animateCheck(check);
+        boolean set = isBoxCreated(check);
+        return set;
+    }
+    private boolean beforeLines(int column, int row) {
+        ImageViewAdded a = layoutInArray[column+1][row+1];
+        ImageViewAdded b = layoutInArray[column-1][row+1];
+        ImageViewAdded c =  layoutInArray[column][row+2];
+        ImageViewAdded[] check = {a,b,c};
+        //animateCheck(check);
+        boolean set = isBoxCreated(check);
+        return set;
+    }
+    private boolean afterLines(int column, int row) {
+        ImageViewAdded a =  layoutInArray[column+1][row-1];
+        ImageViewAdded b =   layoutInArray[column-1][row-1];
+        ImageViewAdded c =   layoutInArray[column][row-2];
+        ImageViewAdded[] check = {a,b,c};
+        //animateCheck(check);
+        boolean set = isBoxCreated(check);
+        return set;
+    }
+    private boolean isBoxCreated(ImageViewAdded[] lines){
+        ImageViewAdded a = lines[0];
+        ImageViewAdded b = lines[1];
+        ImageViewAdded c = lines[2];
+        boolean set = a.isSet() && b.isSet() && c.isSet();
+        return set;
+    }
+    //These methods set the box
+    private void topLinesBox(int column, int row){
+        layoutInArray[column+1][row].setImageResource(R.drawable.redBoxDrawable);
+    }
+    private void bottomLinesBox(int column, int row){
+        layoutInArray[column-1][row].setImageResource(R.drawable.redBoxDrawable);
+    }
+    private void beforeLinesBox(int column, int row){
+        layoutInArray[column][row+1].setImageResource(R.drawable.redBoxDrawable);
+    }
+    private void afterLinesBox(int column, int row){
+        layoutInArray[column][row-1].setImageResource(R.drawable.redBoxDrawable);
+    }
+    private void animateLine(final ImageViewAdded i, boolean horizontal){
         final AnimationDrawable animation = new AnimationDrawable();
-        animation.addFrame(getResources().getDrawable(R.drawable.blueHorizontalDrawable,null), 100);
-        animation.addFrame(getResources().getDrawable(R.drawable.redHorizontalDrawable,null), 200);
-        animation.addFrame(getResources().getDrawable(R.drawable.blueHorizontalDrawable,null), 300);
+        final Drawable original = i.getDrawable();
+        animation.addFrame(original,100);
+        if(horizontal){
+            animation.addFrame(getResources().getDrawable(R.drawable.yellowHorizontalDrawable,null),200);
+        }else {
+            animation.addFrame(getResources().getDrawable(R.drawable.yellowVerticalDrawable,null),200);
+        }
+        animation.addFrame(original,100);
         animation.setOneShot(false);
         i.setImageDrawable(animation);
-                // Drawable[] drawables = new Drawable[i.length];
-        /*for(int k=0; k<i.length; k++){
-            drawables[k] = i[k].getDrawable();
-            i[k].setImageDrawable(animation);
-        }*/
         animation.start();
-
+        //Stop animation after x seconds & set back to original
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 animation.stop();
+                i.setImageDrawable(original);
                 //refreshing.clearAnimation();
             }
-        }, 5000);
-        /*for(int k=0; k<i.length; k++){
-            i[k].setImageDrawable(drawables[k]);
-        }*/
+        }, 1000);
     }
-    //Colum addd goes up the table, column minus goes down
-    //row add goes into table, minums out
-    //TODO changed botom lines &top
-    private boolean bottomLines(ImageViewAdded[][] lay, int column, int row) {
-        ImageViewAdded[] i = {lay[column-1][row+1],lay[column-1][row-1],lay[column-2][row]};
-        animate(lay[column-1][row+1]);
-        Boolean y = false;
-        for (ImageViewAdded j: i) {
-            y = j.isSet();
-        }
-        boolean r = y;
-        //animate(i);
-        if(r){box = lay[column-1][row];}
-        return r;
-    }
-    private boolean topLines(ImageViewAdded[][] lay, int column, int row) {
-        System.out.println("******************c"+column+"********"+row);
-        boolean r = (lay[column+1][row+1].isSet() &&
-                      lay[column+1][row-1].isSet() &&
-                       lay[column+2][row].isSet());
-        if(r){box = lay[column+1][row];}
-        return r;
-    }
-    private boolean beforeLines(ImageViewAdded[][] lay, int column, int row) {
-        boolean r = (lay[column+1][row+1].isSet() &&
-                     lay[column-1][row+1].isSet() &&
-                      lay[column][row+2].isSet());
-        if(r){box = lay[column][row+1];}
-        return r;
-    }
-    private boolean afterLines(ImageViewAdded[][] lay, int column, int row) {
-        boolean r = (lay[column-1][row-1].isSet() &&
-                      lay[column-1][row+1].isSet() &&
-                      lay[column][row-2].isSet());
-        if(r){box = lay[column][row-1];}
-        return r;
-    }
-
-
-    /*************Meathods used in checking if lines near box************8*/
-    /*HorizontalLineas are in lineBools(0), VerticalLines: LineBools(1), Location of the current
-    * line is Loc(0) for row(downwards on table) & loc(1) for colums (sidewards on table).
-    * Currently all LineBools are stored in lineBools in
-    * format:: HORIZONTAL/VERTICAL [row] [colume] with row & column being relative to it's type
-    * of line only (so same amount of rows & colums of Horizontal & Vertical Lines)*/
-    private boolean checkHBelow( List<Boolean[][]> lineBools, List<Integer> loc){
-        return (lineBools.get(1)[loc.get(0)][loc.get(1)] //Vertical BOTOOM Left
-                && lineBools.get(1)[loc.get(0)][loc.get(1) +1] //Vertical BOTOOM Right
-                && lineBools.get(0)[loc.get(0)+1][loc.get(1)]);//Horizontal BOTOOM (directly opp)
-    }
-    private boolean checkHAbove(List<Boolean[][]> lineBools,List<Integer> loc){
-        return(lineBools.get(1)[loc.get(0)-1][loc.get(1)] //Vertical TOP Left
-                && lineBools.get(1)[loc.get(0)-1][loc.get(1)+1] //Vertical TOP Right
-                && lineBools.get(0)[loc.get(0)-1][loc.get(1)]); //Horizontal TOP (direnctly opp)
-    }
-    private boolean checkVforward(List<Boolean[][]> lineBools,List<Integer> loc){
-        return(lineBools.get(0)[loc.get(0)][loc.get(1)] //Horizontal FORWARD top
-                && lineBools.get(0)[loc.get(0)+1][loc.get(1)] //Horizontal FORWARD bottom
-                && lineBools.get(1)[loc.get(0)][loc.get(1)+1]); //Vertical FORWARD (direnctly opp)
-    }
-    private boolean checkVBackward( List<Boolean[][]> lineBools,List<Integer> loc){
-        return(lineBools.get(0)[loc.get(0)][loc.get(1)-1] //Horizontal BACKWARD top
-                && lineBools.get(0)[loc.get(0)+1][loc.get(1)-1] //Horizontal BACKWARD bottom
-                && lineBools.get(1)[loc.get(0)][loc.get(1)-1]); //Vertical BACKWARD (direnctly opp)
-    }
-
 
     /********************Aux Meathods**********/
     //Method that show wiaing toast
@@ -883,8 +701,18 @@ public class GameFragment2 extends Fragment {
         } return false;
     }
     //Method checks if any more turns left
-    private boolean haveTurns(){
-        return (noPlayableLinesLeft !=0);
+    private boolean haveTurns(){ return (noPlayableLinesLeft !=0); }
+    //Aux method used to animate lines to check if cheking right lines onClick, not used in game
+    private void animateCheck (ImageViewAdded[] in){
+        try {
+            for (ImageViewAdded i: in){
+                animateLine(i, isHorizontalLine(i));
+                animateLine(i, isHorizontalLine(i));
+                animateLine(i, isHorizontalLine(i));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /***********Getters & Setters **********8*/
@@ -899,34 +727,6 @@ public class GameFragment2 extends Fragment {
     public int getLocalPlayers() { return localPlayers; }
     public void setLocalPlayers(int localPlayers) { this.localPlayers = localPlayers;}
 
-
-
-
-
-    /************************To Remove**************/
-    private ImageViewAdded tryFindLine(View view, boolean h) throws Exception {
-        boolean p = false;
-        ImageViewAdded img;
-        for(int i=0; i<100; i++) {
-            if (h) {
-                img = view.findViewWithTag(hLineTag);
-                if (!img.isSet()) {
-                    p = true;
-                    break;
-                }
-            } else {
-                img = view.findViewWithTag(vLineTag);
-                if (!img.isSet()) {
-                    p = true;
-                    break;
-                }
-            }
-            return img;
-        }
-        if(!p){
-            throw new Exception("Unable to find Line");
-        }return null;
-    }
 
 }
 
