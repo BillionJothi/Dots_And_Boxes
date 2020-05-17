@@ -76,8 +76,12 @@ public class MainGameFragment extends Fragment {
     public interface GameListener{
         public void GameClicked(int[] score, int turn);
         public void updateTurn(String turn);
-        public void setInitialTurn(String turn);
         public void updatePlayerScore(int score);
+        public void updatePlayerName(String s);
+        public void updateAIName(String s);
+        public void updateAIScore(int score);
+        public void updateOverallScore(String s);
+        public void disableButtoms();
     }
     @Override
     public void onAttach(@NonNull Context context) {
@@ -143,7 +147,6 @@ public class MainGameFragment extends Fragment {
         this.vLineTag = getResources().getString(R.string.verticalLineTagChecker);
         this.playerColors = new String[totalPlayers];
         setPlayerColors();
-
         try {
             checkCubeBoard();
         } catch (Exception e) {
@@ -342,8 +345,6 @@ public class MainGameFragment extends Fragment {
                         if(playersTurn) {min=1;}
                         pcTurn = r.nextInt(totalPlayers - min) + min;
                         done = true;
-                        System.out.println("Total Player s =  "+totalPlayers
-                        + "PCTURNS Siz =" + PCTurns.length);
                         if(playersTurn && totalPlayers == 2){pcTurn=1;}
                         if(!playersTurn && totalPlayers ==2){pcTurn=0;}
                         if(i>0){
@@ -370,22 +371,24 @@ public class MainGameFragment extends Fragment {
                 }
             }
         }
-        System.out.println("TotalNo.Players = "+totalPlayers + ", PC Players = " + noPcPlaying +
-                ", PCTurns = "+ Arrays.toString(PCTurns) );
-        //Setting Player turns no.
+
+        //Seting remiaing turns as players
         playerTurns = new int[localPlayers];
-        int playercount = 0;
-        boolean isAPlyaerTurn = false;
-        for (int i=0; i<totalPlayers; i++){
-            for(int j=0; j<PCTurns.length; j++){
-                if (PCTurns[j] == i) {
-                    isAPlyaerTurn = false;
+        int playercount =0;
+        if(noPcPlaying>0) {
+            int[] register = new int[totalPlayers];
+            for (int i : PCTurns) {
+                register[i] = 1;
+            }
+            for (int i = 1; i < register.length; i++) {
+                if (register[i] == 0) {
+                    playerTurns[playercount] = i;
+                    playercount++;
                 }
             }
-            if(isAPlyaerTurn){
-                System.out.println("placing "+ i);
-                playerTurns[playercount] = i;
-                playercount++;
+        }else{
+            for(int i=0; i<localPlayers; i++){
+                playerTurns[i] = i;
             }
         }
     }
@@ -514,11 +517,45 @@ public class MainGameFragment extends Fragment {
         int boxScore = getResources().getInteger(R.integer.boxScore);
         if(line){ this.score[player]+=lineScore; }
         else { this.score[player]+= boxScore; }
-        if(localPlayers > 0){
-            if(player == playerTurns[0]) {
-                activityCommander.updatePlayerScore(this.score[player]);
-            }
+
+        if(localPlayers > 0 && isPlayersTurn()) {
+            activityCommander.updatePlayerScore(this.score[turn]);
+        }else if (noPcPlaying > 0 && isPCTurn(turn)){
+            activityCommander.updateAIScore(this.score[turn]);
         }
+        updateScoreText();
+    }
+    private void updateScoreText(){
+        int P0 = score[0];
+        int P1 = score[1];
+        int top1 = 0, top2 =0, top3 =0;
+        int pt1=0, pt2=0, pt3=0;
+        for(int i=0; i<score.length; i++){
+            if(score[i]>top1){top1 = score[i]; pt1 = i;}
+            else if(score[i]>top1){top1 = score[i]; pt2 = i;}
+            else if(score[i]>top1){top1 = score[i]; pt3 =i;}
+        }
+        String up;
+        switch (totalPlayers){
+            case 2: up = whoiseTurnSimple(0) + ": " +score[0] + "\n"
+                        + whoiseTurnSimple(1) + ": " +score[1];
+                break;
+            case 3: up = whoiseTurnSimple(0) + ": " +score[0] + "\n"
+                    + whoiseTurnSimple(1) + ": " +score[1] + "\n"
+                    + whoiseTurnSimple(pt1) + ": " +score[pt1];
+                break;
+            case 4: up = whoiseTurnSimple(0) + ": " +score[0] + "\n"
+                    + whoiseTurnSimple(1) + ": " +score[1] + "\n"
+                    + whoiseTurnSimple(pt1) + ": " +score[pt1] + "\n"
+                    + whoiseTurnSimple(pt2) + ": " +score[pt2];
+                break;
+            default: up = whoiseTurnSimple(0) + ": " +score[0] + "\n"
+                    + whoiseTurnSimple(1) + ": " +score[1] + "\n"
+                    + whoiseTurnSimple(pt1) + ": " +score[pt1] + "\n"
+                    + whoiseTurnSimple(pt2) + ": " +score[pt2] + "\n"
+                    + whoiseTurnSimple(pt3) + ": " +score[pt3];
+                break;
+        }activityCommander.updateOverallScore(up);
     }
     private void downScore(Boolean line, int player)  {
         int lineScore = getResources().getInteger(R.integer.lineScore);
@@ -587,19 +624,27 @@ public class MainGameFragment extends Fragment {
         if(haveTurns()){
             this.turn++;
             if(turn >= totalPlayers){ this.turn = 0;}
-            activityCommander.updateTurn(whoiseTurn(turn));
+                activityCommander.updateTurn(whoiseTurn2(turn));
+            if(isPlayersTurn()){
+                String s = whoiseTurn(turn);
+                activityCommander.updatePlayerName(s);
+                activityCommander.updatePlayerScore(score[turn]);
+            }else if(noPcPlaying > 0 && isPCTurn(turn)){
+                String y = whoiseTurn(turn);
+                activityCommander.updateAIName(y);
+                activityCommander.updateAIScore(score[turn]);
+            }
             nextPlayer();
-        }else{ showToast("GAME OVER!"); }
+        }else{ gameOver(); }
     }
     //Method Changes Players
     private void nextPlayer(){
-        System.out.println("****Players turn =  " + playersTurn + ", newturn & current =" +turn
-                +", PCTurns = " + Arrays.toString(PCTurns));
-        playersTurn = !isPCTurn();
+        System.out.println(Arrays.toString(PCTurns) + "\n" + Arrays.toString(playerTurns) + "\n" + Arrays.toString(score)+"\n" +score.length);
+        playersTurn = !isPCTurn(turn);
         System.out.println("****Players turn =  " + playersTurn + ", newturn & current =" +turn
                 +", PCTurns = " + Arrays.toString(PCTurns));
         if(!playersTurn){
-            if(pcPlaying && isPCTurn()){
+            if(pcPlaying && isPCTurn(turn)){
                 //Add delay so not immediate & user sees it
                 new CountDownTimer(delay, 1000) {
                     @Override
@@ -839,15 +884,66 @@ public class MainGameFragment extends Fragment {
         }
     }
     //Method checks if turn is PCsTrun
-    private boolean isPCTurn(){
-        for (int pcPlayer : PCTurns) {
-            if (turn == pcPlayer) { return true;}
-        } return false;
+    private  boolean isPCTurn(int turn){
+        if(noPcPlaying > 0){
+            for (int pcPlayer : PCTurns) {
+                if (turn == pcPlayer) { return true;}
+            }
+        }
+        return false;
+    }
+
+    private void gameOver(){
+        activityCommander.disableButtoms();
+        int max =0, winner = 0;
+        for(int i=0; i<score.length; i++){
+            if(score[i] > max){
+                max = score[i];
+                winner = i;
+            }
+        }
+        showToast("GAME OVER! \n Winner is "+ whoiseTurn(winner) + "  with a score of " + max);
     }
     //Method checks if any more turns left
     private boolean haveTurns(){ return (noPlayableLinesLeft !=0); }
     protected String whoiseTurn(int turn) {
-        if(isPCTurn()) {
+        if(isPCTurn(turn)) {
+            if(turn ==0){ return "Computer 01";}
+            else if(turn < 10){ return "Computer 0"+ turn;}
+            else{ return "Computer "+turn;}
+        }else{
+            if(localPlayers > 0){
+                for(int i=0; i< playerTurns.length; i++){
+                    if(playerTurns[i] == turn ){
+                        if(turn ==0){ }
+                        if(i<10){ return "Player 01"; }
+                        else { return "Player "+i; }
+                    }
+                }
+            }
+        }
+        return "Unknowned "+turn + " ("+turn+")";
+    }
+    protected String whoiseTurnSimple(int turn) {
+        if(isPCTurn(turn)) {
+            if(turn ==0){ return "C01";}
+            else if(turn < 10){ return "C0"+ turn;}
+            else{ return "C"+turn;}
+        }else{
+            if(localPlayers > 0){
+                for(int i=0; i< playerTurns.length; i++){
+                    if(playerTurns[i] == turn ){
+                        if(turn ==0){ }
+                        if(i<10){ return "P01"; }
+                        else { return "P"+i; }
+                    }
+                }
+            }
+        }
+        return "Unk"+turn + " ("+turn+")";
+    }
+    protected String whoiseTurn2(int turn) {
+        if(isPCTurn(turn)) {
             if(turn ==0){ return "Turn: Computer 01"+ " ("+turn+")";}
             else if(turn < 10){ return "Turn: Computer 0"+ turn + " ("+turn+")";}
             else{ return "Turn: Computer "+turn + " ("+turn+")";}

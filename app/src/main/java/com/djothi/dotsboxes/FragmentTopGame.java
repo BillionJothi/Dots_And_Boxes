@@ -14,6 +14,9 @@ public class FragmentTopGame extends Fragment {
 
     private TextView turn;
     private TextView allScore;
+    private TextView AI;
+    private TextView scoreword;
+    private TextView aiscore;
 
     public FragmentTopGame() {
     }
@@ -25,6 +28,9 @@ public class FragmentTopGame extends Fragment {
 
         turn = (TextView) v.findViewById(R.id.turn);
         allScore = (TextView) v.findViewById(R.id.score_all);
+        AI = (TextView) v.findViewById(R.id.aiName);
+        scoreword = (TextView) v.findViewById(R.id.scoreWord);
+        aiscore = (TextView) v.findViewById(R.id.aiscore);
 
         return v;
     }
@@ -40,10 +46,19 @@ public class FragmentTopGame extends Fragment {
         turn.setText(s);
     }
 
-    public void setAllScore(int newscore){
-        String s = allScore.getText().toString().replaceFirst("[0-9]+",
-                Integer.toString(newscore));
+    public void setAllScore(String s){
         allScore.setText(s);
+    }
+
+    public void newAIName(String s){
+        AI.setText(s);
+        AI.invalidate();AI.requestLayout();
+    }
+
+    public void newAIScore(int newscore){
+        String s = aiscore.getText().toString().replaceFirst("[0-9]+",
+                Integer.toString(newscore));
+        aiscore.setText(s);
     }
 
 }

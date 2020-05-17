@@ -17,6 +17,7 @@ public class FragmentBottomGame extends Fragment {
     private TextView score;
     private Button undo;
     private Button hint;
+    private TextView name;
 
     public FragmentBottomGame() {
     }
@@ -47,6 +48,7 @@ public class FragmentBottomGame extends Fragment {
         undo = (Button) v.findViewById(R.id.undobutton);
         hint = (Button) v.findViewById(R.id.hintbutton);
         score = (TextView) v.findViewById(R.id.score_player);
+        name = (TextView) v.findViewById(R.id.playerName);
 
         undo.setOnClickListener(new Button.OnClickListener(){
             @Override
@@ -63,6 +65,11 @@ public class FragmentBottomGame extends Fragment {
         });
 
         return v;
+    }
+
+    public void endGameDisableButtons(){
+        undo.setEnabled(false);
+        hint.setEnabled(false);
     }
 
     public void undoClicked(View view){
@@ -85,6 +92,10 @@ public class FragmentBottomGame extends Fragment {
         String s = score.getText().toString().replaceFirst("[0-9]+",
                 Integer.toString(newscore));
         score.setText(s);
+    }
+
+    public void newPlayerName(String s){
+        name.setText(s);
     }
 
 }

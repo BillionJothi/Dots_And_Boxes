@@ -8,16 +8,28 @@
 
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/aiName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="AI"
         android:textColor="#FFFFFF"
-        android:textSize="@dimen/textSize24"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView5"
         app:layout_constraintStart_toEndOf="@+id/imageView5"
         app:layout_constraintTop_toTopOf="@+id/imageView5"
-        app:layout_constraintVertical_bias="0.315" />
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/aiscore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Score:"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView5"
+        app:layout_constraintTop_toBottomOf="@+id/aiName"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/score_all"
@@ -27,18 +39,20 @@
         android:textAlignment="textEnd"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.175"
-        app:layout_constraintStart_toEndOf="@+id/textView5"
-        app:layout_constraintTop_toTopOf="@+id/textView5" />
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toEndOf="@+id/scoreWord"
+        app:layout_constraintTop_toTopOf="@+id/scoreWord" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/scoreWord"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="136dp"
-        android:text=" Score: "
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="5dp"
+        android:text=" Score:\nBest Scores:"
+        android:textAlignment="textEnd"
         android:textColor="#FFFFFF"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
+        app:layout_constraintStart_toEndOf="@+id/aiscore"
         app:layout_constraintTop_toTopOf="@+id/imageView5" />
 
     <ImageView
@@ -51,7 +65,7 @@
         app:layout_constraintHorizontal_bias="0.046"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="0.1"
         app:srcCompat="@drawable/player_icon" />
 
     <TextView
@@ -59,11 +73,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
         android:text="Turn:"
         android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView5"
+        app:layout_constraintVertical_bias="1.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

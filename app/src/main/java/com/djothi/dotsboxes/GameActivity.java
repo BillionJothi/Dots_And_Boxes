@@ -83,12 +83,30 @@ public class GameActivity extends AppCompatActivity
 
 
     @Override
-    public void updatePlayerScore(int score) {
-        fragmentBottomGame.setScore(score);
+    public void updatePlayerScore(int score) { fragmentBottomGame.setScore(score); }
+    @Override
+    public void updatePlayerName(String s) { fragmentBottomGame.newPlayerName(s); }
+
+    @Override
+    public void updateAIName(String s) {
+        fragmentTopGame.newAIName(s);
     }
+
+    @Override
+    public void updateAIScore(int score) {
+        fragmentTopGame.newAIScore(score);
+    }
+
+    @Override
+    public void updateOverallScore(String s) {
+        fragmentTopGame.setAllScore(s);
+    }
+
+    @Override
+    public void disableButtoms() { fragmentBottomGame.endGameDisableButtons(); }
     @Override
     public void updateTurn(String turn) { fragmentTopGame.setTurn(turn); }
-    @Override
+    //@Override
     public void setInitialTurn(String turn) { fragmentTopGame.setInitialTurn(turn); }
     @Override
     public void undo() { fragmentgame.undo(); }
