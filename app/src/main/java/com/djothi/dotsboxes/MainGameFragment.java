@@ -28,7 +28,7 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 
-public class GameFragment extends Fragment {
+public class MainGameFragment extends Fragment {
 
     private int noTotalDots;
     private int noTotalInitialXlines;
@@ -64,7 +64,7 @@ public class GameFragment extends Fragment {
     private GameListener activityCommander;
     private View view;
 
-    public GameFragment() {
+    public MainGameFragment() {
     }
 
     public interface GameListener{
@@ -84,10 +84,10 @@ public class GameFragment extends Fragment {
         Fragment currentFragment = getFragmentManager().findFragmentById(R.id.fragment4);
         FragmentTransaction fragTransaction = getFragmentManager().beginTransaction();
         fragTransaction.detach(currentFragment);
-        //GameFragment g = new GameFragment();
+        //MainGameFragment g = new MainGameFragment();
         CreateGameBoard g2 = (CreateGameBoard) new CreateGameBoard();
         g2.makeBoard(layout);
-        GameFragment g =(GameFragment) g2;
+        MainGameFragment g =(MainGameFragment) g2;
         fragTransaction.attach(currentFragment);
         fragTransaction.commit();*/
     }

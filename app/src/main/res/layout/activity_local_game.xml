@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#48AEF1"
     android:theme="@style/AppTheme"
-    tools:context=".LocalGame1">
+    tools:context=".LocalGame">
 
 
     <com.google.android.material.appbar.AppBarLayout

@@ -10,6 +10,7 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
@@ -82,7 +83,7 @@
 
     <fragment
         android:id="@+id/fragment"
-        android:name="com.djothi.dotsboxes.themes_fragment"
+        android:name="com.djothi.dotsboxes.FragmentThemes"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -95,7 +96,7 @@
 
     <fragment
         android:id="@+id/fragment3"
-        android:name="com.djothi.dotsboxes.CustomTheme"
+        android:name="com.djothi.dotsboxes.FragmentCustomTheme"
         android:layout_width="373dp"
         android:layout_height="236dp"
         android:layout_weight="1"

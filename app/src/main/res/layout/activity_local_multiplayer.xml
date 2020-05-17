@@ -6,13 +6,14 @@
     android:layout_height="match_parent"
     android:background="#48AEF1"
     android:theme="@style/AppTheme"
-    tools:context=".LocalGame1">
+    tools:context=".LocalGame">
 
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/toolbarLayoutMulti"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar

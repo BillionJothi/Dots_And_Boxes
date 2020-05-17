@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainGame">
+    tools:context=".GameActivity">
 
 
     <LinearLayout
@@ -22,7 +22,7 @@
 
         <fragment
             android:id="@+id/fragment5"
-            android:name="com.djothi.dotsboxes.GameFragment"
+            android:name="com.djothi.dotsboxes.MainGameFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="30dp"
@@ -31,7 +31,7 @@
 
         <fragment
             android:id="@+id/container_b"
-            android:name="com.djothi.dotsboxes.BottomGameFragment"
+            android:name="com.djothi.dotsboxes.FragmentBottomGame"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1.0"></fragment>

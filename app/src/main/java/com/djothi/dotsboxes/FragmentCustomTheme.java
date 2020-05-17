@@ -9,14 +9,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-public class BottomGameFragment extends Fragment {
-    public BottomGameFragment() {
+public class FragmentCustomTheme extends Fragment {
+    public FragmentCustomTheme() {
+
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_game_bottom, container, false);
+        View v = inflater.inflate(R.layout.fragment_custom_theme, container, false);
         return v;
     }
 }

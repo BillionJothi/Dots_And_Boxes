@@ -1,10 +1,10 @@
 package com.djothi.dotsboxes;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
-import android.os.Bundle;
 
 public class Settings extends AppCompatActivity {
 

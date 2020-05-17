@@ -9,18 +9,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainGame"></activity>
+        <activity android:name=".GameActivity"></activity>
         <activity
-            android:name=".LocalMultiplayer1"
+            android:name=".LocalMultiplayer"
             android:parentActivityName=".MainPage" />
         <activity
             android:name=".Settings"
             android:parentActivityName=".MainPage" />
         <activity
-            android:name=".LocalGame1"
+            android:name=".LocalGame"
             android:parentActivityName=".MainPage" />
         <activity android:name=".MainPage" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".LoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

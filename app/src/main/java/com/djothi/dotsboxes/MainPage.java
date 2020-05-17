@@ -28,13 +28,13 @@ public class MainPage extends AppCompatActivity {
 
     //Opens Local GameFragment_static Activity
     public void openLocalGame() {
-        Intent intent = new Intent(this, LocalGame1.class);
+        Intent intent = new Intent(this, LocalGame.class);
         startActivity(intent);
     }
 
     //Opens Local Multiplayer Activity
     public void openLocalMultiplayer() {
-        Intent intent = new Intent(this, LocalMultiplayer1.class);
+        Intent intent = new Intent(this, LocalMultiplayer.class);
         startActivity(intent);
     }
 

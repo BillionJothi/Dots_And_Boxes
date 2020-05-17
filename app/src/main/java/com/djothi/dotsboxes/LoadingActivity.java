@@ -7,7 +7,7 @@ import android.view.MotionEvent;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class LoadingActivity extends AppCompatActivity {
 
     private final int delay = 500;
 
