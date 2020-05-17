@@ -20,7 +20,7 @@
         app:layout_constraintVertical_bias="0.315" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/score_all"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="AI: 5 \n You: 5"
@@ -55,7 +55,7 @@
         app:srcCompat="@drawable/player_icon" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/turn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"

@@ -3,7 +3,7 @@
     <!--Game Settings-->
     <integer name="boardSize">7</integer>
     <integer name="turnStart">0</integer>
-    <integer name="PCDelay">1000</integer>
+    <integer name="PCDelay">500</integer>
 
     <!--Players Settings-->
     <!--Set4ttins start from 1-->
@@ -12,6 +12,7 @@
     <integer name="onlinePlayers">0</integer>
     <integer name="localPlayers">2</integer>
     <bool name="playerStarts1st">true</bool>
+    <bool name="randTurns">true</bool>
 
 
     <!-- Game Setting - ColorLine  -->

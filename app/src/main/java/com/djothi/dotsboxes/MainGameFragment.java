@@ -43,12 +43,14 @@ public class MainGameFragment extends Fragment {
     private int turn;
     private boolean playersTurn;
     private boolean pcPlaying;
+    private boolean randomTurns;
     private int noPcPlaying;
     private int PCTurns[];
     private int playerTurns[];
     private int onlinePlayers;
     private int localPlayers;
     private int totalPlayers;
+    private int delay;
     //Gameplay
     private int score[];
     private long time;
@@ -147,6 +149,7 @@ public class MainGameFragment extends Fragment {
         this.noTotalBoxes = (int) Math.pow(boardSize,2);
         //No.of LayoutParams is dependent on the number of object types. Currently fixes no of types
         final int noLayoutParams = 6;
+
 
         //get Resources Values for each object
         final float dotLinearLayoutWeight = getFloatResourcesValues(view, R.dimen.dotLinearLayoutWeight);
@@ -300,11 +303,13 @@ public class MainGameFragment extends Fragment {
     //Method calculates the number of players & PCs & set accordingly. Sets random PC turns too
     // Players & PC may have overlapping turns if > 1 player or > 1 PC!
     private void calPlayers() throws Exception {
+        this.delay = getResources().getInteger(R.integer.PCDelay);
         this.localPlayers = getResources().getInteger(R.integer.localPlayers);
         this.onlinePlayers =  getResources().getInteger(R.integer.onlinePlayers);
         this.pcPlaying = getResources().getBoolean(R.bool.pcPlaying);
         this.noPcPlaying = getResources().getInteger(R.integer.noPCPlayers);
         this.playersTurn = getResources().getBoolean(R.bool.playerStarts1st);
+        this.randomTurns = getResources().getBoolean(R.bool.randTurns);
         totalPlayers = localPlayers + onlinePlayers;
         if(pcPlaying) {
             totalPlayers+=noPcPlaying;
@@ -313,31 +318,37 @@ public class MainGameFragment extends Fragment {
         boolean done;
         int pcTurn, count = 0, min = 0;
         if(pcPlaying) {
-            for (int i = 0; i < PCTurns.length; i++) {
-                Random r = new Random();
-                do {
-                    count++;
-                    if(playersTurn) {min=1;}
-                    System.out.println(totalPlayers +" " + min);
-                    pcTurn = r.nextInt(totalPlayers - min) + min;
-                    done = true;
-                    if(playersTurn && totalPlayers == 2){pcTurn=1;}
-                    if(!playersTurn && totalPlayers ==2){pcTurn=0;}
-                    if(i>0){
-                        //check that new turn is not equal to an older one.
-                        for(int j=0; j<i; j++){
-                            if(pcTurn == PCTurns[j]){
-                                done=false;
-                                break;
+            if(randomTurns){
+                for (int i = 0; i < PCTurns.length; i++) {
+                    Random r = new Random();
+                    do {
+                        count++;
+                        if(playersTurn) {min=1;}
+                        System.out.println(totalPlayers +" " + min);
+                        pcTurn = r.nextInt(totalPlayers - min) + min;
+                        done = true;
+                        if(playersTurn && totalPlayers == 2){pcTurn=1;}
+                        if(!playersTurn && totalPlayers ==2){pcTurn=0;}
+                        if(i>0){
+                            //check that new turn is not equal to an older one.
+                            for(int j=0; j<i; j++){
+                                if(pcTurn == PCTurns[j]){
+                                    done=false;
+                                    break;
+                                }
                             }
                         }
+                    } while (!done && count<100);
+                    if (count >= 100) {
+                        throw new Exception("Cant find new Rand No. for PC");
                     }
-                } while (!done && count<100);
-                if (count >= 100) {
-                    throw new Exception("Cant find new Rand No. for PC");
+                    PCTurns[i] = pcTurn;
                 }
-                PCTurns[i] = pcTurn;
+            }else{
+                //TODO set PCTUrns
+                //this.PCTurns
             }
+
 
         }
 
@@ -578,7 +589,7 @@ public class MainGameFragment extends Fragment {
         if(!playersTurn){
             if(pcPlaying && isPCTurn()){
                 //Add delay so not immediate & user sees it
-                new CountDownTimer(getResources().getInteger(R.integer.PCDelay), 1000) {
+                new CountDownTimer(delay, 1000) {
                     @Override
                     public void onTick(long millisUntilFinished) { }
                     @Override
@@ -839,7 +850,20 @@ public class MainGameFragment extends Fragment {
     public void setTurn(int turn) { this.turn = turn;}
     public int getLocalPlayers() { return localPlayers; }
     public void setLocalPlayers(int localPlayers) { this.localPlayers = localPlayers;}
-
+    public int getNoPcPlaying() { return noPcPlaying; }
+    public void setNoPcPlaying(int noPcPlaying) { this.noPcPlaying = noPcPlaying; }
+    public int[] getPCTurns() { return PCTurns; }
+    public void setPCTurns(int[] PCTurns) { this.PCTurns = PCTurns; }
+    public int[] getPlayerTurns() { return playerTurns; }
+    public void setPlayerTurns(int[] playerTurns) { this.playerTurns = playerTurns; }
+    public int[] getScore() { return score; }
+    public void setScore(int[] score) { this.score = score; }
+    public boolean isPcPlaying() { return pcPlaying; }
+    public void setPcPlaying(boolean pcPlaying) { this.pcPlaying = pcPlaying; }
+    public int getDelay() { return delay; }
+    public void setDelay(int delay) { this.delay = delay; }
+    public boolean isRandomTurns() { return randomTurns; }
+    public void setRandomTurns(boolean randomTurns) { this.randomTurns = randomTurns; }
 
     /**********Test Meathods*****************/
     public void testPrintLayout(){

@@ -14,14 +14,14 @@
         android:orientation="vertical">
 
         <fragment
-            android:id="@+id/container_a"
-            android:name="com.djothi.dotsboxes.TopGameFragment"
+            android:id="@+id/top_game_fragment"
+            android:name="com.djothi.dotsboxes.FragmentTopGame"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1.0"></fragment>
 
         <fragment
-            android:id="@+id/fragment5"
+            android:id="@+id/game_fragment"
             android:name="com.djothi.dotsboxes.MainGameFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -30,7 +30,7 @@
             android:layout_weight="5.0" />
 
         <fragment
-            android:id="@+id/container_b"
+            android:id="@+id/bottom_game_fragment"
             android:name="com.djothi.dotsboxes.FragmentBottomGame"
             android:layout_width="match_parent"
             android:layout_height="0dp"

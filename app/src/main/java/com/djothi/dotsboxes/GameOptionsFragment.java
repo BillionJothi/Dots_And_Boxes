@@ -80,6 +80,7 @@ public class GameOptionsFragment extends Fragment {
         isP1Starts = (Switch) view.findViewById(R.id.setP1StartsSwitch);
         isQuickMode = (Switch) view.findViewById(R.id.setQuickModeSwitch);
         isRandomizeTurns = (Switch) view.findViewById(R.id.setRandomTurnsSwitch);
+        isRandomizeTurns.setChecked(true);
         Button startGameButton = (Button) view.findViewById(R.id.startGameButton);
         this.gridSize = gridSizeNumberPicker.getValue();
         this.totalTextColor = totalNoPlayersText.getTextColors();

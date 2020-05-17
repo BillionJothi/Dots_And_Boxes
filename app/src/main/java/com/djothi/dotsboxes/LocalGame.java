@@ -29,11 +29,16 @@ public class LocalGame extends AppCompatActivity implements GameOptionsFragment.
     public void fragementStartButtonClicked(
             int grid, int human, int AI,
             boolean hint, boolean undo, boolean p1Starts, boolean quickMode, boolean randomTurns) {
-        openGameActivity();
-    }
-
-    public void openGameActivity() {
         Intent intent = new Intent(this, GameActivity.class);
+        intent.putExtra("grid",grid);
+        intent.putExtra("human",human);
+        intent.putExtra("AI",AI);
+        intent.putExtra("hint",hint);
+        intent.putExtra("undo",undo);
+        intent.putExtra("p1Starts",p1Starts);
+        intent.putExtra("quickMode",quickMode);
+        intent.putExtra("randomTurns",randomTurns);
         startActivity(intent);
     }
+
 }
