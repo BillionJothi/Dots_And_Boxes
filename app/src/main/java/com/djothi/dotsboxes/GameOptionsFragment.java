@@ -230,7 +230,6 @@ public class GameOptionsFragment extends Fragment {
         if(this.turnsInt < 8){
             turnsPerPlayerText.setTextColor(Color.RED);
         }else {
-            //TODO
             turnsPerPlayerText.setTextColor(turnsTextColor);
         };
     }

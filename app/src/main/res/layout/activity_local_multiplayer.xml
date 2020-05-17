@@ -10,6 +10,7 @@
 
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolbarLayoutMulti"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -23,8 +24,23 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <TextView
+        android:id="@+id/localMultiText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/local_multiplayer"
+        android:textAlignment="center"
+        android:textSize="@dimen/textSize24"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_game_options"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toBottomOf="@id/toolbarLayoutMulti"
+        app:layout_constraintVertical_bias="0.8" />
+
     <fragment
-        android:id="@+id/fragment2"
+        android:id="@+id/fragment_game_options"
         android:name="com.djothi.dotsboxes.GameOptionsFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,21 +50,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout="@layout/fragment_game_options" />
-
-    <TextView
-        android:id="@+id/localMultiText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/local_multiplayer"
-        android:textAlignment="center"
-        android:textSize="@dimen/textSize24"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/fragment2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.956" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

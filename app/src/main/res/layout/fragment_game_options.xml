@@ -64,14 +64,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/totalTextMarginTop"
-        android:layout_marginStart="2dp"
-        android:textColor="@color/white"
-        android:textAlignment="textStart"
+        android:paddingStart="2dp"
         android:text="Total No. Players  = 5"
+        android:textAlignment="textStart"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/white"
         android:tooltipText="HELP!"
         android:typeface="normal"
-        app:layout_constraintStart_toStartOf="@id/setNoAIPlayersText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/setHintAllowedSwitch"
         app:layout_constraintTop_toBottomOf="@id/setNoAIPlayersText" />
 
     <TextView
@@ -79,14 +81,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/totalTextMarginTop"
-        android:layout_marginEnd="2dp"
-        android:textColor="@color/white"
-        android:textAlignment="textEnd"
+        android:paddingEnd="2dp"
         android:text="6 Turns/player"
+        android:textAlignment="textEnd"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/white"
         android:tooltipText="HELP!"
         android:typeface="normal"
-        app:layout_constraintEnd_toEndOf="@id/setNoAIPlayersText"
+        app:layout_constraintEnd_toEndOf="@+id/setUndoAllowedSwitch"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/setNoAIPlayersText" />
 
     <Switch
@@ -99,7 +103,7 @@
         android:padding="@dimen/switchPadding15"
         android:text="@string/hint_allowed"
         android:textSize="@dimen/switchTextSize"
-        app:layout_constraintStart_toStartOf="@id/showTotalNoPlayersText"
+        app:layout_constraintStart_toStartOf="@+id/setP1StartsSwitch"
         app:layout_constraintTop_toBottomOf="@id/showTotalNoPlayersText" />
 
     <Switch
@@ -112,7 +116,7 @@
         android:padding="@dimen/switchPadding15"
         android:text="@string/undo_allowed"
         android:textSize="@dimen/switchTextSize"
-        app:layout_constraintEnd_toEndOf="@+id/showTrunsPerPlayerText"
+        app:layout_constraintEnd_toEndOf="@+id/setQuickModeSwitch"
         app:layout_constraintTop_toBottomOf="@+id/showTrunsPerPlayerText" />
 
     <Switch
@@ -125,7 +129,7 @@
         android:padding="@dimen/switchPadding15"
         android:text="P1Starts"
         android:textSize="@dimen/switchTextSize"
-        app:layout_constraintStart_toStartOf="@id/setHintAllowedSwitch"
+        app:layout_constraintStart_toStartOf="@+id/setRandomTurnsSwitch"
         app:layout_constraintTop_toBottomOf="@+id/setHintAllowedSwitch" />
 
     <Switch
@@ -137,7 +141,7 @@
         android:padding="@dimen/switchPadding15"
         android:text="QuickMode"
         android:textSize="@dimen/switchTextSize"
-        app:layout_constraintEnd_toEndOf="@+id/setUndoAllowedSwitch"
+        app:layout_constraintEnd_toEndOf="@+id/setRandomTurnsSwitch"
         app:layout_constraintTop_toBottomOf="@+id/setUndoAllowedSwitch" />
 
     <Switch
@@ -149,7 +153,9 @@
         android:padding="@dimen/switchPadding15"
         android:text="Randomize Turns?"
         android:textSize="@dimen/switchTextSize"
-        app:layout_constraintStart_toStartOf="@id/setP1StartsSwitch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="@integer/zeroPoint5"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/setP1StartsSwitch" />
 
     <Button

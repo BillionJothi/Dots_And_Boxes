@@ -2,6 +2,9 @@ package com.djothi.dotsboxes;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Switch;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +26,20 @@ public class LocalMultiplayer1 extends AppCompatActivity implements GameOptionsF
             ab.setTitle(R.string.local_multiplayer);
             ab.setDisplayHomeAsUpEnabled(true);
         }
+
+        View v = findViewById(R.id.fragment_game_options);
+        v.findViewById(R.id.setNoAIPlayersText).setVisibility(View.GONE);
+        v.findViewById(R.id.noAIPlayersPickerInput).setVisibility(View.GONE);
+        v.findViewById(R.id.setQuickModeSwitch).setVisibility(View.GONE);
+        Switch s = v.findViewById(R.id.setP1StartsSwitch);
+        ViewGroup.LayoutParams tochangewidth = s.getLayoutParams();
+        tochangewidth.width = (int) getResources().getDimension(R.dimen.switchWidth);
+        //v.findViewById(R.id.showTotalNoPlayersText).setTextAlignment(View
+        // .TEXT_ALIGNMENT_TEXT_START);
+        //v.findViewById(R.id.showTrunsPerPlayerText).setTextAlignment(View
+        // .TEXT_ALIGNMENT_TEXT_END);
+
+        //v.findViewById(R.id.setHintAllowedSwitch).getLayoutParams().
     }
 
     @Override
