@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Random;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
@@ -57,48 +58,70 @@ public class MainGameFragment extends Fragment {
     private String hLineTag;
     private String vLineTag;
     private String playerColors[];
-    private boolean customP1color;
     //Background
     private ImageViewAdded[][] layoutInArray;
     private List<ImageViewAdded> verticalLinesLeft;
     private List<ImageViewAdded> horziontalLinesLeft;
     private List<ImageViewAdded> moves = new ArrayList<ImageViewAdded>();
-    private GameListener activityCommander;
     private View view;
+    private LinearLayout layout;
+    GameListener activityCommander;
+
+
+
 
     public MainGameFragment() {
     }
 
     public interface GameListener{
         public void GameClicked(int[] score, int turn);
+        public void updateTurn(String turn);
+        public void setInitialTurn(String turn);
+        public void updatePlayerScore(int score);
     }
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         try{
-            activityCommander = (GameListener) getActivity();
+             activityCommander = (GameListener) getActivity();
         }catch (ClassCastException e ){
-//            throw new ClassCastException(getActivity().toString() + "Must implement fragment " +
-  //                  "interface");
+            throw new ClassCastException(getActivity().toString() +
+                    "    Must implement Game fragment interface");
         }
-      /*  //TODO Fragment Detach/Attach
-        **********Attaching & Detaching fragment for updates*************
-        Fragment currentFragment = getFragmentManager().findFragmentById(R.id.fragment4);
-        FragmentTransaction fragTransaction = getFragmentManager().beginTransaction();
-        fragTransaction.detach(currentFragment);
-        //MainGameFragment g = new MainGameFragment();
-        CreateGameBoard g2 = (CreateGameBoard) new CreateGameBoard();
-        g2.makeBoard(layout);
-        MainGameFragment g =(MainGameFragment) g2;
-        fragTransaction.attach(currentFragment);
-        fragTransaction.commit();*/
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Nullable
+    @Override
+    public View onCreateView(@Nullable LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
+        this.view = inflater.inflate(R.layout.fragment_game, container, false);
+        return view;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState){
-        this.view =inflater.inflate(R.layout.fragment_game, container, false);
-        LinearLayout layout = view.findViewById(R.id.linear2);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        /*Getting internal data*/
+        System.out.println("**************Setting internal data!***************");
+        this.boardSize = getArguments().getInt("grid");
+        this.localPlayers = getArguments().getInt("human");
+        this.noPcPlaying = getArguments().getInt("AI");
+        this.playersTurn = getArguments().getBoolean("p1Starts");
+        if(localPlayers == 0) {playersTurn = false;}
+        if(getArguments().getBoolean("quickMode")){this.delay = 0;} else {this.delay = 1000;}
+        this.randomTurns = getArguments().getBoolean("randomTurns");
+        if(noPcPlaying == 0) {this.pcPlaying = false; } else {this.pcPlaying = true;}
+        System.out.println("Board Size:" + this.boardSize);
+        Setup();
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public View Setup(){
+        this.layout = view.findViewById(R.id.linear2);
         layout.removeAllViews();
 
         try {
@@ -106,12 +129,12 @@ public class MainGameFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         //Get Settings from resouruces
         this.turn = getResources().getInteger(R.integer.turnStart);
+
         this.score = new int[totalPlayers];
         for(int i: score){ i = getResources().getInteger(R.integer.initialScore); }
-        this.boardSize = getResources().getInteger(R.integer.boardSize);
+        //this.boardSize = getResources().getInteger(R.integer.boardSize);
         this.noTotalPlayableSides = (boardSize*2*(boardSize+1));
         this.noPlayableLinesLeft = noTotalPlayableSides;
         this.noHorizontalPlayableLinesLeft = noTotalPlayableSides /2;
@@ -125,22 +148,20 @@ public class MainGameFragment extends Fragment {
             checkCubeBoard();
         } catch (Exception e) {
             e.printStackTrace();
-            showToast("BoardLayout Errors");
+            showToast("BoardLayout Errors - Board not made");
         }
-        makeBoard(layout);
+        makeBoard();
         layoutInArray =  getLayoutArray();
-        //testPrintLayout();
-        // Inflate the layout for this fragment
         if(!playersTurn){
             nextPlayer();
         }
         return view;
     }
-    // Method makes the board - Build O for auto-setting element IDs
-    @RequiresApi(api = Build.VERSION_CODES.O)
 
     /*********Create Environment***************************/
-    private void makeBoard(LinearLayout layout) {
+    // Method makes the board - Build O for auto-setting element IDs
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void makeBoard() {
         //For Setup
         int gridSize = (boardSize * 2) + 1;
         this.noTotalDots = (int) Math.pow((boardSize+1),2);
@@ -303,30 +324,26 @@ public class MainGameFragment extends Fragment {
     //Method calculates the number of players & PCs & set accordingly. Sets random PC turns too
     // Players & PC may have overlapping turns if > 1 player or > 1 PC!
     private void calPlayers() throws Exception {
-        this.delay = getResources().getInteger(R.integer.PCDelay);
-        this.localPlayers = getResources().getInteger(R.integer.localPlayers);
         this.onlinePlayers =  getResources().getInteger(R.integer.onlinePlayers);
-        this.pcPlaying = getResources().getBoolean(R.bool.pcPlaying);
-        this.noPcPlaying = getResources().getInteger(R.integer.noPCPlayers);
-        this.playersTurn = getResources().getBoolean(R.bool.playerStarts1st);
-        this.randomTurns = getResources().getBoolean(R.bool.randTurns);
         totalPlayers = localPlayers + onlinePlayers;
         if(pcPlaying) {
             totalPlayers+=noPcPlaying;
             this.PCTurns = new int[noPcPlaying];
         }
-        boolean done;
-        int pcTurn, count = 0, min = 0;
+        List<Integer> a = new ArrayList<Integer>(noPcPlaying);
+        boolean done = true;
+        int pcTurn = 0, count = 0, min = 0;
         if(pcPlaying) {
-            if(randomTurns){
+            if(randomTurns ){
                 for (int i = 0; i < PCTurns.length; i++) {
                     Random r = new Random();
                     do {
                         count++;
                         if(playersTurn) {min=1;}
-                        System.out.println(totalPlayers +" " + min);
                         pcTurn = r.nextInt(totalPlayers - min) + min;
                         done = true;
+                        System.out.println("Total Player s =  "+totalPlayers
+                        + "PCTURNS Siz =" + PCTurns.length);
                         if(playersTurn && totalPlayers == 2){pcTurn=1;}
                         if(!playersTurn && totalPlayers ==2){pcTurn=0;}
                         if(i>0){
@@ -338,42 +355,39 @@ public class MainGameFragment extends Fragment {
                                 }
                             }
                         }
-                    } while (!done && count<100);
-                    if (count >= 100) {
-                        throw new Exception("Cant find new Rand No. for PC");
+                    } while (!done);
+                    if(done){
+                        PCTurns[i] = pcTurn;
                     }
-                    PCTurns[i] = pcTurn;
                 }
             }else{
-                //TODO set PCTUrns
-                //this.PCTurns
+                int j=0;
+                if(!playersTurn){
+                    for(int i=0; i<noPcPlaying; i++){ PCTurns[i] = i; }
+                }else{
+                    j = localPlayers;
+                    for(int i=0; i<noPcPlaying; i++){ PCTurns[i]=j; }
+                }
             }
-
-
         }
-
+        System.out.println("TotalNo.Players = "+totalPlayers + ", PC Players = " + noPcPlaying +
+                ", PCTurns = "+ Arrays.toString(PCTurns) );
+        //Setting Player turns no.
         playerTurns = new int[localPlayers];
         int playercount = 0;
         boolean isAPlyaerTurn = false;
         for (int i=0; i<totalPlayers; i++){
             for(int j=0; j<PCTurns.length; j++){
-                if (PCTurns[j] == i){
+                if (PCTurns[j] == i) {
                     isAPlyaerTurn = false;
                 }
             }
             if(isAPlyaerTurn){
+                System.out.println("placing "+ i);
                 playerTurns[playercount] = i;
                 playercount++;
             }
         }
-
-       /* System.out.println("localPlayers " + localPlayers+ "\n"+
-                " onlinePlayers " + onlinePlayers+"\n"+
-                " pcPlaying " + pcPlaying+"\n"+
-                " noPcPlaying " + noPcPlaying+"\n"+
-                " playersTurn " + playersTurn+"\n"+
-                " totalPlayers " + totalPlayers+"\n"+
-                " PCPlayers "+ Arrays.toString(PCTurns));*/
     }
     //Gets an Array of the exact board layout in table format
     private ImageViewAdded[][] getLayoutArray(){
@@ -423,10 +437,6 @@ public class MainGameFragment extends Fragment {
         }
         return finalLayout;
     }
-    private void customP1Color(){
-        //TODO custom P!
-        playerColors[0]=getResources().getString(R.string.P0Colour);
-    }
     private void setPlayerColors(){
         if(totalPlayers == 2){
             //Sets 1st human player color to always equal to blue
@@ -444,19 +454,17 @@ public class MainGameFragment extends Fragment {
                 Random rnd = new Random();
                 int color = Color.argb(200, rnd.nextInt(256), rnd.nextInt(256),
                         rnd.nextInt(256));
-                //color = Color.RED;
-                //System.out.println("Ininital color in int = "+ color);
                 playerColors[i] = Integer.toString(color);
-                //System.out.println("playaercolor["+i+"] = " + playerColors[i]);
             }
-            Arrays.sort(playerTurns);
-            Arrays.sort(PCTurns);
-            playerColors[playerTurns[0]] = getResources().getString(R.string.P0Colour);
-            playerColors[PCTurns[0]] = getResources().getString(R.string.P1Colour);
-        }
-        //sets 1st human to p0 & 1st pc to p1
-        if(customP1color){
-            customP1Color();
+            //sets 1st human to p0 & 1st pc to p1 always
+
+            if(localPlayers > 0){
+                Arrays.sort(playerTurns);
+                playerColors[playerTurns[0]] = getResources().getString(R.string.P0Colour);
+            }if (noPcPlaying > 0){
+                Arrays.sort(PCTurns);
+                playerColors[PCTurns[0]] = getResources().getString(R.string.P1Colour);
+            }
         }
     }
 
@@ -477,18 +485,13 @@ public class MainGameFragment extends Fragment {
         };
     }
     private void lineClicked(View v) {
+        view = v;
         ImageViewAdded img = (ImageViewAdded) v;
-        boolean isHorizontalLine = false;
-        try {
-            isHorizontalLine = isHorizontalLine(img);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         //On line clicked, upsocre, remove/update the line & change it's color then change turn
         if(playersTurn && !img.isSet()){
             time = System.currentTimeMillis();
             upScore(true, turn);
-            removeLine(v,img,isHorizontalLine);
+            removeLine(img);
             //TODO caller
             //activityCommander.GameClicked(score,turn);
             //System.out.println("Curren Turn = " + turn + ", isPCPlaying = " + pcPlaying + " " +
@@ -496,7 +499,7 @@ public class MainGameFragment extends Fragment {
             nextTurn();
         }else{showWaitToast();}
     }
-    //Method just chekes if cubes board
+    //Method just checks if cubes board
     private void checkCubeBoard() throws Exception {
         if(noHorizontalPlayableLinesLeft != noVerticalPlayableLinesLeft){
             throw new Exception(getString(R.string.exception_playable_horizontal_equal_vertical));
@@ -511,6 +514,11 @@ public class MainGameFragment extends Fragment {
         int boxScore = getResources().getInteger(R.integer.boxScore);
         if(line){ this.score[player]+=lineScore; }
         else { this.score[player]+= boxScore; }
+        if(localPlayers > 0){
+            if(player == playerTurns[0]) {
+                activityCommander.updatePlayerScore(this.score[player]);
+            }
+        }
     }
     private void downScore(Boolean line, int player)  {
         int lineScore = getResources().getInteger(R.integer.lineScore);
@@ -519,30 +527,34 @@ public class MainGameFragment extends Fragment {
         else { this.score[player]-= boxScore; }
     }
     //Meathod Removes the line & updates it based off players colors, also calls to check if box set
-    private void removeLine(View v,ImageViewAdded img, Boolean isHorizontal) {
-        img.setSet(true);
-        img.setClickable(false);
-        noPlayableLinesLeft--;
-        if(isHorizontal){
-            noHorizontalPlayableLinesLeft--;
-            horziontalLinesLeft.remove(img);
-            moves.add(img);
-            switchLineColor(playerColors[turn],img,true);
-        }else{
-            noVerticalPlayableLinesLeft--;
-            verticalLinesLeft.remove(img);
-            moves.add(img);
-            //System.out.println(turn);
-            switchLineColor(playerColors[turn],img,false);
+    private void removeLine(ImageViewAdded img) {
+        try {
+            boolean isHorizontalLine = isHorizontalLine(img);
+            img.setSet(true);
+            img.setClickable(false);
+            noPlayableLinesLeft--;
+            if(isHorizontalLine){
+                noHorizontalPlayableLinesLeft--;
+                horziontalLinesLeft.remove(img);
+                moves.add(img);
+                switchLineColor(playerColors[turn],img,true);
+            }else{
+                noVerticalPlayableLinesLeft--;
+                verticalLinesLeft.remove(img);
+                moves.add(img);
+                switchLineColor(playerColors[turn],img,false);
+            }
+            setFilledBox(img);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), R.string.exception_toast_pc_unable_line,Toast.LENGTH_SHORT).show();
         }
-        setFilledBox(v,img);
     }
     //Auto getting line colors based off inputs, allows for easy upgrades
     private void switchLineColor(String r, ImageViewAdded img, Boolean isHorizontal){
         int line;
         if(isHorizontal){
             switch (r){
-                //case "blue": line = R.drawable.blueHorizontalDrawable; break;
                 case "blue": line = R.drawable.blueHorizontalDrawable; img.setImageResource(line); break;
                 case "red": line = R.drawable.redHorizontalDrawable; img.setImageResource(line); break;
                 case "blank": line = R.drawable.blankHorizontalDrawable; img.setImageResource(line); break;
@@ -567,15 +579,15 @@ public class MainGameFragment extends Fragment {
                 default: line = R.drawable.redVerticalDrawable;
                     img.setImageResource(line);
                     img.setColorFilter(Integer.parseInt(r), PorterDuff.Mode.SRC_ATOP);
-                    //System.out.println("color in int = "+ line);
             }
         }
     }
     //Method increments the turn
     private void nextTurn(){
         if(haveTurns()){
-            turn++;
+            this.turn++;
             if(turn >= totalPlayers){ this.turn = 0;}
+            activityCommander.updateTurn(whoiseTurn(turn));
             nextPlayer();
         }else{ showToast("GAME OVER!"); }
     }
@@ -609,17 +621,9 @@ public class MainGameFragment extends Fragment {
     /****************PC Gameplay Methods****************/
     //Method is for PC/AI gameplay
     private void computersTurn() {
-        ImageViewAdded c = randomLine();
+        ImageViewAdded randomLine = randomLine();
         upScore(true,turn);
-        boolean isHorizontal = false;
-        try {
-            isHorizontal = isHorizontalLine(c);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(getContext(), R.string.exception_toast_pc_unable_line,Toast.LENGTH_SHORT).show();
-        }
-        removeLine(view,c,isHorizontal);
+        removeLine(randomLine);
     }
     //Method picks a remaining line at random
     private ImageViewAdded randomLine() {
@@ -637,14 +641,13 @@ public class MainGameFragment extends Fragment {
         return chooseLine;
     }
     //Method to check if line sets a box
-    private void setFilledBox(View v, ImageViewAdded pcLine) {
+    private void setFilledBox(ImageViewAdded pcLine) {
         ImageViewAdded line;
         int row = 0, column = 0;
-        boolean horizontal = true;
-        if(playersTurn){ line = (ImageViewAdded) v; }
+        boolean horizontal;
+        if(playersTurn){ line = (ImageViewAdded) view; }
         else { line = pcLine; }
 
-        //layout [row][column], gets the clicked line row/colum values]
         boolean t = false;
         for (int i = 0; i < layoutInArray.length; i++) {
             for (int j = 0; j < layoutInArray.length; j++) {
@@ -688,17 +691,17 @@ public class MainGameFragment extends Fragment {
             e.printStackTrace();
         }
     }
-    private void hint(View v){
+    public void hint(){
         try {
             ImageViewAdded c = randomLine();
-            animateLine(randomLine(),isHorizontalLine(c));
+            animateLine(c,isHorizontalLine(c));
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(getContext(), R.string.exception_toast_pc_unable_line,Toast.LENGTH_SHORT).show();
         }
     }
-    private void undo(View v){
-        ImageViewAdded last = moves.get(moves.size());
+    public void undo(){
+        ImageViewAdded last = moves.get(moves.size()-1);
         boolean isHorizontal = false;
         try {
             isHorizontal = isHorizontalLine(last);
@@ -707,13 +710,12 @@ public class MainGameFragment extends Fragment {
         }
         if(isHorizontal){ verticalLinesLeft.add(last);}
         else {horziontalLinesLeft.add(last);}
-        moves.remove(moves.size());
+        moves.remove(moves.size()-1);
         turn--;
         downScore(isHorizontal,turn);
         nextPlayer();
     }
 
-    //TODO Animate
     /*************Meathods used in checking if lines near box*************/
     private boolean bottomLines(int column, int row) {
         ImageViewAdded a = layoutInArray[column-1][row+1];
@@ -760,9 +762,9 @@ public class MainGameFragment extends Fragment {
     }
     //These methods set the box
     private void setBox(ImageViewAdded box){
-        if(turn == playerTurns[0]){
-           box.setImageResource(R.drawable.blueBoxDrawable);
-        }else if (turn == PCTurns[0]){
+        if(localPlayers > 0 && turn == playerTurns[0]){
+            box.setImageResource(R.drawable.blueBoxDrawable);
+        }else if (noPcPlaying > 0 && turn == PCTurns[0]){
             box.setImageResource(R.drawable.redBoxDrawable);
         }else{
             box.setImageResource(R.drawable.redBoxDrawable);
@@ -797,6 +799,9 @@ public class MainGameFragment extends Fragment {
         animation.addFrame(original,100);
         animation.setOneShot(false);
         i.setImageDrawable(animation);
+        //Block updates to ensure right update after animatiion. Block updates for period of
+        // animation
+        i.setClickable(false);
         animation.start();
         //Stop animation after x seconds & set back to original
         new Handler().postDelayed(new Runnable() {
@@ -804,6 +809,7 @@ public class MainGameFragment extends Fragment {
             public void run() {
                 animation.stop();
                 i.setImageDrawable(original);
+                i.setClickable(true);
                 //refreshing.clearAnimation();
             }
         }, 3000);
@@ -840,6 +846,24 @@ public class MainGameFragment extends Fragment {
     }
     //Method checks if any more turns left
     private boolean haveTurns(){ return (noPlayableLinesLeft !=0); }
+    protected String whoiseTurn(int turn) {
+        if(isPCTurn()) {
+            if(turn ==0){ return "Turn: Computer 01"+ " ("+turn+")";}
+            else if(turn < 10){ return "Turn: Computer 0"+ turn + " ("+turn+")";}
+            else{ return "Turn: Computer "+turn + " ("+turn+")";}
+        }else{
+            if(localPlayers > 0){
+            for(int i=0; i< playerTurns.length; i++){
+                    if(playerTurns[i] == turn ){
+                        if(turn ==0){ }
+                        if(i<10){ return "Turn: Player 01"+" ("+turn+")"; }
+                        else { return "Turn: Player "+i + " ("+turn+")"; }
+                    }
+                }
+            }
+        }
+       return "Turn: Unknowned "+turn + " ("+turn+")";
+    }
 
     /***********Getters & Setters **********8*/
     public void setPlayersTurn(boolean playersTurn) { this.playersTurn = playersTurn; }

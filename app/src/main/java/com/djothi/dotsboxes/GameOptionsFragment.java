@@ -1,5 +1,6 @@
 package com.djothi.dotsboxes;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -39,6 +40,8 @@ public class GameOptionsFragment extends Fragment {
     private ColorStateList turnsTextColor;
     private boolean quickMode;
     private boolean suggestQuick;
+    private boolean p1;
+    private Button startGameButton;
 
 
     GameOptionsListerner activityCommander;
@@ -61,6 +64,7 @@ public class GameOptionsFragment extends Fragment {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,7 +85,7 @@ public class GameOptionsFragment extends Fragment {
         isQuickMode = (Switch) view.findViewById(R.id.setQuickModeSwitch);
         isRandomizeTurns = (Switch) view.findViewById(R.id.setRandomTurnsSwitch);
         isRandomizeTurns.setChecked(true);
-        Button startGameButton = (Button) view.findViewById(R.id.startGameButton);
+        startGameButton = (Button) view.findViewById(R.id.startGameButton);
         this.gridSize = gridSizeNumberPicker.getValue();
         this.totalTextColor = totalNoPlayersText.getTextColors();
         this.turnsTextColor = turnsPerPlayerText.getTextColors();
@@ -89,6 +93,7 @@ public class GameOptionsFragment extends Fragment {
                 noAIPlayersNumberPicker.getValue() + noHumanPlayersNumberPicker.getValue();
         this.turnsInt = (int) ((gridSize*2*(gridSize+1)) / (double) noPlayersInt);
         this.quickMode = false;
+        this.p1 = isP1Starts.isChecked();
 
         // OnValueChangeListener
         gridSizeNumberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
@@ -111,7 +116,11 @@ public class GameOptionsFragment extends Fragment {
         noHumanPlayersNumberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+
                 noPlayersInt = newVal + noAIPlayersNumberPicker.getValue();
+                if(newVal == 0){
+                    isP1Starts.setChecked(false);
+                }else {isP1Starts.setChecked(p1);}
                 int playable = gridSize*2*(gridSize+1);
                 //Note: Rounds down in casting
                 if(noPlayersInt != 0){
@@ -136,6 +145,9 @@ public class GameOptionsFragment extends Fragment {
                 updateTotalPlayersText();
                 updateTurnsPerPlayerText();
                 noHumanPlayersNumberPicker.setMaxValue(playable-newVal);
+                if(noHumanPlayersNumberPicker.getMaxValue() == 0){
+                    isP1Starts.setChecked(false);
+                }else{isP1Starts.setChecked(p1);}
                 noHumanPlayersNumberPicker.setWrapSelectorWheel(true);
             }
         });
@@ -155,28 +167,14 @@ public class GameOptionsFragment extends Fragment {
             }
         });
 
-      /*  // Using string values
-        // IMPORTANT! setMinValue to 1 and call setDisplayedValues after setMinValue and setMaxValue
-        String[] data = {"2", "3", "4", "5", "6", "7", "8", "9", "10"};
-        numberPicker.setMinValue(1);
-        numberPicker.setMaxValue(data.length);
-        numberPicker.setDisplayedValues(data);
-        numberPicker.setValue(7);
-        numberPicker.setOnClickListener(new View.OnClickListener() {
+
+
+        isP1Starts.setOnClickListener(new Switch.OnClickListener(){
             @Override
-            public void onClick(View view) {
-                //Log.d(TAG, "Click on current value");
+            public void onClick(View v) {
+                p1 = isP1Starts.isChecked();
             }
         });
-        // OnScrollListener
-        gridSizeNumberPicker.setOnScrollListener(new NumberPicker.OnScrollListener() {
-            @Override
-            public void onScrollStateChange(NumberPicker picker, int scrollState) {
-                if (scrollState == SCROLL_STATE_IDLE) {
-                }
-            }
-        });
-*/
 
         startGameButton.setOnClickListener(
                 new Button.OnClickListener() {
@@ -199,12 +197,15 @@ public class GameOptionsFragment extends Fragment {
     }
     //Methods Checks if too little turns/player & gives visual warninig(
     private void setTotalPlayerTextColor(){
-        if(this.noPlayersInt == 0){ }
+        if(this.noPlayersInt == 0){ startGameButton.setEnabled(false); }
         else if(this.noPlayersInt > 15 && !quickMode){
+            startGameButton.setEnabled(true);
             totalNoPlayersText.setTextColor(Color.RED);
         } else if(((this.gridSize*2*(this.gridSize+1)) % this.noPlayersInt) != 0) {
             totalNoPlayersText.setTextColor(Color.YELLOW);
+            startGameButton.setEnabled(true);
         } else {
+            startGameButton.setEnabled(true);
             totalNoPlayersText.setTextColor(totalTextColor);
         };
 

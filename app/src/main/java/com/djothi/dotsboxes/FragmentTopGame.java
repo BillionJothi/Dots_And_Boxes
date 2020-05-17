@@ -12,8 +12,8 @@ import androidx.fragment.app.Fragment;
 
 public class FragmentTopGame extends Fragment {
 
-    private static TextView turn;
-    private static TextView allScore;
+    private TextView turn;
+    private TextView allScore;
 
     public FragmentTopGame() {
     }
@@ -29,9 +29,14 @@ public class FragmentTopGame extends Fragment {
         return v;
     }
 
-    public void setTurn(int newturn){
-        String s = turn.getText().toString().replaceFirst("[0-9]+",
+    public void setInitialTurn(String newturn){
+        turn.setText(newturn);
+    }
+
+    public void setTurn(String s){
+       /* String s = turn.getText().toString().replaceFirst("[0-9]+",
                 Integer.toString(newturn));
+        System.out.println(s);*/
         turn.setText(s);
     }
 
@@ -40,4 +45,5 @@ public class FragmentTopGame extends Fragment {
                 Integer.toString(newscore));
         allScore.setText(s);
     }
+
 }

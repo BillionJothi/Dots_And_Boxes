@@ -23,10 +23,7 @@ public class FragmentBottomGame extends Fragment {
 
      FragmentBottomGameListener activityCommander;
 
-    public void onStart() {
-        super.onStart();
-        // rest of the code
-    }
+
     public interface FragmentBottomGameListener{
         public void undo();
         public void hint();
@@ -47,8 +44,8 @@ public class FragmentBottomGame extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_game_bottom, container, false);
 
-        Button undo = (Button) v.findViewById(R.id.undobutton);
-        Button hint = (Button) v.findViewById(R.id.hintbutton);
+        undo = (Button) v.findViewById(R.id.undobutton);
+        hint = (Button) v.findViewById(R.id.hintbutton);
         score = (TextView) v.findViewById(R.id.score_player);
 
         undo.setOnClickListener(new Button.OnClickListener(){
