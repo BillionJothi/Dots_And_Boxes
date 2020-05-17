@@ -28,26 +28,20 @@ public class GameFragment_static extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         /*float dip = 50f;
         Resources r = getResources();
-
         int px = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip,
                 r.getDisplayMetrics()));*/
         View view = inflater.inflate(R.layout.fragment_game_static, container,false);
-
-
         set(view,3);
 
         //LinearLayout layout = (LinearLayout)view.findViewById(R.id.layout);
         //boolean success = formIsValid(layout);
-
         //withd & height
       /*  TableRow.LayoutParams dotLayout = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 px);
         TableRow.LayoutParams linearLineLayout = new TableRow.LayoutParams( px,
                 (int)px);*/
-
         /*dot0 = view.findViewById(R.id.dot0);
         dot0.setLayoutParams(dotLayout);
         dot0.requestLayout();

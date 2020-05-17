@@ -34,12 +34,6 @@ public class LocalMultiplayer1 extends AppCompatActivity implements GameOptionsF
         Switch s = v.findViewById(R.id.setP1StartsSwitch);
         ViewGroup.LayoutParams tochangewidth = s.getLayoutParams();
         tochangewidth.width = (int) getResources().getDimension(R.dimen.switchWidth);
-        //v.findViewById(R.id.showTotalNoPlayersText).setTextAlignment(View
-        // .TEXT_ALIGNMENT_TEXT_START);
-        //v.findViewById(R.id.showTrunsPerPlayerText).setTextAlignment(View
-        // .TEXT_ALIGNMENT_TEXT_END);
-
-        //v.findViewById(R.id.setHintAllowedSwitch).getLayoutParams().
     }
 
     @Override
@@ -51,7 +45,7 @@ public class LocalMultiplayer1 extends AppCompatActivity implements GameOptionsF
 
 
     public void openGameActivity() {
-        Intent intent = new Intent(this, ConstrainGame.class);
+        Intent intent = new Intent(this, MainGame.class);
         startActivity(intent);
     }
 

@@ -17,14 +17,8 @@ public class TopGameFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_game, container, false);
-
-
-
-
+        View v = inflater.inflate(R.layout.fragment_game_top, container, false);
 
         return v;
-
-
     }
 }
