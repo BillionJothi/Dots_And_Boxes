@@ -1,6 +1,7 @@
 package com.djothi.dotsboxes;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,5 +23,10 @@ public class Settings extends AppCompatActivity {
             ab.setTitle(R.string.settings);
             ab.setDisplayHomeAsUpEnabled(true);
         }
+
+        View v = findViewById(R.id.settingslayout);
+        v.setClickable(true);
     }
+
+
 }

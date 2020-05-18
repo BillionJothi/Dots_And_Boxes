@@ -155,8 +155,17 @@ public class MainGameFragment extends Fragment {
         }
         makeBoard();
         layoutInArray =  getLayoutArray();
+        System.out.println("lines left ***********************ERWFAA = " +noPlayableLinesLeft);
         if(!playersTurn){
             nextPlayer();
+        }
+        updateScoreText();
+        if(noPcPlaying == 0){
+            if(localPlayers == 1){
+                activityCommander.updateAIName("");
+            }else {
+                activityCommander.updateAIName("Player 2");
+            }
         }
         return view;
     }
@@ -491,10 +500,16 @@ public class MainGameFragment extends Fragment {
         view = v;
         ImageViewAdded img = (ImageViewAdded) v;
         //On line clicked, upsocre, remove/update the line & change it's color then change turn
+        if(!isPCTurn(turn)){ playersTurn = true; }
         if(playersTurn && !img.isSet()){
             time = System.currentTimeMillis();
-            upScore(true, turn);
+            upScore(true);
             removeLine(img);
+            if(noPcPlaying == 0){
+                if(localPlayers > 1){
+                    activityCommander.updateAIScore(score[1]);
+                }
+            }
             //TODO caller
             //activityCommander.GameClicked(score,turn);
             //System.out.println("Curren Turn = " + turn + ", isPCPlaying = " + pcPlaying + " " +
@@ -512,57 +527,107 @@ public class MainGameFragment extends Fragment {
     }
 
     /*********Clicker Extensions/Gameplay**************/
-    private void upScore(Boolean line, int player)  {
+    private void upScore(Boolean line)  {
         int lineScore = getResources().getInteger(R.integer.lineScore);
         int boxScore = getResources().getInteger(R.integer.boxScore);
-        if(line){ this.score[player]+=lineScore; }
-        else { this.score[player]+= boxScore; }
+        System.out.println("upscore" + line);
+        if(line){ this.score[turn]+=lineScore; }
+        else { this.score[turn]+=boxScore; }
 
         if(localPlayers > 0 && isPlayersTurn()) {
-            activityCommander.updatePlayerScore(this.score[turn]);
+            activityCommander.updatePlayerScore(score[turn]);
         }else if (noPcPlaying > 0 && isPCTurn(turn)){
-            activityCommander.updateAIScore(this.score[turn]);
+            activityCommander.updateAIScore(score[turn]);
         }
         updateScoreText();
     }
-    private void updateScoreText(){
-        int P0 = score[0];
-        int P1 = score[1];
-        int top1 = 0, top2 =0, top3 =0;
-        int pt1=0, pt2=0, pt3=0;
-        for(int i=0; i<score.length; i++){
-            if(score[i]>top1){top1 = score[i]; pt1 = i;}
-            else if(score[i]>top1){top1 = score[i]; pt2 = i;}
-            else if(score[i]>top1){top1 = score[i]; pt3 =i;}
-        }
-        String up;
-        switch (totalPlayers){
-            case 2: up = whoiseTurnSimple(0) + ": " +score[0] + "\n"
-                        + whoiseTurnSimple(1) + ": " +score[1];
-                break;
-            case 3: up = whoiseTurnSimple(0) + ": " +score[0] + "\n"
-                    + whoiseTurnSimple(1) + ": " +score[1] + "\n"
-                    + whoiseTurnSimple(pt1) + ": " +score[pt1];
-                break;
-            case 4: up = whoiseTurnSimple(0) + ": " +score[0] + "\n"
-                    + whoiseTurnSimple(1) + ": " +score[1] + "\n"
-                    + whoiseTurnSimple(pt1) + ": " +score[pt1] + "\n"
-                    + whoiseTurnSimple(pt2) + ": " +score[pt2];
-                break;
-            default: up = whoiseTurnSimple(0) + ": " +score[0] + "\n"
-                    + whoiseTurnSimple(1) + ": " +score[1] + "\n"
-                    + whoiseTurnSimple(pt1) + ": " +score[pt1] + "\n"
-                    + whoiseTurnSimple(pt2) + ": " +score[pt2] + "\n"
-                    + whoiseTurnSimple(pt3) + ": " +score[pt3];
-                break;
-        }activityCommander.updateOverallScore(up);
-    }
-    private void downScore(Boolean line, int player)  {
+    private void downScore(Boolean line)  {
         int lineScore = getResources().getInteger(R.integer.lineScore);
         int boxScore = getResources().getInteger(R.integer.boxScore);
-        if(line){ this.score[player]-=lineScore; }
-        else { this.score[player]-= boxScore; }
+        if(line){ score[turn]-=lineScore; }
+        else { score[turn]-=boxScore; }
     }
+    private void updateScoreText(){
+        int P0 = score[0];
+        if(totalPlayers > 1){
+            int P1 = score[1];
+        }
+        int top1 = 2, top2 =2, top3 =2;
+        int pt1=0, pt2=0, pt3=0;
+        List<Integer> chosen =  new ArrayList<Integer>();
+        chosen.clear();
+        if(pcPlaying){
+            chosen.add(PCTurns[0]);
+            if(totalPlayers == 2 & localPlayers == 0){
+                chosen.add(PCTurns[1]);
+            }
+        }
+        if(localPlayers > 0){
+            chosen.add(playerTurns[0]);
+            if(totalPlayers == 2 & !pcPlaying){
+                chosen.add(playerTurns[1]);
+            }
+        }
+        for(int j=0; j<3; j++){
+            for(int i=0; i<score.length; i++){
+                if(j==0 && !chosen.contains(i) && score[i]>=pt1){pt1 = score[i]; top1 = i; chosen.add(i);  break;}
+                else if(j==1 && !chosen.contains(i) && score[i]>=pt2){pt2 = score[i]; top2 = i; chosen.add(i); break;}
+                else if(j==2 && !chosen.contains(i) && score[i]>=pt3){pt3 = score[i]; top3 =i;chosen.add(i); break; }
+            }
+        }
+        System.out.println(top1 + " " + top2 +" " + top1);
+        String up;
+        if(pcPlaying){
+            switch (totalPlayers){
+                case 1:  up = whoiseTurnSimple(0) + ": " +score[0] + "\n";
+                break;
+                case 2: up = whoiseTurnSimple(0) + ": " +score[0] + "\n"
+                        + whoiseTurnSimple(PCTurns[0]) + ": " +score[PCTurns[0]];
+                    break;
+                case 3: up = whoiseTurnSimple(0) + ": " +score[0] + "\n"
+                        + whoiseTurnSimple(PCTurns[0]) + ": " +score[PCTurns[0]] + "\n"
+                        + whoiseTurnSimple(top1) + ": " +score[top1];
+                    break;
+                case 4: up = whoiseTurnSimple(0) + ": " +score[0] + "\n"
+                        + whoiseTurnSimple(PCTurns[0]) + ": " +score[PCTurns[0]] + "\n"
+                        + whoiseTurnSimple(top1) + ": " +score[top1] + "\n"
+                        + whoiseTurnSimple(top2) + ": " +score[top2];
+                    break;
+                default: up = whoiseTurnSimple(0) + ": " +score[0] + "\n"
+                        + whoiseTurnSimple(PCTurns[0]) + ": " +score[PCTurns[0]] + "\n"
+                        + whoiseTurnSimple(top1) + ": " +score[top1] + "\n"
+                        + whoiseTurnSimple(top2) + ": " +score[top2] + "\n"
+                        + whoiseTurnSimple(top3) + ": " +score[top3];
+                    break;
+            }
+        }else{
+            //System.out.println("total = "+totalPlayers);
+            switch (totalPlayers){
+                case 1: up = whoiseTurnSimple(0) + ": " +score[0] + "\n";
+                break;
+                case 2: up = whoiseTurnSimple(0) + ": " +score[0] + "\n"
+                        + whoiseTurnSimple(1) + ": " +score[1];
+                    break;
+                case 3: up = whoiseTurnSimple(0) + ": " +score[0] + "\n"
+                        + whoiseTurnSimple(1) + ": " +score[1] + "\n"
+                        + whoiseTurnSimple(top1) + ": " +score[top1];
+                    break;
+                case 4: up = whoiseTurnSimple(0) + ": " +score[0] + "\n"
+                        + whoiseTurnSimple(1) + ": " +score[1] + "\n"
+                        + whoiseTurnSimple(top1) + ": " +score[top1] + "\n"
+                        + whoiseTurnSimple(top2) + ": " +score[top2];
+                    break;
+                default: up = whoiseTurnSimple(0) + ": " +score[0] + "\n"
+                        + whoiseTurnSimple(1) + ": " +score[1] + "\n"
+                        + whoiseTurnSimple(top1) + ": " +score[top1] + "\n"
+                        + whoiseTurnSimple(top2) + ": " +score[top2] + "\n"
+                        + whoiseTurnSimple(top3) + ": " +score[top3];
+                    break;
+            }
+        }
+       activityCommander.updateOverallScore(up);
+    }
+
     //Meathod Removes the line & updates it based off players colors, also calls to check if box set
     private void removeLine(ImageViewAdded img) {
         try {
@@ -573,15 +638,21 @@ public class MainGameFragment extends Fragment {
             if(isHorizontalLine){
                 noHorizontalPlayableLinesLeft--;
                 horziontalLinesLeft.remove(img);
+                System.out.println("******* total left *** = " +noPlayableLinesLeft);
+                System.out.println("******* veretical left *** = " +verticalLinesLeft.size());
+                System.out.println("******* hori left *** = " +horziontalLinesLeft.size());
                 moves.add(img);
                 switchLineColor(playerColors[turn],img,true);
             }else{
                 noVerticalPlayableLinesLeft--;
                 verticalLinesLeft.remove(img);
+                System.out.println("******* total left *** = " +noPlayableLinesLeft);
+                System.out.println("******* veretical left *** = " +verticalLinesLeft.size());
+                System.out.println("******* hori left *** = " +horziontalLinesLeft.size());
                 moves.add(img);
                 switchLineColor(playerColors[turn],img,false);
             }
-            setFilledBox(img);
+            setFilledBox(img, true);
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(getContext(), R.string.exception_toast_pc_unable_line,Toast.LENGTH_SHORT).show();
@@ -624,25 +695,28 @@ public class MainGameFragment extends Fragment {
         if(haveTurns()){
             this.turn++;
             if(turn >= totalPlayers){ this.turn = 0;}
-                activityCommander.updateTurn(whoiseTurn2(turn));
-            if(isPlayersTurn()){
-                String s = whoiseTurn(turn);
-                activityCommander.updatePlayerName(s);
-                activityCommander.updatePlayerScore(score[turn]);
-            }else if(noPcPlaying > 0 && isPCTurn(turn)){
-                String y = whoiseTurn(turn);
-                activityCommander.updateAIName(y);
-                activityCommander.updateAIScore(score[turn]);
-            }
+            activityCommander.updateTurn(whoiseTurn2(turn));
             nextPlayer();
         }else{ gameOver(); }
     }
     //Method Changes Players
     private void nextPlayer(){
         System.out.println(Arrays.toString(PCTurns) + "\n" + Arrays.toString(playerTurns) + "\n" + Arrays.toString(score)+"\n" +score.length);
-        playersTurn = !isPCTurn(turn);
+        if(isPCTurn(turn)){
+            playersTurn = !isPCTurn(turn);
+        }
         System.out.println("****Players turn =  " + playersTurn + ", newturn & current =" +turn
                 +", PCTurns = " + Arrays.toString(PCTurns));
+        updateScoreText();
+        if(isPlayersTurn()){
+            String s = whoiseTurn(turn);
+            activityCommander.updatePlayerName(s);
+            activityCommander.updatePlayerScore(score[turn]);
+        }else if(noPcPlaying > 0 && isPCTurn(turn)){
+            String y = whoiseTurn(turn);
+            activityCommander.updateAIName(y);
+            activityCommander.updateAIScore(score[turn]);
+        }
         if(!playersTurn){
             if(pcPlaying && isPCTurn(turn)){
                 //Add delay so not immediate & user sees it
@@ -652,7 +726,9 @@ public class MainGameFragment extends Fragment {
                     @Override
                     public void onFinish() {
                         computersTurn();
-                        nextTurn();
+                        if(isPCTurn(turn)){
+                            nextTurn();
+                        }
                     }
                 }.start();
             }
@@ -666,9 +742,11 @@ public class MainGameFragment extends Fragment {
     /****************PC Gameplay Methods****************/
     //Method is for PC/AI gameplay
     private void computersTurn() {
-        ImageViewAdded randomLine = randomLine();
-        upScore(true,turn);
-        removeLine(randomLine);
+        if(isPCTurn(turn)){
+            ImageViewAdded randomLine = randomLine();
+            upScore(true);
+            removeLine(randomLine);
+        }
     }
     //Method picks a remaining line at random
     private ImageViewAdded randomLine() {
@@ -676,21 +754,24 @@ public class MainGameFragment extends Fragment {
         final Random random = new Random();
         final int min = 0;
         boolean horizontal = (Math.random()<0.5);
-        if(noHorizontalPlayableLinesLeft == 0){ horizontal=false; }
-        else if(noVerticalPlayableLinesLeft == 0){ horizontal=true; }
+        if(horziontalLinesLeft.size() == 0){ horizontal=false; }
+        else if(verticalLinesLeft.size() == 0){ horizontal=true; }
         if(horizontal){
+            System.out.println("******* hori left *** = " +horziontalLinesLeft.size());
             chooseLine = horziontalLinesLeft.get(random.nextInt(horziontalLinesLeft.size()-min)+min);
         }else {
+            System.out.println("******* veretical left *** = " +verticalLinesLeft.size());
             chooseLine = verticalLinesLeft.get(random.nextInt(verticalLinesLeft.size()-min)+min);
         }
         return chooseLine;
     }
     //Method to check if line sets a box
-    private void setFilledBox(ImageViewAdded pcLine) {
+    private void setFilledBox(ImageViewAdded pcLine,Boolean isNotUndo) {
         ImageViewAdded line;
         int row = 0, column = 0;
         boolean horizontal;
-        if(playersTurn){ line = (ImageViewAdded) view; }
+        if(!isNotUndo){ line = pcLine;}
+        else if(playersTurn){ line = (ImageViewAdded) view; }
         else { line = pcLine; }
 
         boolean t = false;
@@ -709,27 +790,99 @@ public class MainGameFragment extends Fragment {
             horizontal = isHorizontalLine(line);
             if (horizontal) {
                 if (column == 0) {
-                    if(topLines(column,row)){ topLinesBox(column,row);
-                        upScore(false, turn);}
+                    if(topLines(column,row)){
+                        if(isNotUndo){
+                            upScore(false);
+                            topLinesBox(column,row,true);
+                        }
+                        else{
+                            System.out.println("********************************************");
+                            downScore(false);
+                            topLinesBox(column,row,false);
+                        }
+                    }
                 }
                 else if (column == layoutInArray.length-1) {
-                    if(bottomLines(column,row)){bottomLinesBox(column,row); upScore(false, turn); }
+                    if(bottomLines(column,row)){
+                        if(isNotUndo){
+                            upScore(false);
+                            bottomLinesBox(column,row,true);
+                        }
+                        else{
+                            downScore(false);
+                            bottomLinesBox(column,row,false);
+                        }
+                    }
                 }
                 else {
-                    if(topLines(column,row)) { topLinesBox(column,row); upScore(false, turn);}
-                    if(bottomLines(column,row)) { bottomLinesBox(column,row); upScore(false, turn);}
+                    if(topLines(column,row)) {
+                        if(isNotUndo){
+                            upScore(false);
+                            topLinesBox(column,row,true);
+                        }
+                        else{
+                            downScore(false);
+                            topLinesBox(column,row,false);
+                        }
+                    }
+                    if(bottomLines(column,row)) {
+                        if(isNotUndo){
+                            upScore(false);
+                            bottomLinesBox(column,row,true);
+                        }
+                        else{
+                            downScore(false);
+                            bottomLinesBox(column,row,false);
+                        }
+                    }
                 }
             } else {
                 //Vertical Lines only
                 if (row == 0) {
-                    if(beforeLines(column,row)){ beforeLinesBox(column,row); upScore(false, turn); }
+                    if(beforeLines(column,row)){
+                        if(isNotUndo){
+                            upScore(false);
+                            beforeLinesBox(column,row,true);
+                        }
+                        else{
+                            downScore(false);
+                            beforeLinesBox(column,row,false);
+                        }
+                    }
                 }
                 else if (row == layoutInArray.length-1) {
-                    if(afterLines(column,row)){ afterLinesBox(column,row); upScore(false, turn); }
+                    if(afterLines(column,row)){
+                        if(isNotUndo){
+                            upScore(false);
+                            afterLinesBox(column,row,true);
+                        }
+                        else{
+                            downScore(false);
+                            afterLinesBox(column,row,false);
+                        }
+                    }
                 }
                 else {
-                    if (beforeLines(column,row)){ beforeLinesBox(column,row); upScore(false, turn); }
-                    if (afterLines(column,row)){ afterLinesBox(column,row); upScore(false, turn); }
+                    if (beforeLines(column,row)){
+                        if(isNotUndo){
+                            upScore(false);
+                            beforeLinesBox(column,row,true);
+                        }
+                        else{
+                            downScore(false);
+                            beforeLinesBox(column,row,false);
+                        }
+                    }
+                    if (afterLines(column,row)){
+                        if(isNotUndo){
+                            upScore(false);
+                            afterLinesBox(column,row,true);
+                        }
+                        else{
+                            downScore(false);
+                            afterLinesBox(column,row,false);
+                        }
+                    }
                 }
             }
         } catch (Exception e) {
@@ -746,19 +899,45 @@ public class MainGameFragment extends Fragment {
         }
     }
     public void undo(){
-        ImageViewAdded last = moves.get(moves.size()-1);
-        boolean isHorizontal = false;
-        try {
-            isHorizontal = isHorizontalLine(last);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(moves.size() == 0){}
+        else{
+
+            ImageViewAdded last = moves.get(moves.size()-1);
+            boolean isHorizontal = false;
+            try {
+                isHorizontal = isHorizontalLine(last);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if(isHorizontal){ horziontalLinesLeft.add(last); }
+            else {verticalLinesLeft.add(last);}
+            noPlayableLinesLeft++;
+            System.out.println("******* total left *** = " +noVerticalPlayableLinesLeft);
+            System.out.println("******* veretical left *** = " +verticalLinesLeft.size());
+            System.out.println("******* hori left *** = " +horziontalLinesLeft.size());
+            switchLineColor("blank",last,isHorizontal);
+            turn--;
+            if (turn == -1) { turn = totalPlayers-1;};
+            downScore(true);
+            setFilledBox(last,false);
+            last.setClickable(true);
+            last.setSet(false);
+            updateScoreText();
+            activityCommander.updateTurn(whoiseTurn2(turn));
+            moves.remove(moves.size()-1);
+            if(!isPCTurn(turn)){
+                activityCommander.updatePlayerName(whoiseTurn(turn));
+                activityCommander.updatePlayerScore(score[turn]);
+            }else {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        nextPlayer();
+                    }
+                }, 2000);
+
+            }
         }
-        if(isHorizontal){ verticalLinesLeft.add(last);}
-        else {horziontalLinesLeft.add(last);}
-        moves.remove(moves.size()-1);
-        turn--;
-        downScore(isHorizontal,turn);
-        nextPlayer();
     }
 
     /*************Meathods used in checking if lines near box*************/
@@ -806,31 +985,43 @@ public class MainGameFragment extends Fragment {
         return set;
     }
     //These methods set the box
-    private void setBox(ImageViewAdded box){
-        if(localPlayers > 0 && turn == playerTurns[0]){
-            box.setImageResource(R.drawable.blueBoxDrawable);
-        }else if (noPcPlaying > 0 && turn == PCTurns[0]){
-            box.setImageResource(R.drawable.redBoxDrawable);
-        }else{
-            box.setImageResource(R.drawable.redBoxDrawable);
-            box.setColorFilter(Integer.parseInt(playerColors[turn]),PorterDuff.Mode.SRC_ATOP);
+    private void setBox(ImageViewAdded box, boolean isNotUndo){
+        if(isNotUndo){
+            if(localPlayers > 0 && turn == playerTurns[0]){
+                box.setImageResource(R.drawable.blueBoxDrawable);
+            }else if (noPcPlaying > 0 && turn == PCTurns[0]){
+                box.setImageResource(R.drawable.redBoxDrawable);
+            }else{
+                box.setImageResource(R.drawable.redBoxDrawable);
+                box.setColorFilter(Integer.parseInt(playerColors[turn]),PorterDuff.Mode.SRC_ATOP);
+            }
+        }else {
+            setBoxBlank(box);
         }
     }
-    private void topLinesBox(int column, int row){
+    private void setBoxBlank(ImageViewAdded box){
+        box.setImageResource(R.drawable.blankBoxDrawable);
+        box.setColorFilter(Color.TRANSPARENT,PorterDuff.Mode.SRC_ATOP);
+    }
+    private void topLinesBox(int column, int row, boolean isNotUndo){
         ImageViewAdded box = layoutInArray[column+1][row];
-        setBox(box);
+        if(isNotUndo){setBox(box,true);}
+        else {setBox(box,false); }
     }
-    private void bottomLinesBox(int column, int row){
+    private void bottomLinesBox(int column, int row, boolean isNotUndo){
         ImageViewAdded box = layoutInArray[column-1][row];
-        setBox(box);
+        if(isNotUndo){setBox(box,true);}
+        else {setBox(box,false); }
     }
-    private void beforeLinesBox(int column, int row){
+    private void beforeLinesBox(int column, int row, boolean isNotUndo){
         ImageViewAdded box = layoutInArray[column][row+1];
-        setBox(box);
+        if(isNotUndo){setBox(box,true);}
+        else {setBox(box,false); }
     }
-    private void afterLinesBox(int column, int row){
+    private void afterLinesBox(int column, int row, boolean isNotUndo){
         ImageViewAdded box = layoutInArray[column][row-1];
-        setBox(box);
+        if(isNotUndo){setBox(box,true);}
+        else {setBox(box,false); }
     }
     private void animateLine(final ImageViewAdded i, boolean horizontal){
         final AnimationDrawable animation = new AnimationDrawable();
@@ -908,16 +1099,16 @@ public class MainGameFragment extends Fragment {
     private boolean haveTurns(){ return (noPlayableLinesLeft !=0); }
     protected String whoiseTurn(int turn) {
         if(isPCTurn(turn)) {
-            if(turn ==0){ return "Computer 01";}
-            else if(turn < 10){ return "Computer 0"+ turn;}
-            else{ return "Computer "+turn;}
+            if(turn ==0){ return "Computer 1";}
+            else if(turn < 10){ return "Computer "+ (Arrays.binarySearch(PCTurns,turn)+1);}
+            else{ return "Computer "+(Arrays.binarySearch(PCTurns,turn)+1);}
         }else{
             if(localPlayers > 0){
                 for(int i=0; i< playerTurns.length; i++){
                     if(playerTurns[i] == turn ){
-                        if(turn ==0){ }
-                        if(i<10){ return "Player 01"; }
-                        else { return "Player "+i; }
+                        if(turn ==0){ return "Player 1"; }
+                        else if(i<10){ return "Player "+(Arrays.binarySearch(playerTurns,turn)+1); }
+                        else { return "Player "+(Arrays.binarySearch(playerTurns,turn)+1); }
                     }
                 }
             }
@@ -926,16 +1117,16 @@ public class MainGameFragment extends Fragment {
     }
     protected String whoiseTurnSimple(int turn) {
         if(isPCTurn(turn)) {
-            if(turn ==0){ return "C01";}
-            else if(turn < 10){ return "C0"+ turn;}
-            else{ return "C"+turn;}
+            if(turn ==0){ return "C1";}
+            else if(turn < 10){ return "C"+ (Arrays.binarySearch(PCTurns,turn)+1);}
+            else{ return "C"+(Arrays.binarySearch(PCTurns,turn)+1);}
         }else{
             if(localPlayers > 0){
                 for(int i=0; i< playerTurns.length; i++){
                     if(playerTurns[i] == turn ){
-                        if(turn ==0){ }
-                        if(i<10){ return "P01"; }
-                        else { return "P"+i; }
+                        if(turn ==0){ return "P1";}
+                        else if(i<10){ return "P"+(Arrays.binarySearch(playerTurns,turn)+1); }
+                        else { return "P"+(Arrays.binarySearch(playerTurns,turn)+1); }
                     }
                 }
             }
@@ -944,16 +1135,21 @@ public class MainGameFragment extends Fragment {
     }
     protected String whoiseTurn2(int turn) {
         if(isPCTurn(turn)) {
-            if(turn ==0){ return "Turn: Computer 01"+ " ("+turn+")";}
-            else if(turn < 10){ return "Turn: Computer 0"+ turn + " ("+turn+")";}
-            else{ return "Turn: Computer "+turn + " ("+turn+")";}
+            if(turn ==0){ return "Turn: Computer 1"+ " ("+turn+")";}
+            else if(turn < 10){ return "Turn: Computer "+ (Arrays.binarySearch(PCTurns,turn)+1) +
+                    " ("+turn+
+                    ")";}
+            else{ return "Turn: Computer "+(Arrays.binarySearch(PCTurns,turn)+1)+ " ("+turn+")";}
         }else{
             if(localPlayers > 0){
             for(int i=0; i< playerTurns.length; i++){
                     if(playerTurns[i] == turn ){
-                        if(turn ==0){ }
-                        if(i<10){ return "Turn: Player 01"+" ("+turn+")"; }
-                        else { return "Turn: Player "+i + " ("+turn+")"; }
+                        if(turn ==0){ return "Turn: Player 1"+" ("+turn+")"; }
+                        if(i<10){ return "Turn: Player "+(Arrays.binarySearch(playerTurns,turn)+1)+" " +
+                                "("+turn+")";}
+                        else { return "Turn: Player "+(Arrays.binarySearch(playerTurns,turn)+1) +
+                                " ("+turn+
+                                ")"; }
                     }
                 }
             }

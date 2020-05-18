@@ -108,4 +108,20 @@
         app:layout_constraintVertical_bias="0.279"
         tools:layout="@layout/fragment_custom_theme" />
 
+    <FrameLayout
+        android:id="@+id/settingslayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#C1FFFFFF"
+            android:gravity="fill|fill_horizontal"
+            android:text="Support Comming Soon!"
+            android:textAlignment="center"
+            android:textSize="24sp" />
+    </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

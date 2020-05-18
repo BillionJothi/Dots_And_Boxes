@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Switch;
 
+import com.shawnlin.numberpicker.NumberPicker;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -31,6 +33,8 @@ public class LocalMultiplayer extends AppCompatActivity implements GameOptionsFr
         v.findViewById(R.id.setNoAIPlayersText).setVisibility(View.GONE);
         v.findViewById(R.id.noAIPlayersPickerInput).setVisibility(View.GONE);
         v.findViewById(R.id.setQuickModeSwitch).setVisibility(View.GONE);
+        NumberPicker local = v.findViewById(R.id.noHumanPlayersPickerInput);
+        local.setValue(2);
         Switch s = v.findViewById(R.id.setP1StartsSwitch);
         ViewGroup.LayoutParams tochangewidth = s.getLayoutParams();
         tochangewidth.width = (int) getResources().getDimension(R.dimen.switchWidth);
@@ -43,13 +47,13 @@ public class LocalMultiplayer extends AppCompatActivity implements GameOptionsFr
         Intent intent = new Intent(this, GameActivity.class);
         intent.putExtra("grid",grid);
         intent.putExtra("human",human);
-        intent.putExtra("AI",AI);
+        intent.putExtra("AI",0);
         intent.putExtra("hint",hint);
         intent.putExtra("undo",undo);
         intent.putExtra("p1Starts",p1Starts);
         intent.putExtra("quickMode",quickMode);
         intent.putExtra("randomTurns",randomTurns);
-        //startActivity(intent);
+        startActivity(intent);
     }
 
 }
