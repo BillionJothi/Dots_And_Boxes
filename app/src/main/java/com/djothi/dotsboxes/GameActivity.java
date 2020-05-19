@@ -50,7 +50,7 @@ public class GameActivity extends AppCompatActivity
                 assert fragmentgame != null;
                 fragmentgame.setBoardSize(grid);
                 //  Toast.makeText(this, "grid", Toast.LENGTH_SHORT).show();
-                fragmentgame.setLocalPlayers(human);
+                fragmentgame.setNoLocalPlayers(human);
                 fragmentgame.setNoPcPlaying(AI);
                 fragmentgame.setPcPlaying(AI == 0);
                 fragmentgame.setPlayersTurn(p1Starts);
@@ -59,7 +59,7 @@ public class GameActivity extends AppCompatActivity
                 } else {
                     fragmentgame.setDelay(5000);
                 }
-                fragmentgame.setRandomTurns(randomTurns);
+                fragmentgame.setRandomTurnsOn(randomTurns);
             }
         System.out.println("**************GameAct shared**************");
             if (findViewById(R.id.top_game_fragment) != null) {
@@ -103,7 +103,7 @@ public class GameActivity extends AppCompatActivity
     }
 
     @Override
-    public void disableButtoms() { fragmentBottomGame.endGameDisableButtons(); }
+    public void disableButtons() { fragmentBottomGame.endGameDisableButtons(); }
     @Override
     public void updateTurn(String turn) { fragmentTopGame.setTurn(turn); }
     //@Override
@@ -114,6 +114,4 @@ public class GameActivity extends AppCompatActivity
     public void hint() {
         fragmentgame.hint();
     }
-    @Override
-    public void GameClicked(int[] score, int turn) { }
 }

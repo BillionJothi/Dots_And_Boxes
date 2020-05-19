@@ -118,9 +118,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#C1FFFFFF"
-            android:gravity="fill|fill_horizontal"
+            android:gravity="center|center_vertical"
             android:text="Support Comming Soon!"
-            android:textAlignment="center"
+            android:textAlignment="gravity"
             android:textSize="24sp" />
     </FrameLayout>
 

@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,57 +32,59 @@ import androidx.fragment.app.Fragment;
 
 public class MainGameFragment extends Fragment {
 
-    private int noTotalDots;
-    private int noTotalInitialXlines;
-    private int noTotalBoxes;
-    //For Gameplay
+    //For Gameplay Settings
     private int boardSize;
+    private int currentTurn;
+    private int delay;
+    private String hLineTag;
+    private String vLineTag;
+    //Booleans - Info Values
+    private boolean isPlayersTurn;
+    private boolean isPcPlaying;
+    private boolean isRandomTurnsOn;
+    //Total values - Gameplay
+    private int noPcPlaying;
+    private int noOnlinePlayers;
+    private int noLocalPlayers;
+    private int noTotalPlayers;
+    //Total Objects
     private int noTotalPlayableSides;
+    private int noTotalInitialHorizontallines;
+    private int noTotalInitialVerticallines;
     private int noPlayableLinesLeft;
     private int noHorizontalPlayableLinesLeft;
     private int noVerticalPlayableLinesLeft;
-    //Players (Set in Drawable)
-    private int turn;
-    private boolean playersTurn;
-    private boolean pcPlaying;
-    private boolean randomTurns;
-    private int noPcPlaying;
-    private int PCTurns[];
-    private int playerTurns[];
-    private int onlinePlayers;
-    private int localPlayers;
-    private int totalPlayers;
-    private int delay;
+    private int noTotalDots;
+    private int noTotalBoxes;
     //Gameplay
-    private int score[];
-    private long time;
-    private String hLineTag;
-    private String vLineTag;
-    private String playerColors[];
-    //Background
+    private int[] score;
+    private int[] pcTurns;
+    private int[] playerTurns;
+    private String[] playerColors;
+    //Accessibility
     private ImageViewAdded[][] layoutInArray;
     private List<ImageViewAdded> verticalLinesLeft;
     private List<ImageViewAdded> horziontalLinesLeft;
-    private List<ImageViewAdded> moves = new ArrayList<ImageViewAdded>();
+    private List<ImageViewAdded> boxesLeft;
+    private List<ImageViewAdded> movesDone = new ArrayList<>();
+    /*Main*/
     private View view;
     private LinearLayout layout;
-    GameListener activityCommander;
+    private GameListener activityCommander;
 
 
-
-
+    //Blank - Constructor
     public MainGameFragment() {
     }
-
+    //Interface (requirementS)
     public interface GameListener{
-        public void GameClicked(int[] score, int turn);
-        public void updateTurn(String turn);
-        public void updatePlayerScore(int score);
-        public void updatePlayerName(String s);
-        public void updateAIName(String s);
-        public void updateAIScore(int score);
-        public void updateOverallScore(String s);
-        public void disableButtoms();
+        void updateTurn(String turn);
+        void updatePlayerScore(int score);
+        void updatePlayerName(String s);
+        void updateAIName(String s);
+        void updateAIScore(int score);
+        void updateOverallScore(String s);
+        void disableButtons();
     }
     @Override
     public void onAttach(@NonNull Context context) {
@@ -89,17 +92,16 @@ public class MainGameFragment extends Fragment {
         try{
              activityCommander = (GameListener) getActivity();
         }catch (ClassCastException e ){
-            throw new ClassCastException(getActivity().toString() +
+            throw new ClassCastException(requireActivity().toString() +
                     "    Must implement Game fragment interface");
         }
     }
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Nullable
     @Override
     public View onCreateView(@Nullable LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
+        assert inflater != null;
         this.view = inflater.inflate(R.layout.fragment_game, container, false);
         return view;
     }
@@ -109,65 +111,87 @@ public class MainGameFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         /*Getting internal data*/
-        System.out.println("**************Setting internal data!***************");
+        Log.i("LineUp","**Setting internal data!**");
+        //System.out.println();
+        assert getArguments() != null;
         this.boardSize = getArguments().getInt("grid");
-        this.localPlayers = getArguments().getInt("human");
+        this.noLocalPlayers = getArguments().getInt("human");
+        this.isPlayersTurn = getArguments().getBoolean("p1Starts");
+        if(noLocalPlayers == 0) { isPlayersTurn = false;}
         this.noPcPlaying = getArguments().getInt("AI");
-        this.playersTurn = getArguments().getBoolean("p1Starts");
-        if(localPlayers == 0) {playersTurn = false;}
+        this.isPcPlaying = noPcPlaying != 0;
+        this.noOnlinePlayers =  getResources().getInteger(R.integer.onlinePlayers);
+        this.noTotalPlayers = noLocalPlayers + noOnlinePlayers + noPcPlaying;
         if(getArguments().getBoolean("quickMode")){this.delay = 0;} else {this.delay = 1000;}
-        this.randomTurns = getArguments().getBoolean("randomTurns");
-        if(noPcPlaying == 0) {this.pcPlaying = false; } else {this.pcPlaying = true;}
-        System.out.println("Board Size:" + this.boardSize);
+        this.isRandomTurnsOn = getArguments().getBoolean("randomTurns");
+        Log.i("LineUp","Info from Bundle:"
+                + "\nBoardSize: "+ boardSize
+                + "\nnoLocalPlayers: "+ noLocalPlayers
+                + "\nisPlayersTurn: "+ isPlayersTurn
+                + "\nisPcPlaying: "+ isPcPlaying
+                + "\nnoPcPlaying: "+ noPcPlaying
+                + "\nnoOnlinePlayers: "+ noOnlinePlayers
+                + "\nnoTotalPlayers: "+ noTotalPlayers
+                + "\ndelay: "+ delay
+                + "\nisRandomTurnsOn: "+ isRandomTurnsOn
+        );
         Setup();
     }
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public View Setup(){
+    private void Setup(){
+        //Get Settings from resources
         this.layout = view.findViewById(R.id.linear2);
-        layout.removeAllViews();
-
-        try {
-            calPlayers();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        //Get Settings from resouruces
-        this.turn = getResources().getInteger(R.integer.turnStart);
-
-        this.score = new int[totalPlayers];
+        this.layout.removeAllViews();
+        this.currentTurn = getResources().getInteger(R.integer.turnStart);
+        this.score = new int[noTotalPlayers];
+        this.playerColors = new String[noTotalPlayers];
         for(int i: score){ i = getResources().getInteger(R.integer.initialScore); }
-        //this.boardSize = getResources().getInteger(R.integer.boardSize);
         this.noTotalPlayableSides = (boardSize*2*(boardSize+1));
         this.noPlayableLinesLeft = noTotalPlayableSides;
         this.noHorizontalPlayableLinesLeft = noTotalPlayableSides /2;
         this.noVerticalPlayableLinesLeft = noTotalPlayableSides - noHorizontalPlayableLinesLeft;
+        //Private Settings:
+        this.noTotalInitialHorizontallines = (int) (Math.pow(boardSize,2)+boardSize);
+        this.noTotalInitialVerticallines = noTotalPlayableSides - noTotalInitialHorizontallines;
+        this.noTotalBoxes = (int) Math.pow(boardSize,2);
+        this.pcTurns = new int[noPcPlaying];
+        this.playerTurns = new int[noLocalPlayers];
         this.hLineTag = getResources().getString(R.string.horizontalLineTagChecker);
         this.vLineTag = getResources().getString(R.string.verticalLineTagChecker);
-        this.playerColors = new String[totalPlayers];
+        //Pring Log:
+        Log.i("LineUp","Info from Setup:"
+                + "\ncurrentTurn: "+ currentTurn
+                + "\nscoreLength: "+ score.length
+                + "\nscore: "+ Arrays.toString(score)
+                + "\nplayerColorsLength: "+ playerColors.length
+                + "\nplayerColors: "+ Arrays.toString(playerColors)
+                + "\nnoTotalPlayableSides: "+ noTotalPlayableSides
+                + "\nnoHorizontalPlayableLinesLeft: "+ noHorizontalPlayableLinesLeft
+                + "\nnoVerticalPlayableLinesLeft: "+ noVerticalPlayableLinesLeft
+                + "\nnoTotalInitialHorizontallines: "+ noTotalInitialHorizontallines
+                + "\nnoTotalInitialVerticallines: "+ noTotalInitialVerticallines
+                + "\nnoTotalBoxes: "+ noTotalBoxes
+                + "\npcTurnsLength: "+ pcTurns.length
+                + "\npcTurns: "+ Arrays.toString(pcTurns)
+                + "\nplayerTurnsLength: "+ playerTurns.length
+                + "\nplayerTurns: "+ Arrays.toString(playerTurns)
+                + "\nhLineTag: "+ hLineTag
+                + "\nvLineTag: "+ vLineTag
+        );
+        //Setting Up:
+        try { calPlayers(); }
+        catch (Exception e) { e.printStackTrace(); }
         setPlayerColors();
-        try {
-            checkCubeBoard();
-        } catch (Exception e) {
-            e.printStackTrace();
-            showToast("BoardLayout Errors - Board not made");
-        }
         makeBoard();
-        layoutInArray =  getLayoutArray();
-        System.out.println("lines left ***********************ERWFAA = " +noPlayableLinesLeft);
-        if(!playersTurn){
-            nextPlayer();
+        Log.i("LineUp","Board Made");
+        if(!isPlayersTurn){ nextPlayer(); }
+        if(noPcPlaying == 0){
+            if(noLocalPlayers == 1){ activityCommander.updateAIName(""); }
+            else { activityCommander.updateAIName("Player 2"); }
         }
         updateScoreText();
-        if(noPcPlaying == 0){
-            if(localPlayers == 1){
-                activityCommander.updateAIName("");
-            }else {
-                activityCommander.updateAIName("Player 2");
-            }
-        }
-        return view;
     }
 
     /*********Create Environment***************************/
@@ -177,13 +201,7 @@ public class MainGameFragment extends Fragment {
         //For Setup
         int gridSize = (boardSize * 2) + 1;
         this.noTotalDots = (int) Math.pow((boardSize+1),2);
-        //or for below, can use formaula: Math.pow(x,2)+x where x is boardSize instead;
-        this.noTotalInitialXlines = noTotalPlayableSides/2;
-        this.noTotalBoxes = (int) Math.pow(boardSize,2);
-        //No.of LayoutParams is dependent on the number of object types. Currently fixes no of types
         final int noLayoutParams = 6;
-
-
         //get Resources Values for each object
         final float dotLinearLayoutWeight = getFloatResourcesValues(view, R.dimen.dotLinearLayoutWeight);
         final float linearLayoutWeight =  getFloatResourcesValues(view, R.dimen.linearLayoutWeight);
@@ -191,21 +209,18 @@ public class MainGameFragment extends Fragment {
         final float verticalLineWeight =  getFloatResourcesValues(view, R.dimen.verticalLineWeight);
         final float horizontalLineWeight = getFloatResourcesValues(view, R.dimen.horizontalLineWeight);
         final float boxesWeight =  getFloatResourcesValues(view, R.dimen.boxesWeight);
-
         //Create array for each object
         LinearLayout[] linearLayouts = new LinearLayout[gridSize];
         ImageViewAdded[] imageViews_dot = new ImageViewAdded[noTotalDots];
-        ImageViewAdded[] imageViews_verticalLines = new ImageViewAdded[noTotalInitialXlines];
-        ImageViewAdded[] imageViews_horziontalLines = new ImageViewAdded[noTotalInitialXlines];
+        ImageViewAdded[] imageViews_verticalLines = new ImageViewAdded[noTotalInitialHorizontallines];
+        ImageViewAdded[] imageViews_horziontalLines = new ImageViewAdded[noTotalInitialHorizontallines];
         ImageViewAdded[] imageViews_boxes = new ImageViewAdded[noTotalBoxes];
-
         //CreateLayout for each object
         LinearLayout.LayoutParams[] layoutParams = new LinearLayout.LayoutParams[noLayoutParams];
         for(int i=0; i<noLayoutParams ; i++){
             layoutParams[i] = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         }
-
         //Create Layouts
         layoutParams[0].weight = dotLinearLayoutWeight;
         layoutParams[1].weight = linearLayoutWeight;
@@ -219,7 +234,6 @@ public class MainGameFragment extends Fragment {
             else{ linearLayouts[i].setLayoutParams(layoutParams[1]); }
             layout.addView(linearLayouts[i]);
         }
-
         //Create Dots
         layoutParams[2].weight = dotWeight;
         layoutParams[2].gravity = R.integer.dotGravity;
@@ -233,7 +247,6 @@ public class MainGameFragment extends Fragment {
                     view.getResources().getString(R.string.dotScalling)));
             imageViews_dot[i].setImageResource(R.drawable.dotDrawable);
         }
-
         //Create HorizontaLines
         layoutParams[3].weight = horizontalLineWeight;
         layoutParams[3].gravity = R.integer.horizontalLineGravity;
@@ -250,7 +263,6 @@ public class MainGameFragment extends Fragment {
             imageViews_horziontalLines[i].setSet(false);
             imageViews_horziontalLines[i].setOnClickListener(setLineClicker());
         }
-
         //Create Vertical Lines
         layoutParams[4].weight = verticalLineWeight;
         layoutParams[4].gravity = R.integer.verticalLineGravity;
@@ -267,7 +279,6 @@ public class MainGameFragment extends Fragment {
             imageViews_verticalLines[i].setSet(false);
             imageViews_verticalLines[i].setOnClickListener(setLineClicker());
         }
-
         //Create Boxes
         layoutParams[5].weight = boxesWeight;
         layoutParams[5].gravity = R.integer.boxGravity;
@@ -283,19 +294,18 @@ public class MainGameFragment extends Fragment {
             //Set played to false
             imageViews_boxes[i].setSet(false);
         }
-
         //Adding items to view in right layout. Note: This allows for variable grids
         int dotCount = 0;
         int horizontalLineCount = 0;
         int verticalLineCount = 0;
         int boxesCount = 0;
         for(int i = 0; i< gridSize; i++){
-            //If Even line, add dots & horziontal lines
+            //If Even line, add dots & horizontal lines
             if(i%2 == 0){
                 int count = 0;
                 for(int j = 0; j< gridSize; j++){
-                    /*Checks if max horziontal grid size reached
-                     * If not add a dot & increament then check again, if not add a line*/
+                    /*Checks if max horizontal grid size reached
+                     * If not add a dot & increments then check again, if not add a line*/
                     if(count< gridSize){
                         linearLayouts[i].addView(imageViews_dot[dotCount]);
                         count++;
@@ -311,7 +321,7 @@ public class MainGameFragment extends Fragment {
                 int count = 0;
                 for(int j = 0; j< gridSize; j++){
                     /*Checks if max vertical grid size reached
-                     * If not add a line & increament then check again, if not add a box*/
+                     * If not add a line & increments then check again, if not add a box*/
                     if(count< gridSize){
                         linearLayouts[i].addView(imageViews_verticalLines[verticalLineCount]);
                         count++;
@@ -325,90 +335,74 @@ public class MainGameFragment extends Fragment {
                 }
             }
         }
-
-        //TODO Note: Copying of Arrays of Assets happens here
         //Copy array for finding specific lines later
         this.horziontalLinesLeft = new ArrayList<>(Arrays.asList(Arrays.copyOf(imageViews_horziontalLines,
                 imageViews_horziontalLines.length)));
         this.verticalLinesLeft = new ArrayList<>(Arrays.asList(Arrays.copyOf(imageViews_verticalLines,
                 imageViews_verticalLines.length)));
+        this.layoutInArray =  getLayoutArray();
     }
     //Method calculates the number of players & PCs & set accordingly. Sets random PC turns too
-    // Players & PC may have overlapping turns if > 1 player or > 1 PC!
-    private void calPlayers() throws Exception {
-        this.onlinePlayers =  getResources().getInteger(R.integer.onlinePlayers);
-        totalPlayers = localPlayers + onlinePlayers;
-        if(pcPlaying) {
-            totalPlayers+=noPcPlaying;
-            this.PCTurns = new int[noPcPlaying];
-        }
-        List<Integer> a = new ArrayList<Integer>(noPcPlaying);
-        boolean done = true;
-        int pcTurn = 0, count = 0, min = 0;
-        if(pcPlaying) {
-            if(randomTurns ){
-                for (int i = 0; i < PCTurns.length; i++) {
+    //Players & PC may have overlapping turns if randomTurns is on
+    private void calPlayers() {
+        boolean done;
+        int pcTurn, min = 0;
+        if(isPcPlaying) {
+            if(isRandomTurnsOn){
+                for (int i = 0; i < pcTurns.length; i++) {
                     Random r = new Random();
                     do {
-                        count++;
-                        if(playersTurn) {min=1;}
-                        pcTurn = r.nextInt(totalPlayers - min) + min;
+                        if(isPlayersTurn) {min=1;}
+                        pcTurn = r.nextInt(noTotalPlayers - min) + min;
                         done = true;
-                        if(playersTurn && totalPlayers == 2){pcTurn=1;}
-                        if(!playersTurn && totalPlayers ==2){pcTurn=0;}
+                        if(isPlayersTurn && noTotalPlayers == 2 && i==0){pcTurn=1;}
+                        if(!isPlayersTurn && noTotalPlayers ==2 && i==0){pcTurn=0;}
+                        //check that new turn is not equal to an older one.
                         if(i>0){
-                            //check that new turn is not equal to an older one.
                             for(int j=0; j<i; j++){
-                                if(pcTurn == PCTurns[j]){
+                                if(pcTurn == pcTurns[j]){
                                     done=false;
                                     break;
                                 }
                             }
                         }
                     } while (!done);
-                    if(done){
-                        PCTurns[i] = pcTurn;
-                    }
+                    pcTurns[i] = pcTurn;
                 }
             }else{
-                int j=0;
-                if(!playersTurn){
-                    for(int i=0; i<noPcPlaying; i++){ PCTurns[i] = i; }
+                int j;
+                if(!isPlayersTurn){
+                    for(int i=0; i<noPcPlaying; i++){ pcTurns[i] = i; }
                 }else{
-                    j = localPlayers;
-                    for(int i=0; i<noPcPlaying; i++){ PCTurns[i]=j; }
+                    j = noLocalPlayers;
+                    for(int i=0; i<noPcPlaying; i++){ pcTurns[i]=j+i; }
                 }
             }
         }
-
-        //Seting remiaing turns as players
-        playerTurns = new int[localPlayers];
-        int playercount =0;
+        //Setting remaining turns as players
+        int playerCount =0;
         if(noPcPlaying>0) {
-            int[] register = new int[totalPlayers];
-            for (int i : PCTurns) {
-                register[i] = 1;
-            }
+            int[] register = new int[noTotalPlayers];
+            for (int i : pcTurns) { register[i] = 1; }
             for (int i = 1; i < register.length; i++) {
                 if (register[i] == 0) {
-                    playerTurns[playercount] = i;
-                    playercount++;
+                    playerTurns[playerCount] = i;
+                    playerCount++;
                 }
             }
         }else{
-            for(int i=0; i<localPlayers; i++){
+            for(int i = 0; i< noLocalPlayers; i++){
                 playerTurns[i] = i;
             }
         }
     }
     //Gets an Array of the exact board layout in table format
     private ImageViewAdded[][] getLayoutArray(){
-        int linesPerDotGrid = (noTotalInitialXlines - boardSize) / boardSize;
-        int noDotGrids = noTotalInitialXlines / linesPerDotGrid;
+        int linesPerDotGrid = (noTotalInitialHorizontallines - boardSize) / boardSize;
+        int noDotGrids = noTotalInitialHorizontallines / linesPerDotGrid;
         int totalPerGrid = linesPerDotGrid + noDotGrids;
         int dotCounter=0,hLineCounter = 0, vLineCounter =0, boxCounter =0;
         ImageViewAdded[][] finalLayout = new ImageViewAdded[totalPerGrid][totalPerGrid];
-
         for(int i=0; i<totalPerGrid; i++){
             for(int j=0; j<totalPerGrid; j++){
                 if(i%2==0){
@@ -441,18 +435,19 @@ public class MainGameFragment extends Fragment {
         //Checks if layout gotten matches actual game
         try {
             if(dotCounter != noTotalDots){throw new Exception("Dots layout not matching Game");}
-            if(hLineCounter != noTotalInitialXlines){throw new Exception("Boxes layout not matching Game");}
-            if(vLineCounter != noTotalInitialXlines){throw new Exception("Boxes layout not matching Game");}
+            if(hLineCounter != noTotalInitialHorizontallines){throw new Exception("Boxes layout not matching Game");}
+            if(vLineCounter != noTotalInitialHorizontallines){throw new Exception("Boxes layout not matching Game");}
             if(boxCounter != noTotalBoxes){throw new Exception("Boxes layout not matching Game");}
         }catch (Exception e){
-            showToast(e.getMessage());
+            e.printStackTrace();
         }
         return finalLayout;
     }
+    //Sets Players Colors
     private void setPlayerColors(){
-        if(totalPlayers == 2){
-            //Sets 1st human player color to always equal to blue
-            if(playersTurn){
+        if(noTotalPlayers == 2){
+            //Sets 1st human player color to always equal to blue & next to red
+            if(isPlayersTurn){
                 playerColors[0]=getResources().getString(R.string.P0Colour);
                 playerColors[1]=getResources().getString(R.string.P1Colour);
             }
@@ -464,18 +459,17 @@ public class MainGameFragment extends Fragment {
             for(int i=0; i<playerColors.length; i++) {
                 //if >players than available colors, random them
                 Random rnd = new Random();
-                int color = Color.argb(200, rnd.nextInt(256), rnd.nextInt(256),
+                int color = Color.argb(150, rnd.nextInt(256), rnd.nextInt(256),
                         rnd.nextInt(256));
                 playerColors[i] = Integer.toString(color);
             }
             //sets 1st human to p0 & 1st pc to p1 always
-
-            if(localPlayers > 0){
+            if(noLocalPlayers > 0){
                 Arrays.sort(playerTurns);
                 playerColors[playerTurns[0]] = getResources().getString(R.string.P0Colour);
             }if (noPcPlaying > 0){
-                Arrays.sort(PCTurns);
-                playerColors[PCTurns[0]] = getResources().getString(R.string.P1Colour);
+                Arrays.sort(pcTurns);
+                playerColors[pcTurns[0]] = getResources().getString(R.string.P1Colour);
             }
         }
     }
@@ -497,137 +491,78 @@ public class MainGameFragment extends Fragment {
         };
     }
     private void lineClicked(View v) {
-        view = v;
-        ImageViewAdded img = (ImageViewAdded) v;
-        //On line clicked, upsocre, remove/update the line & change it's color then change turn
-        if(!isPCTurn(turn)){ playersTurn = true; }
-        if(playersTurn && !img.isSet()){
-            time = System.currentTimeMillis();
+        this.view = v;
+        ImageViewAdded img = (ImageViewAdded) view;
+        //On line clicked, upScore, remove/update the line & change it's color then change turn
+        if(!isPCTurn(currentTurn)){ isPlayersTurn = true; }
+        if(isPlayersTurn && !img.isSet()){
             upScore(true);
             removeLine(img);
-            if(noPcPlaying == 0){
-                if(localPlayers > 1){
-                    activityCommander.updateAIScore(score[1]);
-                }
-            }
-            //TODO caller
-            //activityCommander.GameClicked(score,turn);
-            //System.out.println("Curren Turn = " + turn + ", isPCPlaying = " + pcPlaying + " " +
-              //      ", isPCTurn" + isPCTurn() + ", PCTUrns " + PCTurns.toString());
+            if(noPcPlaying == 0 && noLocalPlayers > 1){ activityCommander.updateAIScore(score[1]);}
             nextTurn();
         }else{showWaitToast();}
-    }
-    //Method just checks if cubes board
-    private void checkCubeBoard() throws Exception {
-        if(noHorizontalPlayableLinesLeft != noVerticalPlayableLinesLeft){
-            throw new Exception(getString(R.string.exception_playable_horizontal_equal_vertical));
-        }else if((noHorizontalPlayableLinesLeft + noVerticalPlayableLinesLeft) != noPlayableLinesLeft){
-            throw new Exception(getString(R.string.exception_playable_equal_remianing));
-        }
     }
 
     /*********Clicker Extensions/Gameplay**************/
     private void upScore(Boolean line)  {
         int lineScore = getResources().getInteger(R.integer.lineScore);
         int boxScore = getResources().getInteger(R.integer.boxScore);
-        System.out.println("upscore" + line);
-        if(line){ this.score[turn]+=lineScore; }
-        else { this.score[turn]+=boxScore; }
-
-        if(localPlayers > 0 && isPlayersTurn()) {
-            activityCommander.updatePlayerScore(score[turn]);
-        }else if (noPcPlaying > 0 && isPCTurn(turn)){
-            activityCommander.updateAIScore(score[turn]);
+        if(line){ this.score[currentTurn]+=lineScore; }
+        else { this.score[currentTurn]+=boxScore; }
+        if(noLocalPlayers > 0 && isPlayersTurn()) {
+            activityCommander.updatePlayerScore(score[currentTurn]);
+        }else if (noPcPlaying > 0 && isPCTurn(currentTurn)){
+            activityCommander.updateAIScore(score[currentTurn]);
         }
         updateScoreText();
     }
     private void downScore(Boolean line)  {
         int lineScore = getResources().getInteger(R.integer.lineScore);
         int boxScore = getResources().getInteger(R.integer.boxScore);
-        if(line){ score[turn]-=lineScore; }
-        else { score[turn]-=boxScore; }
+        if(line){ score[currentTurn]-=lineScore; }
+        else { score[currentTurn]-=boxScore; }
     }
     private void updateScoreText(){
-        int P0 = score[0];
-        if(totalPlayers > 1){
-            int P1 = score[1];
-        }
-        int top1 = 2, top2 =2, top3 =2;
-        int pt1=0, pt2=0, pt3=0;
-        List<Integer> chosen =  new ArrayList<Integer>();
+        int topPlayer1 = 2, topPlayer2 =2, topPlayer3 =2;
+        int topPlayer1Score=0, topPlayer2Score=0, topPlayer3Score=0;
+        List<Integer> chosen = new ArrayList<>();
         chosen.clear();
-        if(pcPlaying){
-            chosen.add(PCTurns[0]);
-            if(totalPlayers == 2 & localPlayers == 0){
-                chosen.add(PCTurns[1]);
-            }
+        if(isPcPlaying){
+            chosen.add(pcTurns[0]);
+            if( noLocalPlayers == 0){ chosen.add(pcTurns[1]); }
         }
-        if(localPlayers > 0){
+        if(noLocalPlayers > 0){
             chosen.add(playerTurns[0]);
-            if(totalPlayers == 2 & !pcPlaying){
-                chosen.add(playerTurns[1]);
-            }
+            Log.i("LineUp","Chosen added p0 ");
+            if(!isPcPlaying){ chosen.add(playerTurns[1]); Log.i(
+                    "LineUp",
+                    "Chosen added p2 ");}
         }
+        StringBuilder listString = new StringBuilder();
+        for (Integer s : chosen)
+        { listString.append(s).append("\t"); }
+        Log.i("LineUp","Chosen: "+ listString);
         for(int j=0; j<3; j++){
             for(int i=0; i<score.length; i++){
-                if(j==0 && !chosen.contains(i) && score[i]>=pt1){pt1 = score[i]; top1 = i; chosen.add(i);  break;}
-                else if(j==1 && !chosen.contains(i) && score[i]>=pt2){pt2 = score[i]; top2 = i; chosen.add(i); break;}
-                else if(j==2 && !chosen.contains(i) && score[i]>=pt3){pt3 = score[i]; top3 =i;chosen.add(i); break; }
+                if(j==0 && !chosen.contains(i) && score[i]>=topPlayer1Score){topPlayer1Score = score[i]; topPlayer1 = i; chosen.add(i);  break;}
+                else if(j==1 && !chosen.contains(i) && score[i]>=topPlayer2Score){topPlayer2Score = score[i]; topPlayer2 = i; chosen.add(i); break;}
+                else if(j==2 && !chosen.contains(i) && score[i]>=topPlayer3Score){topPlayer3Score = score[i]; topPlayer3 =i;chosen.add(i); break; }
             }
         }
-        System.out.println(top1 + " " + top2 +" " + top1);
-        String up;
-        if(pcPlaying){
-            switch (totalPlayers){
-                case 1:  up = whoiseTurnSimple(0) + ": " +score[0] + "\n";
-                break;
-                case 2: up = whoiseTurnSimple(0) + ": " +score[0] + "\n"
-                        + whoiseTurnSimple(PCTurns[0]) + ": " +score[PCTurns[0]];
-                    break;
-                case 3: up = whoiseTurnSimple(0) + ": " +score[0] + "\n"
-                        + whoiseTurnSimple(PCTurns[0]) + ": " +score[PCTurns[0]] + "\n"
-                        + whoiseTurnSimple(top1) + ": " +score[top1];
-                    break;
-                case 4: up = whoiseTurnSimple(0) + ": " +score[0] + "\n"
-                        + whoiseTurnSimple(PCTurns[0]) + ": " +score[PCTurns[0]] + "\n"
-                        + whoiseTurnSimple(top1) + ": " +score[top1] + "\n"
-                        + whoiseTurnSimple(top2) + ": " +score[top2];
-                    break;
-                default: up = whoiseTurnSimple(0) + ": " +score[0] + "\n"
-                        + whoiseTurnSimple(PCTurns[0]) + ": " +score[PCTurns[0]] + "\n"
-                        + whoiseTurnSimple(top1) + ": " +score[top1] + "\n"
-                        + whoiseTurnSimple(top2) + ": " +score[top2] + "\n"
-                        + whoiseTurnSimple(top3) + ": " +score[top3];
-                    break;
-            }
-        }else{
-            //System.out.println("total = "+totalPlayers);
-            switch (totalPlayers){
-                case 1: up = whoiseTurnSimple(0) + ": " +score[0] + "\n";
-                break;
-                case 2: up = whoiseTurnSimple(0) + ": " +score[0] + "\n"
-                        + whoiseTurnSimple(1) + ": " +score[1];
-                    break;
-                case 3: up = whoiseTurnSimple(0) + ": " +score[0] + "\n"
-                        + whoiseTurnSimple(1) + ": " +score[1] + "\n"
-                        + whoiseTurnSimple(top1) + ": " +score[top1];
-                    break;
-                case 4: up = whoiseTurnSimple(0) + ": " +score[0] + "\n"
-                        + whoiseTurnSimple(1) + ": " +score[1] + "\n"
-                        + whoiseTurnSimple(top1) + ": " +score[top1] + "\n"
-                        + whoiseTurnSimple(top2) + ": " +score[top2];
-                    break;
-                default: up = whoiseTurnSimple(0) + ": " +score[0] + "\n"
-                        + whoiseTurnSimple(1) + ": " +score[1] + "\n"
-                        + whoiseTurnSimple(top1) + ": " +score[top1] + "\n"
-                        + whoiseTurnSimple(top2) + ": " +score[top2] + "\n"
-                        + whoiseTurnSimple(top3) + ": " +score[top3];
-                    break;
-            }
+        Log.i("LineUp", "topPlayer1 = " + topPlayer1
+                + "\ntopPlayer2: "+ topPlayer2
+                + "\ntopPlayer3: "+ topPlayer3
+        );
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(whoseTurn(0, 2)).append(": ").append(score[0]).append("\n");
+        for(int i=0; i<noTotalPlayers; i++){
+            if(i == 1){ stringBuilder.append(whoseTurn(1, 2)).append(": ").append(score[1]).append("\n");}
+            if(i == 2){ stringBuilder.append(whoseTurn(topPlayer1, 2)).append(": ").append(score[topPlayer1]).append("\n");}
+            if(i == 3){ stringBuilder.append(whoseTurn(topPlayer2, 2)).append(": ").append(score[topPlayer2]).append("\n");}
+            if(i == 4){ stringBuilder.append(whoseTurn(topPlayer3, 2)).append(": ").append(score[topPlayer3]).append("\n");}
         }
-       activityCommander.updateOverallScore(up);
+       activityCommander.updateOverallScore(stringBuilder.toString());
     }
-
     //Meathod Removes the line & updates it based off players colors, also calls to check if box set
     private void removeLine(ImageViewAdded img) {
         try {
@@ -638,19 +573,13 @@ public class MainGameFragment extends Fragment {
             if(isHorizontalLine){
                 noHorizontalPlayableLinesLeft--;
                 horziontalLinesLeft.remove(img);
-                System.out.println("******* total left *** = " +noPlayableLinesLeft);
-                System.out.println("******* veretical left *** = " +verticalLinesLeft.size());
-                System.out.println("******* hori left *** = " +horziontalLinesLeft.size());
-                moves.add(img);
-                switchLineColor(playerColors[turn],img,true);
+                movesDone.add(img);
+                switchLineColor(playerColors[currentTurn],img,true);
             }else{
                 noVerticalPlayableLinesLeft--;
                 verticalLinesLeft.remove(img);
-                System.out.println("******* total left *** = " +noPlayableLinesLeft);
-                System.out.println("******* veretical left *** = " +verticalLinesLeft.size());
-                System.out.println("******* hori left *** = " +horziontalLinesLeft.size());
-                moves.add(img);
-                switchLineColor(playerColors[turn],img,false);
+                movesDone.add(img);
+                switchLineColor(playerColors[currentTurn],img,false);
             }
             setFilledBox(img, true);
         } catch (Exception e) {
@@ -693,32 +622,27 @@ public class MainGameFragment extends Fragment {
     //Method increments the turn
     private void nextTurn(){
         if(haveTurns()){
-            this.turn++;
-            if(turn >= totalPlayers){ this.turn = 0;}
-            activityCommander.updateTurn(whoiseTurn2(turn));
+            this.currentTurn++;
+            if(currentTurn >= noTotalPlayers){ this.currentTurn = 0;}
+            activityCommander.updateTurn(whoseTurn(currentTurn,0));
             nextPlayer();
         }else{ gameOver(); }
     }
     //Method Changes Players
     private void nextPlayer(){
-        System.out.println(Arrays.toString(PCTurns) + "\n" + Arrays.toString(playerTurns) + "\n" + Arrays.toString(score)+"\n" +score.length);
-        if(isPCTurn(turn)){
-            playersTurn = !isPCTurn(turn);
+        if(isPCTurn(currentTurn)){
+            isPlayersTurn = !isPCTurn(currentTurn);
         }
-        System.out.println("****Players turn =  " + playersTurn + ", newturn & current =" +turn
-                +", PCTurns = " + Arrays.toString(PCTurns));
         updateScoreText();
         if(isPlayersTurn()){
-            String s = whoiseTurn(turn);
-            activityCommander.updatePlayerName(s);
-            activityCommander.updatePlayerScore(score[turn]);
-        }else if(noPcPlaying > 0 && isPCTurn(turn)){
-            String y = whoiseTurn(turn);
-            activityCommander.updateAIName(y);
-            activityCommander.updateAIScore(score[turn]);
+            activityCommander.updatePlayerName(whoseTurn(currentTurn,1));
+            activityCommander.updatePlayerScore(score[currentTurn]);
+        }else if(noPcPlaying > 0 && isPCTurn(currentTurn)){
+            activityCommander.updateAIName(whoseTurn(currentTurn,1));
+            activityCommander.updateAIScore(score[currentTurn]);
         }
-        if(!playersTurn){
-            if(pcPlaying && isPCTurn(turn)){
+        if(!isPlayersTurn){
+            if(isPcPlaying && isPCTurn(currentTurn)){
                 //Add delay so not immediate & user sees it
                 new CountDownTimer(delay, 1000) {
                     @Override
@@ -726,23 +650,22 @@ public class MainGameFragment extends Fragment {
                     @Override
                     public void onFinish() {
                         computersTurn();
-                        if(isPCTurn(turn)){
+                        if(isPCTurn(currentTurn)){
                             nextTurn();
                         }
                     }
                 }.start();
             }
-            //TODO Online players tiemout/send reminders
+            //TODO Online players tiemout/send reminders (else)
             //Else do nothing, but in future to add funtionality to timeout online player, send
             // reminders etc & end game if too long etc
-            else{}
         }
     }
 
     /****************PC Gameplay Methods****************/
     //Method is for PC/AI gameplay
     private void computersTurn() {
-        if(isPCTurn(turn)){
+        if(isPCTurn(currentTurn)){
             ImageViewAdded randomLine = randomLine();
             upScore(true);
             removeLine(randomLine);
@@ -754,13 +677,11 @@ public class MainGameFragment extends Fragment {
         final Random random = new Random();
         final int min = 0;
         boolean horizontal = (Math.random()<0.5);
-        if(horziontalLinesLeft.size() == 0){ horizontal=false; }
-        else if(verticalLinesLeft.size() == 0){ horizontal=true; }
+        if(noHorizontalPlayableLinesLeft == 0){ horizontal=false; }
+        else if(noVerticalPlayableLinesLeft == 0){ horizontal=true; }
         if(horizontal){
-            System.out.println("******* hori left *** = " +horziontalLinesLeft.size());
             chooseLine = horziontalLinesLeft.get(random.nextInt(horziontalLinesLeft.size()-min)+min);
         }else {
-            System.out.println("******* veretical left *** = " +verticalLinesLeft.size());
             chooseLine = verticalLinesLeft.get(random.nextInt(verticalLinesLeft.size()-min)+min);
         }
         return chooseLine;
@@ -771,10 +692,8 @@ public class MainGameFragment extends Fragment {
         int row = 0, column = 0;
         boolean horizontal;
         if(!isNotUndo){ line = pcLine;}
-        else if(playersTurn){ line = (ImageViewAdded) view; }
+        else if(isPlayersTurn){ line = (ImageViewAdded) view; }
         else { line = pcLine; }
-
-        boolean t = false;
         for (int i = 0; i < layoutInArray.length; i++) {
             for (int j = 0; j < layoutInArray.length; j++) {
                 if (layoutInArray[i][j].getTag() == line.getTag()) {
@@ -789,107 +708,25 @@ public class MainGameFragment extends Fragment {
         try {
             horizontal = isHorizontalLine(line);
             if (horizontal) {
-                if (column == 0) {
-                    if(topLines(column,row)){
-                        if(isNotUndo){
-                            upScore(false);
-                            topLinesBox(column,row,true);
-                        }
-                        else{
-                            System.out.println("********************************************");
-                            downScore(false);
-                            topLinesBox(column,row,false);
-                        }
-                    }
-                }
-                else if (column == layoutInArray.length-1) {
-                    if(bottomLines(column,row)){
-                        if(isNotUndo){
-                            upScore(false);
-                            bottomLinesBox(column,row,true);
-                        }
-                        else{
-                            downScore(false);
-                            bottomLinesBox(column,row,false);
-                        }
-                    }
-                }
+                if (column == 0) { checkTopLine(column,row,isNotUndo); }
+                else if (column == layoutInArray.length-1) { checkBottomLine(column,row,isNotUndo); }
                 else {
-                    if(topLines(column,row)) {
-                        if(isNotUndo){
-                            upScore(false);
-                            topLinesBox(column,row,true);
-                        }
-                        else{
-                            downScore(false);
-                            topLinesBox(column,row,false);
-                        }
-                    }
-                    if(bottomLines(column,row)) {
-                        if(isNotUndo){
-                            upScore(false);
-                            bottomLinesBox(column,row,true);
-                        }
-                        else{
-                            downScore(false);
-                            bottomLinesBox(column,row,false);
-                        }
-                    }
+                    checkTopLine(column,row,isNotUndo);
+                    checkBottomLine(column,row,isNotUndo);
                 }
-            } else {
-                //Vertical Lines only
-                if (row == 0) {
-                    if(beforeLines(column,row)){
-                        if(isNotUndo){
-                            upScore(false);
-                            beforeLinesBox(column,row,true);
-                        }
-                        else{
-                            downScore(false);
-                            beforeLinesBox(column,row,false);
-                        }
-                    }
-                }
-                else if (row == layoutInArray.length-1) {
-                    if(afterLines(column,row)){
-                        if(isNotUndo){
-                            upScore(false);
-                            afterLinesBox(column,row,true);
-                        }
-                        else{
-                            downScore(false);
-                            afterLinesBox(column,row,false);
-                        }
-                    }
-                }
+            } else { //Vertical Lines only
+                if (row == 0) { checkBeforeLine(column,row,isNotUndo); }
+                else if (row == layoutInArray.length-1) { checkAfterLine(column,row,isNotUndo); }
                 else {
-                    if (beforeLines(column,row)){
-                        if(isNotUndo){
-                            upScore(false);
-                            beforeLinesBox(column,row,true);
-                        }
-                        else{
-                            downScore(false);
-                            beforeLinesBox(column,row,false);
-                        }
-                    }
-                    if (afterLines(column,row)){
-                        if(isNotUndo){
-                            upScore(false);
-                            afterLinesBox(column,row,true);
-                        }
-                        else{
-                            downScore(false);
-                            afterLinesBox(column,row,false);
-                        }
-                    }
+                    checkBeforeLine(column,row,isNotUndo);
+                    checkAfterLine(column,row,isNotUndo);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    public void hint(){
+    void hint(){
         try {
             ImageViewAdded c = randomLine();
             animateLine(c,isHorizontalLine(c));
@@ -898,37 +735,31 @@ public class MainGameFragment extends Fragment {
             Toast.makeText(getContext(), R.string.exception_toast_pc_unable_line,Toast.LENGTH_SHORT).show();
         }
     }
-    public void undo(){
-        if(moves.size() == 0){}
-        else{
-
-            ImageViewAdded last = moves.get(moves.size()-1);
+    void undo(){
+        if(!(movesDone.size() == 0)){
+            ImageViewAdded last = movesDone.get(movesDone.size()-1);
             boolean isHorizontal = false;
-            try {
-                isHorizontal = isHorizontalLine(last);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if(isHorizontal){ horziontalLinesLeft.add(last); }
-            else {verticalLinesLeft.add(last);}
+            try { isHorizontal = isHorizontalLine(last); }
+            catch (Exception e) { e.printStackTrace(); }
+            if(isHorizontal){ horziontalLinesLeft.add(last); noHorizontalPlayableLinesLeft++;}
+            else {verticalLinesLeft.add(last); noVerticalPlayableLinesLeft++;}
             noPlayableLinesLeft++;
-            System.out.println("******* total left *** = " +noVerticalPlayableLinesLeft);
-            System.out.println("******* veretical left *** = " +verticalLinesLeft.size());
-            System.out.println("******* hori left *** = " +horziontalLinesLeft.size());
             switchLineColor("blank",last,isHorizontal);
-            turn--;
-            if (turn == -1) { turn = totalPlayers-1;};
+            currentTurn--;
+            if (currentTurn == -1) { currentTurn = noTotalPlayers -1;}
             downScore(true);
             setFilledBox(last,false);
             last.setClickable(true);
             last.setSet(false);
             updateScoreText();
-            activityCommander.updateTurn(whoiseTurn2(turn));
-            moves.remove(moves.size()-1);
-            if(!isPCTurn(turn)){
-                activityCommander.updatePlayerName(whoiseTurn(turn));
-                activityCommander.updatePlayerScore(score[turn]);
+            activityCommander.updateTurn(whoseTurn(currentTurn,0));
+            movesDone.remove(movesDone.size()-1);
+            if(!isPCTurn(currentTurn)){
+                activityCommander.updatePlayerName(whoseTurn(currentTurn,1));
+                activityCommander.updatePlayerScore(score[currentTurn]);
             }else {
+                activityCommander.updateAIName(whoseTurn(currentTurn,1));
+                activityCommander.updateAIScore(score[currentTurn]);
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -939,6 +770,17 @@ public class MainGameFragment extends Fragment {
             }
         }
     }
+    private void gameOver(){
+        activityCommander.disableButtons();
+        int max =0, winner = 0;
+        for(int i=0; i<score.length; i++){
+            if(score[i] > max){
+                max = score[i];
+                winner = i;
+            }
+        }
+        showToast("GAME OVER! \n Winner is "+ whoseTurn(winner,1) + "  with a score of " + max);
+    }
 
     /*************Meathods used in checking if lines near box*************/
     private boolean bottomLines(int column, int row) {
@@ -947,8 +789,7 @@ public class MainGameFragment extends Fragment {
         ImageViewAdded c =  layoutInArray[column-2][row];
         ImageViewAdded[] check = {a,b,c};
         //animateCheck(check);
-        boolean set = isBoxCreated(check);
-        return set;
+        return isBoxCreated(check);
     }
     private boolean topLines(int column, int row) {
         ImageViewAdded a = layoutInArray[column+1][row+1];
@@ -956,8 +797,7 @@ public class MainGameFragment extends Fragment {
         ImageViewAdded c =  layoutInArray[column+2][row];
         ImageViewAdded[] check = {a,b,c};
         //animateCheck(check);
-        boolean set = isBoxCreated(check);
-        return set;
+        return isBoxCreated(check);
     }
     private boolean beforeLines(int column, int row) {
         ImageViewAdded a = layoutInArray[column+1][row+1];
@@ -965,8 +805,7 @@ public class MainGameFragment extends Fragment {
         ImageViewAdded c =  layoutInArray[column][row+2];
         ImageViewAdded[] check = {a,b,c};
         //animateCheck(check);
-        boolean set = isBoxCreated(check);
-        return set;
+        return isBoxCreated(check);
     }
     private boolean afterLines(int column, int row) {
         ImageViewAdded a = layoutInArray[column+1][row-1];
@@ -974,34 +813,61 @@ public class MainGameFragment extends Fragment {
         ImageViewAdded c =  layoutInArray[column][row-2];
         ImageViewAdded[] check = {a,b,c};
         //animateCheck(check);
-        boolean set = isBoxCreated(check);
-        return set;
+        return isBoxCreated(check);
     }
     private boolean isBoxCreated(ImageViewAdded[] lines){
         ImageViewAdded a = lines[0];
         ImageViewAdded b = lines[1];
         ImageViewAdded c = lines[2];
-        boolean set = a.isSet() && b.isSet() && c.isSet();
-        return set;
+        return a.isSet() && b.isSet() && c.isSet();
     }
-    //These methods set the box
-    private void setBox(ImageViewAdded box, boolean isNotUndo){
-        if(isNotUndo){
-            if(localPlayers > 0 && turn == playerTurns[0]){
-                box.setImageResource(R.drawable.blueBoxDrawable);
-            }else if (noPcPlaying > 0 && turn == PCTurns[0]){
-                box.setImageResource(R.drawable.redBoxDrawable);
-            }else{
-                box.setImageResource(R.drawable.redBoxDrawable);
-                box.setColorFilter(Integer.parseInt(playerColors[turn]),PorterDuff.Mode.SRC_ATOP);
+    private void checkTopLine(int column, int row, boolean isNotUndo){
+        if(topLines(column,row)){
+            if(isNotUndo){
+                upScore(false);
+                topLinesBox(column,row,true);
             }
-        }else {
-            setBoxBlank(box);
+            else{
+                downScore(false);
+                topLinesBox(column,row,false);
+            }
         }
     }
-    private void setBoxBlank(ImageViewAdded box){
-        box.setImageResource(R.drawable.blankBoxDrawable);
-        box.setColorFilter(Color.TRANSPARENT,PorterDuff.Mode.SRC_ATOP);
+    private void checkBottomLine(int column, int row, boolean isNotUndo){
+        if(bottomLines(column,row)){
+            if(isNotUndo){
+                upScore(false);
+                bottomLinesBox(column,row,true);
+            }
+            else{
+                downScore(false);
+                bottomLinesBox(column,row,false);
+            }
+        }
+    }
+    private void checkBeforeLine(int column, int row, boolean isNotUndo){
+        if(beforeLines(column,row)){
+            if(isNotUndo){
+                upScore(false);
+                beforeLinesBox(column,row,true);
+            }
+            else{
+                downScore(false);
+                beforeLinesBox(column,row,false);
+            }
+        }
+    }
+    private void checkAfterLine(int column, int row, boolean isNotUndo){
+        if(afterLines(column,row)){
+            if(isNotUndo){
+                upScore(false);
+                afterLinesBox(column,row,true);
+            }
+            else{
+                downScore(false);
+                afterLinesBox(column,row,false);
+            }
+        }
     }
     private void topLinesBox(int column, int row, boolean isNotUndo){
         ImageViewAdded box = layoutInArray[column+1][row];
@@ -1023,6 +889,25 @@ public class MainGameFragment extends Fragment {
         if(isNotUndo){setBox(box,true);}
         else {setBox(box,false); }
     }
+    /*********************These methods set the box***************/
+    private void setBox(ImageViewAdded box, boolean isNotUndo){
+        if(isNotUndo){
+            if(noLocalPlayers > 0 && currentTurn == playerTurns[0]){
+                box.setImageResource(R.drawable.blueBoxDrawable);
+            }else if (noPcPlaying > 0 && currentTurn == pcTurns[0]){
+                box.setImageResource(R.drawable.redBoxDrawable);
+            }else{
+                box.setImageResource(R.drawable.redBoxDrawable);
+                box.setColorFilter(Integer.parseInt(playerColors[currentTurn]),PorterDuff.Mode.SRC_ATOP);
+            }
+        }else {
+            setBoxBlank(box);
+        }
+    }
+    private void setBoxBlank(ImageViewAdded box){
+        box.setImageResource(R.drawable.blankBoxDrawable);
+        box.setColorFilter(Color.TRANSPARENT,PorterDuff.Mode.SRC_ATOP);
+    }
     private void animateLine(final ImageViewAdded i, boolean horizontal){
         final AnimationDrawable animation = new AnimationDrawable();
         final Drawable original = i.getDrawable();
@@ -1035,7 +920,7 @@ public class MainGameFragment extends Fragment {
         animation.addFrame(original,100);
         animation.setOneShot(false);
         i.setImageDrawable(animation);
-        //Block updates to ensure right update after animatiion. Block updates for period of
+        //Block updates to ensure right update after animation. Block updates for period of
         // animation
         i.setClickable(false);
         animation.start();
@@ -1050,139 +935,86 @@ public class MainGameFragment extends Fragment {
             }
         }, 3000);
     }
-
-    /********************Aux Meathods**********/
+    /********************Aux Meathods*************************/
     //Method that show waiting toast
     private void showWaitToast(){ String s = getString(R.string.toast_wait_next_player); showToast(s); }
     // Method to show toast of string input
     private void showToast(String s){ Toast.makeText(getContext(),s,Toast.LENGTH_SHORT).show(); }
     //Method to check if line is horizontal
     private boolean isHorizontalLine(ImageViewAdded img) throws Exception {
-        if(img.getTag().toString().contains(hLineTag)){
-            return true;
-        }else if(img.getTag().toString().contains(vLineTag)){
-            return false;
-        }else{
-            throw new Exception("Unknown Line");
-        }
+        if(img.getTag().toString().contains(hLineTag)){ return true; }
+        else if(img.getTag().toString().contains(vLineTag)){ return false; }
+        else{ throw new Exception("Unknown Line"); }
     }
     //Method gets line tag no, returning only its no.
     private String getLineTagNo(ImageViewAdded line,Boolean isHorizontal){
-        if(isHorizontal){
-            return line.getTag().toString().replace(hLineTag,"");
-        }else{
-            return line.getTag().toString().replace(vLineTag,"");
-        }
+        if(isHorizontal){ return line.getTag().toString().replace(hLineTag,""); }
+        else{ return line.getTag().toString().replace(vLineTag,""); }
     }
     //Method checks if turn is PCsTrun
     private  boolean isPCTurn(int turn){
         if(noPcPlaying > 0){
-            for (int pcPlayer : PCTurns) {
+            for (int pcPlayer : pcTurns) {
                 if (turn == pcPlayer) { return true;}
             }
         }
         return false;
     }
-
-    private void gameOver(){
-        activityCommander.disableButtoms();
-        int max =0, winner = 0;
-        for(int i=0; i<score.length; i++){
-            if(score[i] > max){
-                max = score[i];
-                winner = i;
-            }
-        }
-        showToast("GAME OVER! \n Winner is "+ whoiseTurn(winner) + "  with a score of " + max);
-    }
-    //Method checks if any more turns left
+    //Checks if there is anymore turns
     private boolean haveTurns(){ return (noPlayableLinesLeft !=0); }
-    protected String whoiseTurn(int turn) {
+    //Type 0 (turn): includes turn text & full,
+    // Type 2(norm): full without turn text,
+    // Type 3: Short Form
+    private String whoseTurn(int turn, int type) {
+        String[][] returnsTypes = new String[3][5];
+        returnsTypes[0][0] = "Turn: Computer 1"+ " ("+turn+")";
+        returnsTypes[1][0] = "Computer 1";
+        returnsTypes[2][0] = "C1";
+        if(isPcPlaying){
+            returnsTypes[0][1] = "Turn: Computer "+(Arrays.binarySearch(pcTurns,turn)+1)+ " ("+turn+")";
+            returnsTypes[1][1] = "Computer "+ (Arrays.binarySearch(pcTurns,turn)+1);
+            returnsTypes[2][1] = "C"+ (Arrays.binarySearch(pcTurns,turn)+1);
+        }
+        returnsTypes[0][2] = "Turn: Player 1"+" ("+turn+")";
+        returnsTypes[1][2] = "Player 1";
+        returnsTypes[2][2] = "P1";
+        if(noLocalPlayers > 0 ){
+            returnsTypes[0][3] = "Turn: Player "+(Arrays.binarySearch(playerTurns,turn)+1)+" " + "("+turn+")";
+            returnsTypes[1][3] = "Player "+(Arrays.binarySearch(playerTurns,turn)+1);
+            returnsTypes[2][3] = "P"+(Arrays.binarySearch(playerTurns,turn)+1);
+        }
+        returnsTypes[0][4] = "Turn: Unknowned "+turn + " ("+turn+")";
+        returnsTypes[1][4] = "Unknowned "+turn + " ("+turn+")";
+        returnsTypes[2][4] = "Unk"+turn + " ("+turn+")";
+
         if(isPCTurn(turn)) {
-            if(turn ==0){ return "Computer 1";}
-            else if(turn < 10){ return "Computer "+ (Arrays.binarySearch(PCTurns,turn)+1);}
-            else{ return "Computer "+(Arrays.binarySearch(PCTurns,turn)+1);}
+            if(turn ==0){ return returnsTypes[type][0];}
+            else{ return returnsTypes[type][1];}
         }else{
-            if(localPlayers > 0){
-                for(int i=0; i< playerTurns.length; i++){
-                    if(playerTurns[i] == turn ){
-                        if(turn ==0){ return "Player 1"; }
-                        else if(i<10){ return "Player "+(Arrays.binarySearch(playerTurns,turn)+1); }
-                        else { return "Player "+(Arrays.binarySearch(playerTurns,turn)+1); }
+            if(noLocalPlayers > 0){
+                for (int playerTurn : playerTurns) {
+                    if (playerTurn == turn) {
+                        if (turn == 0) { return returnsTypes[type][2]; }
+                        else { return returnsTypes[type][3]; }
                     }
                 }
             }
         }
-        return "Unknowned "+turn + " ("+turn+")";
-    }
-    protected String whoiseTurnSimple(int turn) {
-        if(isPCTurn(turn)) {
-            if(turn ==0){ return "C1";}
-            else if(turn < 10){ return "C"+ (Arrays.binarySearch(PCTurns,turn)+1);}
-            else{ return "C"+(Arrays.binarySearch(PCTurns,turn)+1);}
-        }else{
-            if(localPlayers > 0){
-                for(int i=0; i< playerTurns.length; i++){
-                    if(playerTurns[i] == turn ){
-                        if(turn ==0){ return "P1";}
-                        else if(i<10){ return "P"+(Arrays.binarySearch(playerTurns,turn)+1); }
-                        else { return "P"+(Arrays.binarySearch(playerTurns,turn)+1); }
-                    }
-                }
-            }
-        }
-        return "Unk"+turn + " ("+turn+")";
-    }
-    protected String whoiseTurn2(int turn) {
-        if(isPCTurn(turn)) {
-            if(turn ==0){ return "Turn: Computer 1"+ " ("+turn+")";}
-            else if(turn < 10){ return "Turn: Computer "+ (Arrays.binarySearch(PCTurns,turn)+1) +
-                    " ("+turn+
-                    ")";}
-            else{ return "Turn: Computer "+(Arrays.binarySearch(PCTurns,turn)+1)+ " ("+turn+")";}
-        }else{
-            if(localPlayers > 0){
-            for(int i=0; i< playerTurns.length; i++){
-                    if(playerTurns[i] == turn ){
-                        if(turn ==0){ return "Turn: Player 1"+" ("+turn+")"; }
-                        if(i<10){ return "Turn: Player "+(Arrays.binarySearch(playerTurns,turn)+1)+" " +
-                                "("+turn+")";}
-                        else { return "Turn: Player "+(Arrays.binarySearch(playerTurns,turn)+1) +
-                                " ("+turn+
-                                ")"; }
-                    }
-                }
-            }
-        }
-       return "Turn: Unknowned "+turn + " ("+turn+")";
+        return returnsTypes[type][4];
     }
 
     /***********Getters & Setters **********8*/
-    public void setPlayersTurn(boolean playersTurn) { this.playersTurn = playersTurn; }
-    public int getBoardSize() { return boardSize; }
-    public void setBoardSize(int boardSize) { this.boardSize = boardSize;}
-    public boolean isPlayersTurn() { return playersTurn; }
-    public int getTurn() { return turn; }
-    public void setTurn(int turn) { this.turn = turn;}
-    public int getLocalPlayers() { return localPlayers; }
-    public void setLocalPlayers(int localPlayers) { this.localPlayers = localPlayers;}
-    public int getNoPcPlaying() { return noPcPlaying; }
-    public void setNoPcPlaying(int noPcPlaying) { this.noPcPlaying = noPcPlaying; }
-    public int[] getPCTurns() { return PCTurns; }
-    public void setPCTurns(int[] PCTurns) { this.PCTurns = PCTurns; }
-    public int[] getPlayerTurns() { return playerTurns; }
-    public void setPlayerTurns(int[] playerTurns) { this.playerTurns = playerTurns; }
-    public int[] getScore() { return score; }
-    public void setScore(int[] score) { this.score = score; }
-    public boolean isPcPlaying() { return pcPlaying; }
-    public void setPcPlaying(boolean pcPlaying) { this.pcPlaying = pcPlaying; }
-    public int getDelay() { return delay; }
-    public void setDelay(int delay) { this.delay = delay; }
-    public boolean isRandomTurns() { return randomTurns; }
-    public void setRandomTurns(boolean randomTurns) { this.randomTurns = randomTurns; }
+    void setPlayersTurn(boolean playersTurn) { this.isPlayersTurn = playersTurn; }
+    void setBoardSize(int boardSize) { this.boardSize = boardSize;}
+    private boolean isPlayersTurn() { return isPlayersTurn; }
+    void setNoLocalPlayers(int noLocalPlayers) { this.noLocalPlayers = noLocalPlayers;}
+    void setNoPcPlaying(int noPcPlaying) { this.noPcPlaying = noPcPlaying; }
+    void setPcPlaying(boolean pcPlaying) { this.isPcPlaying = pcPlaying; }
+    void setDelay(int delay) { this.delay = delay; }
+    void setRandomTurnsOn(boolean randomTurnsOn) { this.isRandomTurnsOn = randomTurnsOn; }
 
     /**********Test Meathods*****************/
-    public void testPrintLayout(){
+    private void testPrintLayout(){
         System.out.println(layoutInArray[0][0].getTag()+","+layoutInArray[0][1].getTag()+","+layoutInArray[0][2].getTag()+ ","+layoutInArray[0][3].getTag()+","+layoutInArray[0][4].getTag()+","+layoutInArray[0][5].getTag()+","+layoutInArray[0][6].getTag());
         System.out.println(layoutInArray[1][0].getTag()+","+layoutInArray[1][1].getTag()+","+layoutInArray[1][2].getTag()+","+layoutInArray[1][3].getTag()+","+layoutInArray[1][4].getTag()+","+layoutInArray[1][5].getTag()+","+layoutInArray[1][6].getTag());
         System.out.println(layoutInArray[2][0].getTag()+","+layoutInArray[2][1].getTag()+","+layoutInArray[2][2].getTag()+","+layoutInArray[2][3].getTag()+","+layoutInArray[2][4].getTag()+","+layoutInArray[2][5].getTag()+","+layoutInArray[2][6].getTag());
