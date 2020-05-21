@@ -154,7 +154,7 @@
         android:padding="@dimen/switchPadding15"
         android:text="@string/switch_randomize_turns"
         android:textSize="@dimen/switchTextSize"
-        android:tooltipText="All PC &amp; human turns at random/togather?"
+        android:tooltipText="All PC &amp; human turns at random/entangled?"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="@integer/zeroPoint5"
         app:layout_constraintStart_toStartOf="parent"
