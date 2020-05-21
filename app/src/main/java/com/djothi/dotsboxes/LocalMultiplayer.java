@@ -56,4 +56,9 @@ public class LocalMultiplayer extends AppCompatActivity implements GameOptionsFr
         startActivity(intent);
     }
 
+    @Override
+    public void longClicked() {
+
+    }
+
 }

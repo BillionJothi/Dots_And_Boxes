@@ -39,7 +39,7 @@
     <string name="exception_toast_pc_unable_line">Unable to remove line</string>
     <string name="toast_wait_next_player">Waiting for next player\'s decision</string>
     <string name="switch_randomize_turns">Randomize Turns?</string>
-    <string name="switch_quickmode">QuickMod</string>
+    <string name="switch_quickmode">Quick</string>
     <string name="switch_p1starts">P1Starts</string>
     <string name="text__turns_player">12 Turns/player</string>
     <string name="text_total_no_players">Total No. Players = 2</string>

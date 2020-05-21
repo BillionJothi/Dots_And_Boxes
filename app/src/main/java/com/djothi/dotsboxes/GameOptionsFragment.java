@@ -51,6 +51,7 @@ public class GameOptionsFragment extends Fragment {
                 int grid, int human, int AI,
                 boolean hint, boolean undo, boolean p1Starts, boolean quickMode,
                 boolean randomTurns);
+        public void longClicked();
     }
 
     @Override
@@ -184,6 +185,17 @@ public class GameOptionsFragment extends Fragment {
                     }
                 }
         );
+
+        startGameButton.setOnLongClickListener(
+                new Button.OnLongClickListener(){
+                    @Override
+                    public boolean onLongClick(View v) {
+                        activityCommander.longClicked();
+                        return true;
+                    }
+                }
+        );
+
         // Inflate the layout for this fragment
         return view;
     }

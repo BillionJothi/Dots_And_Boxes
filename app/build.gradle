@@ -27,6 +27,9 @@ android {
             }
         }
     }
+    compileOptions {
+        sourceCompatibility = 1.7
+    }
     buildscript {
         repositories {
             jcenter()

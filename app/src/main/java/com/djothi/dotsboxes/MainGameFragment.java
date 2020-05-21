@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -36,6 +38,8 @@ public class MainGameFragment extends Fragment {
     private int boardSize;
     private int currentTurn;
     private int delay;
+    private boolean undoTicker;
+    private boolean doesP1Start;
     private String hLineTag;
     private String vLineTag;
     //Booleans - Info Values
@@ -61,6 +65,7 @@ public class MainGameFragment extends Fragment {
     private int[] pcTurns;
     private int[] playerTurns;
     private String[] playerColors;
+    private boolean[] playerColorsIsSolid;
     //Accessibility
     private ImageViewAdded[][] layoutInArray;
     private List<ImageViewAdded> verticalLinesLeft;
@@ -85,7 +90,15 @@ public class MainGameFragment extends Fragment {
         void updateAIScore(int score);
         void updateOverallScore(String s);
         void disableButtons();
+        void setTurnToolTipText(String s);
+        void setScoreToolTipText(String s);
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -117,6 +130,7 @@ public class MainGameFragment extends Fragment {
         this.boardSize = getArguments().getInt("grid");
         this.noLocalPlayers = getArguments().getInt("human");
         this.isPlayersTurn = getArguments().getBoolean("p1Starts");
+        this.doesP1Start = getArguments().getBoolean("p1Starts");
         if(noLocalPlayers == 0) { isPlayersTurn = false;}
         this.noPcPlaying = getArguments().getInt("AI");
         this.isPcPlaying = noPcPlaying != 0;
@@ -142,8 +156,16 @@ public class MainGameFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void Setup(){
         //Get Settings from resources
-        this.layout = view.findViewById(R.id.linear2);
-        this.layout.removeAllViews();
+        RelativeLayout relativeLayout = (RelativeLayout) view;
+        LinearLayout linearLayout = new LinearLayout(view.getContext());
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout.LayoutParams layoutParams =
+                new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT);
+        linearLayout.setLayoutParams(layoutParams);
+        relativeLayout.addView(linearLayout);
+        this.layout = linearLayout;
         this.currentTurn = getResources().getInteger(R.integer.turnStart);
         this.score = new int[noTotalPlayers];
         this.playerColors = new String[noTotalPlayers];
@@ -185,6 +207,8 @@ public class MainGameFragment extends Fragment {
         catch (Exception e) { e.printStackTrace(); }
         setPlayerColors();
         makeBoard();
+        setUpTurnToolTip();
+        activityCommander.updateTurn(whoseTurn(currentTurn,0));
         Log.i("LineUp","Board Made");
         if(!isPlayersTurn){ nextPlayer(); }
         if(noPcPlaying == 0){
@@ -216,26 +240,26 @@ public class MainGameFragment extends Fragment {
         ImageViewAdded[] imageViews_horziontalLines = new ImageViewAdded[noTotalInitialHorizontallines];
         ImageViewAdded[] imageViews_boxes = new ImageViewAdded[noTotalBoxes];
         //CreateLayout for each object
-        LinearLayout.LayoutParams[] layoutParams = new LinearLayout.LayoutParams[noLayoutParams];
-        for(int i=0; i<noLayoutParams ; i++){
+        LinearLayout.LayoutParams[] layoutParams = new LinearLayout.LayoutParams[noLayoutParams+2];
+        for(int i=0; i<noLayoutParams+2 ; i++){
             layoutParams[i] = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         }
         //Create Layouts
-        layoutParams[0].weight = dotLinearLayoutWeight;
-        layoutParams[1].weight = linearLayoutWeight;
         for(int i = 0; i< gridSize; i++){
             linearLayouts[i] = new LinearLayout(view.getContext());
             linearLayouts[i].getAutofillId();
             linearLayouts[i].setTag(
                     view.getResources().getString(R.string.horizontalGameLayoutTag)+ i);
             linearLayouts[i].setOrientation(LinearLayout.HORIZONTAL);
-            if(i%2 == 0){ linearLayouts[i].setLayoutParams(layoutParams[0]); }
+            if(i == 0){ linearLayouts[i].setLayoutParams(layoutParams[6]); }
+            else if(i == gridSize-1 ) {linearLayouts[i].setLayoutParams(layoutParams[7]); }
+            else if(i%2 == 0){ linearLayouts[i].setLayoutParams(layoutParams[0]); }
             else{ linearLayouts[i].setLayoutParams(layoutParams[1]); }
             layout.addView(linearLayouts[i]);
         }
         //Create Dots
-        layoutParams[2].weight = dotWeight;
+        layoutParams[1].weight = linearLayoutWeight;
         layoutParams[2].gravity = R.integer.dotGravity;
         for( int i=0; i<imageViews_dot.length; i++){
             imageViews_dot[i] = new ImageViewAdded(view.getContext());
@@ -245,10 +269,10 @@ public class MainGameFragment extends Fragment {
             imageViews_dot[i].setLayoutParams(layoutParams[2]);
             imageViews_dot[i].setScaleType(ImageView.ScaleType.valueOf(
                     view.getResources().getString(R.string.dotScalling)));
+            //imageViews_dot[i].setPadding(15,15,15,15);
             imageViews_dot[i].setImageResource(R.drawable.dotDrawable);
         }
         //Create HorizontaLines
-        layoutParams[3].weight = horizontalLineWeight;
         layoutParams[3].gravity = R.integer.horizontalLineGravity;
         for( int i=0; i<imageViews_horziontalLines.length; i++){
             imageViews_horziontalLines[i] = new ImageViewAdded(view.getContext());
@@ -258,7 +282,9 @@ public class MainGameFragment extends Fragment {
             imageViews_horziontalLines[i].setLayoutParams(layoutParams[3]);
             imageViews_horziontalLines[i].setScaleType(ImageView.ScaleType.valueOf(
                     view.getResources().getString(R.string.horizontalLineScalling)));
-            imageViews_horziontalLines[i].setImageResource(R.drawable.blankHorizontalDrawable);
+            imageViews_horziontalLines[i].setBackgroundColor(Color.TRANSPARENT);
+           // imageViews_horziontalLines[i].setImageResource(R.drawable
+            // .line_transparent_horizontal);
             //setPlayed to false
             imageViews_horziontalLines[i].setSet(false);
             imageViews_horziontalLines[i].setOnClickListener(setLineClicker());
@@ -274,13 +300,13 @@ public class MainGameFragment extends Fragment {
             imageViews_verticalLines[i].setLayoutParams(layoutParams[4]);
             imageViews_verticalLines[i].setScaleType(ImageView.ScaleType.valueOf(
                     view.getResources().getString(R.string.verticalLineScalling)));
-            imageViews_verticalLines[i].setImageResource(R.drawable.blankVerticalDrawable);
+            imageViews_verticalLines[i].setBackgroundColor(Color.TRANSPARENT);
+            //imageViews_verticalLines[i].setImageResource(R.drawable.line_transparent_vertical);
             //Set played to false
             imageViews_verticalLines[i].setSet(false);
             imageViews_verticalLines[i].setOnClickListener(setLineClicker());
         }
         //Create Boxes
-        layoutParams[5].weight = boxesWeight;
         layoutParams[5].gravity = R.integer.boxGravity;
         for( int i=0; i<imageViews_boxes.length; i++){
             imageViews_boxes[i] = new ImageViewAdded(view.getContext());
@@ -294,6 +320,45 @@ public class MainGameFragment extends Fragment {
             //Set played to false
             imageViews_boxes[i].setSet(false);
         }
+        //Padding based off grid sizes:
+        this.layout.setBackgroundResource(R.drawable.black_background);
+        this.layout.setPadding(30,30,30,30);
+        if(boardSize < getResources().getInteger(R.integer.w1)){
+            //layouts
+            layoutParams[0].weight = getFloatResourcesValues(view, R.dimen.weight1);
+            layoutParams[6].weight = getFloatResourcesValues(view, R.dimen.weight1);
+            layoutParams[7].weight = getFloatResourcesValues(view, R.dimen.weight1);
+            //dots
+            layoutParams[2].weight = getFloatResourcesValues(view, R.dimen.weight2);
+            //HLine
+            layoutParams[3].weight = getFloatResourcesValues(view, R.dimen.weight3);
+            // bpc
+            layoutParams[5].weight = getFloatResourcesValues(view, R.dimen.weight4);}
+        else if(boardSize < getResources().getInteger(R.integer.w2)){
+            layoutParams[0].weight = (float) 1.155;
+            layoutParams[6].weight = (float) 1.155;
+            layoutParams[7].weight = (float) 1.155;
+            layoutParams[2].weight = (float) 1.1;
+            layoutParams[3].weight = (float) 1;
+            layoutParams[5].weight = (float) 0.9;
+        }else if(boardSize < 8){
+            layoutParams[0].weight = (float) 1.085;
+            layoutParams[6].weight = (float) 1.085;
+            layoutParams[7].weight = (float) 1.085;
+            layoutParams[2].weight = (float) 1.075;
+            layoutParams[3].weight = (float) 1;
+            layoutParams[5].weight = (float) 0.9;
+        }
+        else {
+            layoutParams[0].weight = (float) 1.03;
+            layoutParams[6].weight = (float) 1.03;
+            layoutParams[7].weight = (float) 1.03;
+            layoutParams[2].weight = (float) 1.03;
+            layoutParams[3].weight = horizontalLineWeight;
+            layoutParams[5].weight = (float) 0.95;
+         }
+
+
         //Adding items to view in right layout. Note: This allows for variable grids
         int dotCount = 0;
         int horizontalLineCount = 0;
@@ -444,6 +509,7 @@ public class MainGameFragment extends Fragment {
         return finalLayout;
     }
     //Sets Players Colors
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void setPlayerColors(){
         if(noTotalPlayers == 2){
             //Sets 1st human player color to always equal to blue & next to red
@@ -459,8 +525,9 @@ public class MainGameFragment extends Fragment {
             for(int i=0; i<playerColors.length; i++) {
                 //if >players than available colors, random them
                 Random rnd = new Random();
-                int color = Color.argb(150, rnd.nextInt(256), rnd.nextInt(256),
+                int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256),
                         rnd.nextInt(256));
+                Log.i("LineUp","Color int ="+color);
                 playerColors[i] = Integer.toString(color);
             }
             //sets 1st human to p0 & 1st pc to p1 always
@@ -472,6 +539,25 @@ public class MainGameFragment extends Fragment {
                 playerColors[pcTurns[0]] = getResources().getString(R.string.P1Colour);
             }
         }
+        if(playerColors.length > 30){
+            playerColorsIsSolid = new boolean[playerColors.length];
+            for(int i=0; i<playerColors.length; i++){
+                boolean  isSolid = Math.random()<0.5;
+                if(isSolid){ playerColorsIsSolid[i] = true;
+                }else { playerColorsIsSolid[i] = false;}
+            }
+        }
+    }
+    //Sets tooltip for turns:
+    private void setUpTurnToolTip(){
+        StringBuilder s = new StringBuilder();
+        for(int i=0; i<noTotalPlayers ;i++){
+            s.append(i);
+            s.append(":");
+            s.append(whoseTurn(i,2));
+            s.append(" | ");
+        }
+        activityCommander.setTurnToolTipText(s.toString());
     }
 
     /*************************** Aux methods Used in MakeBoard****************************/
@@ -522,46 +608,92 @@ public class MainGameFragment extends Fragment {
         if(line){ score[currentTurn]-=lineScore; }
         else { score[currentTurn]-=boxScore; }
     }
-    private void updateScoreText(){
-        int topPlayer1 = 2, topPlayer2 =2, topPlayer3 =2;
-        int topPlayer1Score=0, topPlayer2Score=0, topPlayer3Score=0;
+    private void updateScoreText() {
+        int topPlayer1 = 2, topPlayer2 = 2, topPlayer3 = 2;
+        int topPlayer1Score = 0, topPlayer2Score = 0, topPlayer3Score = 0;
         List<Integer> chosen = new ArrayList<>();
         chosen.clear();
-        if(isPcPlaying){
+        int humanPC = 5;
+        if (isPcPlaying) {
             chosen.add(pcTurns[0]);
-            if( noLocalPlayers == 0){ chosen.add(pcTurns[1]); }
+            humanPC = 1;
+            if (noLocalPlayers == 0 && noTotalPlayers >= 2) {
+                chosen.add(pcTurns[1]);
+                humanPC = 0;
+            }
         }
-        if(noLocalPlayers > 0){
+        if (noLocalPlayers > 0) {
             chosen.add(playerTurns[0]);
-            Log.i("LineUp","Chosen added p0 ");
-            if(!isPcPlaying){ chosen.add(playerTurns[1]); Log.i(
-                    "LineUp",
-                    "Chosen added p2 ");}
+            humanPC = 2;
+            Log.i("LineUp", "Chosen added p0 ");
+            if (!isPcPlaying && noTotalPlayers >= 2) {
+                chosen.add(playerTurns[1]);
+                humanPC = 0;
+                Log.i(
+                        "LineUp",
+                        "Chosen added p2 ");
+            }
         }
         StringBuilder listString = new StringBuilder();
-        for (Integer s : chosen)
-        { listString.append(s).append("\t"); }
-        Log.i("LineUp","Chosen: "+ listString);
-        for(int j=0; j<3; j++){
-            for(int i=0; i<score.length; i++){
-                if(j==0 && !chosen.contains(i) && score[i]>=topPlayer1Score){topPlayer1Score = score[i]; topPlayer1 = i; chosen.add(i);  break;}
-                else if(j==1 && !chosen.contains(i) && score[i]>=topPlayer2Score){topPlayer2Score = score[i]; topPlayer2 = i; chosen.add(i); break;}
-                else if(j==2 && !chosen.contains(i) && score[i]>=topPlayer3Score){topPlayer3Score = score[i]; topPlayer3 =i;chosen.add(i); break; }
+        for (Integer s : chosen) {
+            listString.append(s).append("\t");
+        }
+        Log.i("LineUp", "Chosen: " + listString);
+        for (int j = 0; j < 3; j++) {
+            for (int i = 0; i < score.length; i++) {
+                if (j == 0 && !chosen.contains(i) && score[i] >= topPlayer1Score) {
+                    topPlayer1Score = score[i];
+                    topPlayer1 = i;
+                    chosen.add(i);
+                    break;
+                } else if (j == 1 && !chosen.contains(i) && score[i] >= topPlayer2Score) {
+                    topPlayer2Score = score[i];
+                    topPlayer2 = i;
+                    chosen.add(i);
+                    break;
+                } else if (j == 2 && !chosen.contains(i) && score[i] >= topPlayer3Score) {
+                    topPlayer3Score = score[i];
+                    topPlayer3 = i;
+                    chosen.add(i);
+                    break;
+                }
             }
         }
         Log.i("LineUp", "topPlayer1 = " + topPlayer1
-                + "\ntopPlayer2: "+ topPlayer2
-                + "\ntopPlayer3: "+ topPlayer3
+                + "\ntopPlayer2: " + topPlayer2
+                + "\ntopPlayer3: " + topPlayer3
         );
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(whoseTurn(0, 2)).append(": ").append(score[0]).append("\n");
+
+        if (noTotalPlayers == 1) {
+        } else if (noTotalPlayers >= 2 && ((noLocalPlayers >= 2 && noPcPlaying == 0) || (noLocalPlayers == 0 && noPcPlaying >= 2))) {
+            stringBuilder.append(whoseTurn(1, 2)).append(": ").append(score[1]).append("\n");
+        } else if (noPcPlaying > 0 && noLocalPlayers > 0) {
+            if (isPCTurn(0)) {
+                stringBuilder.append(whoseTurn(playerTurns[0], 2)).append(": ").append(score[playerTurns[0]]).append("\n");
+            } else {
+                stringBuilder.append(whoseTurn(pcTurns[0], 2)).append(": ").append(score[pcTurns[0]]).append("\n");
+            }
+        }
+
+
         for(int i=0; i<noTotalPlayers; i++){
-            if(i == 1){ stringBuilder.append(whoseTurn(1, 2)).append(": ").append(score[1]).append("\n");}
-            if(i == 2){ stringBuilder.append(whoseTurn(topPlayer1, 2)).append(": ").append(score[topPlayer1]).append("\n");}
-            if(i == 3){ stringBuilder.append(whoseTurn(topPlayer2, 2)).append(": ").append(score[topPlayer2]).append("\n");}
-            if(i == 4){ stringBuilder.append(whoseTurn(topPlayer3, 2)).append(": ").append(score[topPlayer3]).append("\n");}
+            if (i == 2) { stringBuilder.append(whoseTurn(topPlayer1, 2)).append(": ").append(score[topPlayer1]).append("\n"); }
+            if (i == 3) { stringBuilder.append(whoseTurn(topPlayer2, 2)).append(": ").append(score[topPlayer2]).append("\n"); }
+            if (i == 4) { stringBuilder.append(whoseTurn(topPlayer3, 2)).append(": ").append(score[topPlayer3]).append("\n"); }
+
         }
        activityCommander.updateOverallScore(stringBuilder.toString());
+        //update score tooltip
+        StringBuilder s = new StringBuilder();
+        for(int i=0; i<noTotalPlayers ;i++){
+            s.append(whoseTurn(i,2));
+            s.append(":");
+            s.append(score[i]);
+            s.append(" | ");
+        }
+        activityCommander.setScoreToolTipText(s.toString());
     }
     //Meathod Removes the line & updates it based off players colors, also calls to check if box set
     private void removeLine(ImageViewAdded img) {
@@ -594,26 +726,31 @@ public class MainGameFragment extends Fragment {
             switch (r){
                 case "blue": line = R.drawable.blueHorizontalDrawable; img.setImageResource(line); break;
                 case "red": line = R.drawable.redHorizontalDrawable; img.setImageResource(line); break;
-                case "blank": line = R.drawable.blankHorizontalDrawable; img.setImageResource(line); break;
-                case "lightBlue": line = R.drawable.lightblueHorizontalDrawable; img.setImageResource(line); break;
-                case "yellow": line = R.drawable.yellowHorizontalDrawable; img.setImageResource(line); break;
-                case "pink": line = R.drawable.pinkHorizontalDrawable; img.setImageResource(line); break;
+                case "blank": line = R.drawable.line_empty_horizontal; img.setImageResource(line); break;
+                case "lightBlue": line = R.drawable.lightblueHorizontalDrawable; img.setImageResource(line);  break;
+                case "yellow": line = R.drawable.yellowHorizontalDrawable; img.setImageResource(line);  break;
+                case "pink": line = R.drawable.pinkHorizontalDrawable; img.setImageResource(line);break;
                 case "orange": line = R.drawable.orangeHorizontalDrawable; img.setImageResource(line); break;
-                default: line = R.drawable.redHorizontalDrawable;
+                default:
+                    if(noTotalPlayers > 10 && playerColorsIsSolid[currentTurn]){
+                        line = R.drawable.yellowHorizontalDrawable;
+                    }else {line = R.drawable.line_transparent_horizontal;}
                     img.setImageResource(line);
                     img.setColorFilter(Integer.parseInt(r),PorterDuff.Mode.SRC_ATOP);
-                    //System.out.println("color in int = "+ line);
             }
         }else{
             switch (r){
                 case "blue": line = R.drawable.blueVerticalDrawable; img.setImageResource(line); break;
-                case "red": line = R.drawable.redVerticalDrawable;img.setImageResource(line); break;
-                case "blank": line = R.drawable.blankVerticalDrawable; img.setImageResource(line); break;
+                case "red": line = R.drawable.redVerticalDrawable;img.setImageResource(line);break;
+                case "blank": line = R.drawable.line_empty_vertical; img.setImageResource(line); break;
                 case "lightBlue": line = R.drawable.lightblueVerticalDrawable; img.setImageResource(line); break;
                 case "yellow": line = R.drawable.yellowVerticalDrawable; img.setImageResource(line); break;
                 case "pink": line = R.drawable.pinkVerticalDrawable; img.setImageResource(line); break;
                 case "orange": line = R.drawable.orangeVerticalDrawable; img.setImageResource(line); break;
-                default: line = R.drawable.redVerticalDrawable;
+                default:
+                    if(noTotalPlayers > 30 && playerColorsIsSolid[currentTurn]){
+                        line = R.drawable.yellowVerticalDrawable;
+                    }else {line = R.drawable.line_transparent_vertical;}
                     img.setImageResource(line);
                     img.setColorFilter(Integer.parseInt(r), PorterDuff.Mode.SRC_ATOP);
             }
@@ -650,7 +787,8 @@ public class MainGameFragment extends Fragment {
                     @Override
                     public void onFinish() {
                         computersTurn();
-                        if(isPCTurn(currentTurn)){
+                        if(undoTicker){ }
+                        else if(isPCTurn(currentTurn)){
                             nextTurn();
                         }
                     }
@@ -737,6 +875,7 @@ public class MainGameFragment extends Fragment {
     }
     void undo(){
         if(!(movesDone.size() == 0)){
+            this.undoTicker = true;
             ImageViewAdded last = movesDone.get(movesDone.size()-1);
             boolean isHorizontal = false;
             try { isHorizontal = isHorizontalLine(last); }
@@ -763,7 +902,8 @@ public class MainGameFragment extends Fragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        nextPlayer();
+                        undoTicker = false;
+                         nextPlayer();
                     }
                 }, 2000);
 
@@ -910,7 +1050,8 @@ public class MainGameFragment extends Fragment {
     }
     private void animateLine(final ImageViewAdded i, boolean horizontal){
         final AnimationDrawable animation = new AnimationDrawable();
-        final Drawable original = i.getDrawable();
+        Drawable original = i.getDrawable();
+        if(original == null){ original = new ColorDrawable(Color.TRANSPARENT);}
         animation.addFrame(original,100);
         if(horizontal){
             animation.addFrame(getResources().getDrawable(R.drawable.yellowHorizontalDrawable,null),200);
@@ -925,11 +1066,12 @@ public class MainGameFragment extends Fragment {
         i.setClickable(false);
         animation.start();
         //Stop animation after x seconds & set back to original
+        final Drawable finalOriginal = original;
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 animation.stop();
-                i.setImageDrawable(original);
+                i.setImageDrawable(finalOriginal);
                 i.setClickable(true);
                 //refreshing.clearAnimation();
             }
@@ -963,8 +1105,8 @@ public class MainGameFragment extends Fragment {
     //Checks if there is anymore turns
     private boolean haveTurns(){ return (noPlayableLinesLeft !=0); }
     //Type 0 (turn): includes turn text & full,
-    // Type 2(norm): full without turn text,
-    // Type 3: Short Form
+    // Type 1(norm): full without turn text,
+    // Type 2: Short Form
     private String whoseTurn(int turn, int type) {
         String[][] returnsTypes = new String[3][5];
         returnsTypes[0][0] = "Turn: Computer 1"+ " ("+turn+")";
@@ -1001,6 +1143,9 @@ public class MainGameFragment extends Fragment {
             }
         }
         return returnsTypes[type][4];
+    }
+    private static int getA(int argb) {
+        return (argb >> 24) & 0xFF;
     }
 
     /***********Getters & Setters **********8*/

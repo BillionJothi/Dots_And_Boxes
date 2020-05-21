@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.widget.ImageView;
 
-import androidx.annotation.Nullable;
-
 @SuppressLint("AppCompatCustomView")
 class ImageViewAdded extends ImageView {
     boolean set = false;
@@ -25,6 +23,7 @@ class ImageViewAdded extends ImageView {
     }
     public int getPlayer() { return player; }
     public void setPlayer(int player) { this.player = player; }
+
 
 
 }

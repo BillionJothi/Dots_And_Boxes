@@ -1,5 +1,6 @@
 package com.djothi.dotsboxes;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 public class FragmentTopGame extends Fragment {
@@ -31,7 +33,6 @@ public class FragmentTopGame extends Fragment {
         AI = (TextView) v.findViewById(R.id.aiName);
         scoreword = (TextView) v.findViewById(R.id.scoreWord);
         aiscore = (TextView) v.findViewById(R.id.aiscore);
-
         return v;
     }
 
@@ -59,6 +60,16 @@ public class FragmentTopGame extends Fragment {
         String s = aiscore.getText().toString().replaceFirst("[0-9]+",
                 Integer.toString(newscore));
         aiscore.setText(s);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void setTurnToolTipText(String s){
+        turn.setTooltipText(s);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void setScoreToolTipText(String s){
+        allScore.setTooltipText(s);
     }
 
 }

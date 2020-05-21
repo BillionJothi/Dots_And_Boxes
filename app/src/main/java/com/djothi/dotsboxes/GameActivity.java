@@ -1,8 +1,10 @@
 package com.djothi.dotsboxes;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class GameActivity extends AppCompatActivity
@@ -46,6 +48,7 @@ public class GameActivity extends AppCompatActivity
             fragmentgame =
                     (MainGameFragment) getSupportFragmentManager().findFragmentById(R.id.game_fragment);
             //Send Data
+            assert fragmentgame != null;
             fragmentgame.setArguments(bundle);
                 assert fragmentgame != null;
                 fragmentgame.setBoardSize(grid);
@@ -104,6 +107,19 @@ public class GameActivity extends AppCompatActivity
 
     @Override
     public void disableButtons() { fragmentBottomGame.endGameDisableButtons(); }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void setTurnToolTipText(String s) {
+        fragmentTopGame.setTurnToolTipText(s);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void setScoreToolTipText(String s) {
+        fragmentTopGame.setScoreToolTipText(s);
+    }
+
     @Override
     public void updateTurn(String turn) { fragmentTopGame.setTurn(turn); }
     //@Override
