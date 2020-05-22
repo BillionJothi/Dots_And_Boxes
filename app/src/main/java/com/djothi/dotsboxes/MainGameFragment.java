@@ -539,7 +539,7 @@ public class MainGameFragment extends Fragment {
                 playerColors[pcTurns[0]] = getResources().getString(R.string.P1Colour);
             }
         }
-        if(playerColors.length > 30){
+        if(playerColors.length > 10){
             playerColorsIsSolid = new boolean[playerColors.length];
             for(int i=0; i<playerColors.length; i++){
                 boolean  isSolid = Math.random()<0.5;
