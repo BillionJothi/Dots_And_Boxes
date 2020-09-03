@@ -50,8 +50,9 @@ The game mechanics was originally modeled in Vienna Development Model (VDM) usin
 - Potential inclusion of 3D game board
 
 
-![Options Gif](https://i.imgur.com/Hse2VUB.gif)
-
+<p align="left">  
+	<img src="https://i.imgur.com/Hse2VUB.gif" width="325" alt="OptionsGif"/>
+</p>
 
 ### App Images
 ![Actual App Images](https://i.imgur.com/hbX052c.png)
@@ -65,6 +66,7 @@ The game mechanics was originally modeled in Vienna Development Model (VDM) usin
 
 
 ![StoryBoard](https://i.imgur.com/gnPvLpF.jpg)
+
 
 [//]: # (<img src="https://i.imgur.com/gnPvLpF.jpg" height="600" style="horizontal-align:middle">)
 
