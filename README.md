@@ -5,15 +5,35 @@
 
 <p align="center"> 
 	<h1 align="center"> Dots And Boxes <img src="https://img.shields.io/badge/platform-android-blue" alt="Platform" /> <img src="https://img.shields.io/badge/release-not ready-yellowgreen" /> </h1>  
-	
 </p>
 
+
 <div align="center">
-Dots & Boxes Android Mobile Game (Application).
-The game mechanics was originally modeled in Vienna Development Model (VDM) using Overture. Upon validation, the app was designed and programmed using Java following the Mobile Application Development Cycle. The app was designed with the key idea to make each and every option within the game customizable whilst keeping to the Android Material Design choices.
+	Dots & Boxes Android Mobile Game (Application).
+	The game mechanics was originally modeled in Vienna Development Model (VDM) using Overture. Upon validation, the app was designed and programmed using Java following the Mobile Application Development Cycle. The app was designed with the key idea to make each and every option within the game customizable whilst keeping to the Android Material Design choices.
 </div>
 
 
+<div align="center">
+	<h4>
+		<a href="/PDFs/Business Case.pdf">Business Case</a> <span> • </span>
+		<a href="/PDFs/Font Board.pdf">Font Board</a> <span>•</span>
+		<a href="/PDFs/Mood Board.pdf">Mood Board</a> <span>•</span>
+		<a href="/PDFs/User Stories.pdf">User Stories</a> <span>•</span>
+	</h4>
+</div>
+
+
+<p align="center"> 
+	<img src="https://img.shields.io/badge/platform-android-blue" alt="Platform" /> 
+	<img src="https://img.shields.io/badge/release-not ready-yellowgreen" />
+	<img src="https://img.shields.io/badge/language-java-red" />
+</p>
+
+<p align="center">
+  <a href="#features">Features</a> •
+  <a href="#support">Support</a>
+</p>
 
 ## Features
 - Variable Game Options/Settings:
