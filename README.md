@@ -17,11 +17,10 @@
 
 <div align="center">
 	<h4>
-		<span> • </span>
 		<a href="/PDFs/Business Case.pdf">Business Case</a> <span> • </span>
 		<a href="/PDFs/Font Board.pdf">Font Board</a> <span>•</span>
 		<a href="/PDFs/Mood Board.pdf">Mood Board</a> <span>•</span>
-		<a href="/PDFs/User Stories.pdf">User Stories</a> <span> • </span>
+		<a href="/PDFs/User Stories.pdf">User Stories</a>
 	</h4>
 </div>
 
