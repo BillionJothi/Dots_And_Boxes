@@ -76,8 +76,11 @@
 
 
 <p align="center">  
-	<img src="https://i.imgur.com/bSWa2nL.gif" max-width="330" alt="OptionsGif"/>
-	<img src="https://i.imgur.com/Og0L2As.gif" max-width="330" alt="GamplayGif"/>
+	<View style={{ maxWidth: 330px }}>
+		<img src="https://i.imgur.com/bSWa2nL.gif" width="330" height="661" alt="OptionsGif"/>
+		<img src="https://i.imgur.com/Og0L2As.gif" width="330" height="661" alt="GamplayGif"/>
+	</View>
+	
 </p>
 
 
