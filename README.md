@@ -1,7 +1,18 @@
 
-# Dots And Boxes
-> Dots & Boxes Android Mobile Game (Application).
-> The game mechanics was originally modeled in Vienna Development Model (VDM) using Overture. Upon validation, the app was designed and programmed using Java following the Mobile Application Development Cycle. The app was designed with the key idea to make each and every option within the game customizable whilst keeping to the Android Material Design choices.
+<p align="center">  
+	<img src="app/src/main/res/drawable/logo.png" width="250" alt="Dots&BoxesLogo"/>
+</p>
+
+<p align="center"> 
+	<h1 align="center"> Dots And Boxes <img src="https://img.shields.io/badge/platform-android-blue" alt="Platform" /> <img src="https://img.shields.io/badge/release-not ready-yellowgreen" /> </h1>  
+	
+</p>
+
+<div align="center">
+Dots & Boxes Android Mobile Game (Application).
+The game mechanics was originally modeled in Vienna Development Model (VDM) using Overture. Upon validation, the app was designed and programmed using Java following the Mobile Application Development Cycle. The app was designed with the key idea to make each and every option within the game customizable whilst keeping to the Android Material Design choices.
+</div>
+
 
 
 ## Features
@@ -59,7 +70,7 @@
 
 
 
-How To Play:
+## How To Play:
 - [WikiHow Dots & Boxes](https://www.wikihow.com/Play-Dots-and-Boxes)
 - [Try Dots & Boxes Online here](http://www.papg.com/show?1TMU)
 - [How to always win at Dots and Boxes](https://www.youtube.com/watch?v=KboGyIilP6k)
