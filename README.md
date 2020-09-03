@@ -76,7 +76,7 @@
 
 
 <p align="center">  
-	<img src="https://i.imgur.com/Hse2VUB.gif" width="330" alt="OptionsGif"/>
+	<img src="https://i.imgur.com/bSWa2nL.gif" width="330" alt="OptionsGif"/>
 	<img src="https://i.imgur.com/Og0L2As.gif" width="330" alt="GamplayGif"/>
 </p>
 
