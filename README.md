@@ -10,7 +10,7 @@
 
 
 <div align="center">
-	Dots & Boxes Android Mobile Game (Application).
+	<span align="center"> <b> Dots & Boxes Android Mobile Casual Game (Application) </b> </span>
 	The game mechanics was originally modeled in Vienna Development Model (VDM) using Overture. Upon validation, the app was designed and programmed using Java following the Mobile Application Development Cycle. The app was designed with the key idea to make each and every option within the game customizable whilst keeping to the Android Material Design choices.
 </div>
 
@@ -41,7 +41,7 @@
 ## Features
 - Variable Game Options/Settings:
 	- Board/Grid Size
-	- Number of Players - Only limited by selected board size
+	- Number of Players - Unlimited (Limited only by choosen board size)
 		- No. AI Players
 		- No. Human Players
 	- Optional Hints
@@ -73,9 +73,11 @@
 - Potential inclusion of 3D game board
 
 
-<p align="left">  
+<p align="center">  
 	<img src="https://i.imgur.com/Hse2VUB.gif" width="325" alt="OptionsGif"/>
+	<img src="https://i.imgur.com/Og0L2As.gif" width="325" alt="GamplayGif"/>
 </p>
+
 
 ### App Images
 ![Actual App Images](https://i.imgur.com/hbX052c.png)
