@@ -3,6 +3,11 @@
 	<img src="app/src/main/res/drawable/logo.png" width="250" alt="Dots&BoxesLogo"/>
 </p>
 
+<p align="center"> 
+	<h1 align="center"> Dots And Boxes </h1>  
+</p>
+
+
 
 <div align="center">
 	Dots & Boxes Android Mobile Game (Application).
