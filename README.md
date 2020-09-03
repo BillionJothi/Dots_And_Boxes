@@ -25,10 +25,10 @@
 </div>
 
 
-<p align="center"> 
-	<img src="https://img.shields.io/badge/platform-android-blue" alt="Platform" /> 
-	<img src="https://img.shields.io/badge/release-not ready-yellowgreen" />
-	<img src="https://img.shields.io/badge/language-java-red" />
+<p align="center">
+	<img src="https://img.shields.io/badge/platform-Android-1f425f.svg" alt="Platform" /> 
+	<img src="https://img.shields.io/badge/status-in development-yellow" />
+	<img src="https://img.shields.io/badge/Made%20with-Java-red.svg" alt="Made With Java Badge" />
 </p>
 
 <p align="center">
