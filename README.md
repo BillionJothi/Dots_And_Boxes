@@ -13,7 +13,7 @@
 	<p align="center"> 
 		<span align="center"> <b> Dots & Boxes Android Mobile Game (Casual) </b> </span>
 	</p>
-	The game mechanics was originally modeled in Vienna Development Model (VDM) using Overture. Upon validation, the app was designed and programmed using Java following the Mobile Application Development Cycle. The app was designed with the key idea to make each and every option within the game customizable whilst keeping to the Android Material Design choices.
+	The game mechanics was originally modeled in Vienna Development Model (VDM) using Overture. Upon validation, the game was designed and programmed using Java - following the Mobile Application Development Cycle (see hyperlinks below this). The app was designed with the key idea to make each and every option within the game customizable whilst keeping to the Android Material Design.
 </div>
 
 
@@ -76,8 +76,8 @@
 
 
 <p align="center">  
-	<img src="https://i.imgur.com/Hse2VUB.gif" width="350" alt="OptionsGif"/>
-	<img src="https://i.imgur.com/Og0L2As.gif" width="350" alt="GamplayGif"/>
+	<img src="https://i.imgur.com/Hse2VUB.gif" width="330" alt="OptionsGif"/>
+	<img src="https://i.imgur.com/Og0L2As.gif" width="330" alt="GamplayGif"/>
 </p>
 
 
