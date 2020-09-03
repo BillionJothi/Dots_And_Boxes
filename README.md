@@ -3,10 +3,6 @@
 	<img src="app/src/main/res/drawable/logo.png" width="250" alt="Dots&BoxesLogo"/>
 </p>
 
-<p align="center"> 
-	<h1 align="center"> Dots And Boxes <img src="https://img.shields.io/badge/platform-android-blue" alt="Platform" /> <img src="https://img.shields.io/badge/release-not ready-yellowgreen" /> </h1>  
-</p>
-
 
 <div align="center">
 	Dots & Boxes Android Mobile Game (Application).
