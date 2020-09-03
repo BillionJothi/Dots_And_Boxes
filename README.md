@@ -3,7 +3,6 @@
 > Dots & Boxes Android Mobile Game (Application).
 > The game mechanics was originally modeled in Vienna Development Model (VDM) using Overture. Upon validation, the app was designed and programmed using Java following the Mobile Application Development Cycle. The app was designed with the key idea to make each and every option within the game customizable whilst keeping to the Android Material Design choices.
 
----
 
 ## Features
 - Variable Game Options/Settings:
@@ -42,23 +41,23 @@
 
 ![Options Gif](https://i.imgur.com/Hse2VUB.gif)
 
----
+
 ### App Images
 ![Actual App Images](https://i.imgur.com/hbX052c.png)
 
----
+
 
 #### StoryBoard / UX Design
 
 ![StoryBoardPics](https://i.imgur.com/XKOlESw.png)
 
----
+
 
 ![StoryBoard](https://i.imgur.com/gnPvLpF.jpg)
 
 [//]: # (<img src="https://i.imgur.com/gnPvLpF.jpg" height="600" style="horizontal-align:middle">)
 
----
+
 
 How To Play:
 - [WikiHow Dots & Boxes](https://www.wikihow.com/Play-Dots-and-Boxes)
@@ -67,7 +66,7 @@ How To Play:
 
 **Note:** This is ongoing development/work not yet ready for a public release - however it is fully functional
 
----
+
 
 ## Support
 
@@ -76,4 +75,4 @@ Reach out to me at one of the following places!
 - Email at DotsNBoxes@djothi.com (specific for this repo)
 - Email at Github@djothi.com
 
----
+
